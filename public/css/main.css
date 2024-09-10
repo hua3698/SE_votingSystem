@@ -1,0 +1,56 @@
+body {
+    background-color: #f2f3f5;
+}
+
+.header {
+    background-color: #fdfdfd;
+    height: 80px;
+    margin-bottom: 40px;
+}
+
+.header .container {
+    padding: 20px 0;
+}
+
+.header a {
+    color: #000;
+    text-decoration: none;
+}
+
+.vote_form_div {
+    margin: 0 15%;
+}
+
+.form-check .form-check-input {
+    margin-left: 0;
+}
+
+.form-check .form-check-label {
+    margin-left: 1.5rem;
+}
+
+.candidate_div svg.delete {
+    color: red;
+    cursor: pointer;
+}
+
+.vote_group .card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 5px 10px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+}
+
+.vote_detail h4 {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.vote_detail p {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.underline {
+    border-bottom: 2px solid #aaa;
+    margin-bottom: 10px;
+}
