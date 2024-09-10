@@ -15,8 +15,8 @@ return new class extends Migration
             $table->increments('cand_id');
             $table->unsignedInteger('event_id');
             $table->foreign('event_id')->references('event_id')->on('vote_events')->onDelete('cascade');
-            $table->string('candidates_name')->comment('候選人名稱');
-            $table->string('candidates_school')->nullable()->comment('候選人學校');
+            $table->string('name')->comment('候選人名稱');
+            $table->string('school')->nullable()->comment('候選人學校');
             $table->integer('votes_count')->default(0);
             $table->text('notes')->nullable()->comment('備註');
             $table->timestamps();

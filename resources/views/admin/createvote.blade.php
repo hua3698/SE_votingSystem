@@ -31,7 +31,7 @@
                             Valid last name is required.
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 mb-3">
+                    <div class="col-12 col-md-6">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="1" name="manual_control" checked id="flexCheckIndeterminate">
                             <label class="form-check-label" for="flexCheckIndeterminate">手動開啟/關閉投票活動</label>
@@ -130,7 +130,7 @@
             let startTime = moment(start, "YYYY-MM-DD HH:mm:ss");
             let endTime = moment(end, "YYYY-MM-DD HH:mm:ss");
             let qrcodeCount = $('#qrcode').val()
-            let boolMaunal = $('input[name=manual_control]').prop('checked') ? 1 : 0
+            let boolManual = $('input[name=manual_control]').prop('checked') ? 1 : 0
             let max_vote = $('select[name=max_vote]').val()
             let max_winner = $('select[name=max_winner]').val()
 
@@ -166,7 +166,7 @@
             post_data.end = end
             post_data.candidates = candidates
             post_data.qrcode_count = qrcodeCount
-            post_data.manual_control = boolMaunal
+            post_data.manual_control = boolManual
             post_data.max_vote = max_vote
             post_data.max_winner = max_winner
 

@@ -27,7 +27,8 @@ Route::get('/admin/createvote', function () {
 });
 
 Route::post('/admin/createvote', [AdminController::class, 'createVote'])->name('create.vote');
-Route::get('/admin/vote/{event_id}', [AdminController::class, 'getVoteEvent'])->name('admin.vote.get');;
+Route::get('/admin/vote/{event_id}', [AdminController::class, 'getVoteEvent'])->name('admin.vote.get');
+Route::post('/admin/vote/{event_id}/pdf', [AdminController::class, 'generatePDF'])->name('admin.vote.pdf');
 
 # 投票
 Route::get('/vote/{event_id}/{qrcode_string}', [VoteController::class, 'showVotePage']);

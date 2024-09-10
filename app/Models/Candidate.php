@@ -15,7 +15,7 @@ class Candidate extends Model
 
     protected $fillable = [
         'event_id',
-        'candidates_name',
+        'name',
         'vote_count',
         'notes',
     ];
