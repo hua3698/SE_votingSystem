@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\VoteController;
 
@@ -16,19 +17,25 @@ use App\Http\Controllers\VoteController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('nothing');
 });
 
-# 後臺設定
-Route::get('/admin', [AdminController::class, 'adminPage']);
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login.form');
+Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 
-Route::get('/admin/createvote', function () {
-    return view('admin.createvote');
+Route::middleware(['web', 'auth.check'])->group(function () 
+{
+    # 後臺設定
+    Route::get('/admin', [AdminController::class, 'adminPage']);
+
+    Route::get('/admin/createvote', function () {
+        return view('admin.createvote');
+    });
+
+    Route::post('/admin/createvote', [AdminController::class, 'createVote'])->name('create.vote');
+    Route::get('/admin/vote/{event_id}', [AdminController::class, 'getVoteEvent'])->name('admin.vote.get');
+    Route::post('/admin/vote/{event_id}/pdf', [AdminController::class, 'generatePDF'])->name('admin.vote.pdf');
+
+    # 投票
+    Route::get('/vote/{event_id}/{qrcode_string}', [VoteController::class, 'showVotePage']);
 });
-
-Route::post('/admin/createvote', [AdminController::class, 'createVote'])->name('create.vote');
-Route::get('/admin/vote/{event_id}', [AdminController::class, 'getVoteEvent'])->name('admin.vote.get');
-Route::post('/admin/vote/{event_id}/pdf', [AdminController::class, 'generatePDF'])->name('admin.vote.pdf');
-
-# 投票
-Route::get('/vote/{event_id}/{qrcode_string}', [VoteController::class, 'showVotePage']);

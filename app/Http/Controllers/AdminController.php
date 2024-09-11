@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\VoteEvent;
 use App\Models\Candidate;
 use App\Models\GenerateQrcode;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
-use chillerlan\QRCode\{QRCode, QROptions};
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\View;
+use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use Illuminate\Support\Facades\View;
+use chillerlan\QRCode\{QRCode, QROptions};
 
 class AdminController extends Controller
 {
