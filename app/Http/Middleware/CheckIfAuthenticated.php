@@ -18,11 +18,6 @@ class CheckIfAuthenticated
     {
         $email = $request->session()->get('email');
 
-        // 判斷是否是 AJAX 請求或是想要 Modal 的狀況
-        if ($request->ajax() || $request->expectsJson()) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
-
         if (!$email) {
             return redirect()->route('login.form');
         }

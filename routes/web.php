@@ -17,7 +17,7 @@ use App\Http\Controllers\VoteController;
 */
 
 Route::get('/', function () {
-    return view('nothing');
+    return view('hello');
 });
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login.form');
@@ -32,10 +32,14 @@ Route::middleware(['web', 'auth.check'])->group(function ()
         return view('admin.createvote');
     });
 
-    Route::post('/admin/createvote', [AdminController::class, 'createVote'])->name('create.vote');
+    Route::post('/admin/createvote', [AdminController::class, 'createVoteEvent'])->name('create.vote');
     Route::get('/admin/vote/{event_id}', [AdminController::class, 'getVoteEvent'])->name('admin.vote.get');
     Route::post('/admin/vote/{event_id}/pdf', [AdminController::class, 'generatePDF'])->name('admin.vote.pdf');
 
-    # 投票
-    Route::get('/vote/{event_id}/{qrcode_string}', [VoteController::class, 'showVotePage']);
+    Route::put('/admin/vote/activate', [AdminController::class, 'activateVoteEvent'])->name('activate.vote');
+    Route::put('/admin/vote/deactivate', [AdminController::class, 'deactivateVoteEvent'])->name('deactivate.vote');
 });
+
+# 投票
+Route::get('/vote/{event_id}/{qrcode_string}', [VoteController::class, 'showVotePage']);
+Route::post('/vote', [VoteController::class, 'doVote'])->name('vote');;

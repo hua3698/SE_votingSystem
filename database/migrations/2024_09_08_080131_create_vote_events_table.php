@@ -20,7 +20,8 @@ return new class extends Migration
             $table->integer('number_of_qrcodes')->comment('要產生的qrcode數量');
             $table->integer('number_of_candidates')->comment('共有幾位候選人');
             $table->integer('number_of_winners')->comment('共有幾位得名者');
-            $table->boolean('manual_control')->default(true)->comment('是否手動控制投票活動');
+            $table->tinyInteger('manual_control')->default(0)->comment('是否手動控制投票活動');
+            $table->string('vote_is_ongoing')->default(0)->comment('只有在manual_control=1才有效，0:尚未開始,1:投票進行中,2:已結束');
             $table->timestamps();
         });
     }

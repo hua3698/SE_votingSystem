@@ -1,0 +1,56 @@
+.container {
+    padding: 10%;
+}
+
+.vote_name {
+    word-wrap: break-word;
+    padding: 1rem 0;
+}
+
+.cand {
+    background-color: #eee;
+    border-radius: 10px;
+    display: flex;
+    height: 80px;
+    margin-bottom: 1rem;
+}
+
+.cand:hover {
+    background-color: #ddd;
+    cursor: pointer;
+}
+
+.cand .circle_div, .intro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cand .intro p {
+    margin-bottom: 0;
+}
+
+.vote_check input {
+    width: 30px;
+    height: 30px;
+}
+
+.end {
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.end #btnVote {
+    width: 30%;
+    background-color: #37a772;
+    padding: 0.6rem 0.8rem;
+    border-radius: 5%;
+    color: #fcfcfc;
+    margin: auto;
+    border: none;
+}
+
+.end #btnVote:hover {
+    background: #2a835a;
+    cursor: pointer;
+}

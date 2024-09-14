@@ -17,20 +17,27 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6',
-        ]);
+        try
+        {
+            $credentials = $request->validate([
+                'email' => 'required|email',
+                'password' => 'required|min:6',
+            ]);
 
-        if (Auth::attempt($credentials)) {
-            // 登入成功
-            session()->put('email', $credentials['email']);
-            return redirect()->intended('/admin');
+            if (Auth::attempt($credentials)) {
+                // 登入成功
+                session()->put('email', $credentials['email']);
+                return redirect()->intended('/admin');
+            }
+
+            // 登入失敗
+            return back()->withErrors([
+                'email' => '帳號或密碼錯誤。',
+            ]);
         }
-
-        // 登入失敗
-        return back()->withErrors([
-            'email' => '帳號或密碼錯誤。',
-        ]);
+        catch (\Exception $e) 
+        {
+            echo $e;
+        }
     }
 }

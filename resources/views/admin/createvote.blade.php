@@ -170,9 +170,6 @@
             post_data.max_vote = max_vote
             post_data.max_winner = max_winner
 
-            console.log(post_data)
-            console.log(JSON.stringify(post_data))
-
             $.ajax({
                 type: 'POST',
                 url: "{{ route('create.vote') }}",

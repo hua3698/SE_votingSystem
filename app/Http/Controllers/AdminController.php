@@ -13,9 +13,12 @@ use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use chillerlan\QRCode\{QRCode, QROptions};
+use App\Traits\VoteHelper;
 
 class AdminController extends Controller
 {
+    use VoteHelper;
+
     public function adminPage(Request $request) 
     {
         try
@@ -25,14 +28,13 @@ class AdminController extends Controller
                 $start = Carbon::parse($event->start_time);
                 $end = Carbon::parse($event->end_time);
 
-                if ($now->between($start, $end)) {
-                    $event->status = 1; # 進行中
-                } elseif ($now->lessThan($start)) {
-                    $event->status = 2; # 未開始
+                if ($now->lessThan($start)) {
+                    $event->status = 0; // 未開始
+                } elseif ($now->between($start, $end)) {
+                    $event->status = 1; // 進行中
                 } else {
-                    $event->status = 3; # 已結束
+                    $event->status = 2; // 已結束
                 }
-
                 return $event;
             });
 
@@ -51,7 +53,7 @@ class AdminController extends Controller
     }
 
     // 新增投票活動
-    public function createVote(Request $request) 
+    public function createVoteEvent(Request $request) 
     {
         try
         {
@@ -109,20 +111,7 @@ class AdminController extends Controller
     public function getVoteEvent($event_id)
     {
         $voteEvent = VoteEvent::find($event_id);
-        if ($voteEvent) {
-            $now = Carbon::now();
-            $start = Carbon::parse($voteEvent->start_time);
-            $end = Carbon::parse($voteEvent->end_time);
-
-            // 判斷狀態
-            if ($now->between($start, $end)) {
-                $voteEvent->status = 1; // 進行中
-            } elseif ($now->lessThan($start)) {
-                $voteEvent->status = 2; // 未開始
-            } else {
-                $voteEvent->status = 3; // 已結束
-            }
-        }
+        $voteEvent = $this->getVoteStatus($voteEvent);
 
         if (!$voteEvent) {
             return response()->json(['error' => 'Vote Event not found'], 404);
@@ -130,11 +119,12 @@ class AdminController extends Controller
 
         $candidates = Candidate::where('event_id', $event_id)->get();
 
-        $qrcodes = GenerateQrcode::where('event_id', $event_id)->get()->map(function ($qrcode, $event_id) {
+        $qrcodes = GenerateQrcode::where('event_id', $event_id)->get();
+        foreach ($qrcodes as $key => $qrcode) {
             $url = 'http://140.115.2.129/vote' . '/' . $event_id . '/' . $qrcode->qrcode_string;
-            $qrcode->qrcode_url = (new QRCode)->render($url);
-            return $qrcode;
-        }, $event_id);
+            $images = (new QRCode)->render($url);
+            $qrcodes[$key]->qrcode_url = $images;
+        }
 
         $response = [];
         $response = [
@@ -182,6 +172,58 @@ class AdminController extends Controller
         }, $event_id);
 
         return $result;
+    }
+
+    public function activateVoteEvent(Request $request)
+    {
+        $validated = $request->validate([
+            'event_id' => 'required|integer',
+        ]);
+
+        $voteEvent = VoteEvent::find($validated['event_id']);
+
+        if ($voteEvent) {
+            $voteEvent->vote_is_ongoing = 1;
+            $voteEvent->save();
+            return response()->json(['message' => '投票活動已啟用'], 200);
+        }
+
+        return response()->json(['message' => '投票活動不存在'], 404);
+    }
+
+    // 停用投票活動
+    public function deactivateVoteEvent(Request $request)
+    {
+        $validated = $request->validate([
+            'event_id' => 'required|integer',
+        ]);
+
+        // 根據 ID 查找投票活動
+        $voteEvent = VoteEvent::find($validated['event_id']);
+
+        if ($voteEvent) {
+            $voteEvent->vote_is_ongoing = 2;
+            $voteEvent->save();
+            return response()->json(['message' => '投票活動已停用'], 200);
+        }
+
+        return response()->json(['message' => '投票活動不存在'], 404);
+    }
+
+    public function testPDF($event_id)
+    {
+        $voteEvent = VoteEvent::find($event_id);
+        $candidates = Candidate::where('event_id', $event_id)->get();
+        $qrcodes = $this->getQrcodeInfo($event_id);
+
+        $response = [];
+        $response = [
+            'vote_event' => $voteEvent,
+            'candidates' => $candidates,
+            'qrcodes' => $qrcodes,
+        ];
+
+        return view('pdf.test', $response);
     }
 
 }

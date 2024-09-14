@@ -10,18 +10,29 @@
             <div class="vote_group row">
                 @foreach($vote_event as $event)
                     <div class="col col-md-6">
-                        <div class="card">
+                        <div class="card" data-event="{{ $event->event_id }}">
                             <div class="card-body">
                                 <h5 class="card-title">{{ $event->event_name }}</h5>
-                                @if ($event->status === 1)
-                                    <span class="badge text-bg-success">投票進行中</span>
-                                @elseif ($event->status === 2)
-                                    <span class="badge text-bg-secondary">尚未開始</span>
+                                @if ($event->manual_control === 1)
+                                    @if ($event->vote_is_ongoing === 0 && $event->status !== 2)
+                                        <span class="badge text-bg-secondary">尚未開始</span>
+                                    @elseif ($event->vote_is_ongoing === 1 && $event->status !== 2)
+                                        <span class="badge text-bg-success">投票進行中</span>
+                                        @else 
+                                        <span class="badge text-bg-danger">已結束</span>
+                                    @endif
+                                @else
+                                    @if ($event->status === 0)
+                                        <span class="badge text-bg-secondary">尚未開始</span>
+                                    @elseif ($event->status === 1)
+                                        <span class="badge text-bg-success">投票進行中</span>
                                     @else 
-                                    <span class="badge text-bg-secondary">已結束</span>
+                                        <span class="badge text-bg-danger">已結束</span>
+                                    @endif
                                 @endif
-                                <p class="card-text">開放時間： {{ $event->start_time }} ~ {{ $event->end_time }}</p>
-                                <a href="{{ route('admin.vote.get', ['event_id' => $event->event_id]) }}" class="btn btn-primary">查看詳細內容</a>
+                                <p class="card-text mb-0 mt-3">開放時間</p>
+                                <p>{{ $event->start_time }} ~ {{ $event->end_time }}</p>
+                                {{-- <a href="{{ route('admin.vote.get', ['event_id' => $event->event_id]) }}" class="btn btn-primary">查看詳細內容</a> --}}
                             </div>
                         </div>
                     </div>
@@ -36,6 +47,11 @@
     $(function() {
         $('#add_new_vote').on('click', function() {
             window.location.href="{{ url('admin/createvote') }}"
+        })
+
+        $('.card').on('click', function() {
+            let event_id = $(this).data('event')
+            location.href = '{{ route("admin.vote.get", ":event_id") }}'.replace(':event_id', event_id);
         })
     })
 </script>

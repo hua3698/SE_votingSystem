@@ -34,6 +34,10 @@ body {
     cursor: pointer;
 }
 
+.vote_group .card {
+    cursor: pointer;
+}
+
 .vote_group .card:hover {
     transform: scale(1.03);
     box-shadow: 0 5px 10px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
@@ -50,15 +54,28 @@ body {
 }
 
 .vote_detail p {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    word-wrap: break-word;
+    padding: 0 30px;
 }
 
 .vote_detail .block {
     padding: 3%;
     background-color: #f9f9f9;
     border-radius: 10px;
+}
+
+.vote_detail .threedot {
+    width: 45px;
+    height: 45px;
+    padding: 8px;
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+}
+
+.vote_detail .threedot:hover {
+    background-color: #cedeff;
+    border-radius: 50%;
 }
 
 .underline {
@@ -69,4 +86,8 @@ body {
 .qrcode_header {
     display: flex;
     justify-content: start;
+}
+
+.show_qrcode img {
+    width: 200px;
 }
