@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>投票 - 後台</title>
+        <title>桃園區網線上投票平台 - 管理端</title>
         <link href="{{ asset('plugins/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
@@ -20,10 +20,10 @@
         <script src="{{ asset('js/main.js') }}"></script>
     </head>
     <body>
-        <div class="header shadow-sm">
+        <div class="header shadow">
             <div class="container">
                 <div class="title">
-                    <h2><a href="{{ url('admin') }}">投票平台 Admin</a></h2>
+                    <h2><a href="{{ url('outstand') }}">桃園區網線上投票平台 - 管理端</a></h2>
                 </div>
             </div>
         </div>

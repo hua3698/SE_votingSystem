@@ -25,15 +25,15 @@ class VoteController extends Controller
         try
         {
             $result = $this->handleVoteEvent($event_id, $qrcode_string);
-
             if ($result['status'] === 'error') {
                 return view('front.vote', $result);
+            }
+            elseif ($result['status'] === 'voted') {
+                return $this->showVoteResult($event_id, $qrcode_string);
             }
 
             $candidates = Candidate::where('event_id', $event_id)->get();
 
-
-            $response = [];
             $response = [
                 'status' => 'ok',
                 'vote_event' => $this->voteEvent,
@@ -46,11 +46,6 @@ class VoteController extends Controller
         catch (\Exception $e) 
         {
             Log::error(sprintf('[%s] %s', __METHOD__, $e->getMessage()));
-
-            // $response = [];
-            // $response['status'] = 'no';
-            // $response['error_msg'] = $e->getMessage();
-            // return view('front.vote', $response);
             return view('hello');
         }
     }
@@ -71,6 +66,9 @@ class VoteController extends Controller
 
             if ($result['status'] === 'error') {
                 return view('front.vote', $result);
+            } 
+            elseif ($result['status'] === 'voted') {
+                $this->showVoteResult($validated['event_id'], $validated['qrcode_string']);
             }
 
             // 寫入投票紀錄
@@ -109,14 +107,6 @@ class VoteController extends Controller
             ];
         }
 
-        // 檢查是否開放投票
-        if (!$isOpen) {
-            return [
-                'status' => 'error',
-                'error_msg' => '目前不在開放投票的時間內'
-            ];
-        }
-
         // 檢查 QR code 是否存在、是否已經投過票
         $this->generateQrcode = GenerateQrcode::where('qrcode_string', $qrcode_string)->first();
         if (!$this->generateQrcode) {
@@ -126,8 +116,16 @@ class VoteController extends Controller
             ];
         } elseif ($this->generateQrcode->has_been_voted === 1) {
             return [
-                'status' => 'error',
+                'status' => 'voted',
                 'error_msg' => '已經投過票囉'
+            ];
+        }
+
+        // 檢查是否開放投票
+        if (!$isOpen) {
+            return [
+                'status' => 'error',
+                'error_msg' => '目前不在開放投票的時間內'
             ];
         }
 
@@ -150,5 +148,39 @@ class VoteController extends Controller
             return false;
         }
         return true;
+    }
+
+    private function getVoteRecords($qrcode_id)
+    {
+        return VoteRecord::leftJoin('candidates', 'vote_records.cand_id', '=', 'candidates.cand_id')
+                ->where('vote_records.code_id', $qrcode_id)
+                ->select('vote_records.code_id', 'candidates.name as cand_name', 'candidates.school as cand_school', 'vote_records.updated_at as vote_time')
+                ->get();
+    }
+
+    public function showVoteResult($event_id, $qrcode_string)
+    {
+        try
+        {
+            $qrcode = GenerateQrcode::where('qrcode_string', $qrcode_string)->first();
+
+            if($qrcode->has_been_voted === 1) {
+                $records = $this->getVoteRecords($qrcode->code_id);
+                $response = [
+                    'status' => 'ok',
+                    'records' => $records,
+                    'qrcode_string' => $qrcode_string
+                ];
+                return view('front.result', $response);
+            }
+            else {
+                return view('front.result', ['status' => 'error']);
+            }
+        }
+        catch (\Exception $e) 
+        {
+            Log::error(sprintf('[%s] %s', __METHOD__, $e->getMessage()));
+            return view('hello');
+        }
     }
 }

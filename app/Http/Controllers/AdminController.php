@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\VoteEvent;
 use App\Models\Candidate;
 use App\Models\GenerateQrcode;
+use App\Models\VoteRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -118,13 +119,7 @@ class AdminController extends Controller
         }
 
         $candidates = Candidate::where('event_id', $event_id)->get();
-
-        $qrcodes = GenerateQrcode::where('event_id', $event_id)->get();
-        foreach ($qrcodes as $key => $qrcode) {
-            $url = 'http://140.115.2.129/vote' . '/' . $event_id . '/' . $qrcode->qrcode_string;
-            $images = (new QRCode)->render($url);
-            $qrcodes[$key]->qrcode_url = $images;
-        }
+        $qrcodes = $this->getQrcodeInfo($event_id);
 
         $response = [];
         $response = [
@@ -160,18 +155,35 @@ class AdminController extends Controller
         // 輸出 PDF
         return response($dompdf->output(), 200)
             ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', 'attachment; filename="qrcode.pdf"');
+            ->header('Content-Disposition', 'attachment; filename="' . $voteEvent->event_name . '_qrcode.pdf"');
+    }
+
+    public function testPDF($event_id)
+    {
+        $voteEvent = VoteEvent::find($event_id);
+        $candidates = Candidate::where('event_id', $event_id)->get();
+        $qrcodes = $this->getQrcodeInfo($event_id);
+
+        $response = [];
+        $response = [
+            'voteEvent' => $voteEvent,
+            'candidates' => $candidates,
+            'qrcodes' => $qrcodes,
+        ];
+
+        return view('pdf.test', $response);
     }
 
     private function getQrcodeInfo($event_id)
     {
-        $result = GenerateQrcode::where('event_id', $event_id)->get()->map(function ($qrcode, $event_id) {
-            $url = 'http://140.115.2.129/vote' . '/' . $event_id . '/' . $qrcode->qrcode_string;
-            $qrcode->qrcode_url = (new QRCode)->render($url);
-            return $qrcode;
-        }, $event_id);
+        $qrcodes = GenerateQrcode::where('event_id', $event_id)->get();
+        foreach ($qrcodes as $key => $qrcode) {
+            $url = 'http://140.115.2.129/vote' . '/' . $event_id . '/' . $qrcode->qrcode_string; 
+            $images = (new QRCode)->render($url);
+            $qrcodes[$key]->qrcode_url = $images;
+        }
 
-        return $result;
+        return $qrcodes;
     }
 
     public function activateVoteEvent(Request $request)
@@ -210,20 +222,75 @@ class AdminController extends Controller
         return response()->json(['message' => '投票活動不存在'], 404);
     }
 
-    public function testPDF($event_id)
+    public function checkVoteSituation($event_id)
     {
         $voteEvent = VoteEvent::find($event_id);
-        $candidates = Candidate::where('event_id', $event_id)->get();
-        $qrcodes = $this->getQrcodeInfo($event_id);
+        $voted_qrcodes = GenerateQrcode::where('generate_qrcodes.event_id', $event_id)
+            ->where('has_been_voted', 1)
+            ->leftJoin('vote_records', 'generate_qrcodes.code_id', '=', 'vote_records.code_id')
+            ->select('generate_qrcodes.*', DB::raw('COUNT(vote_records.code_id) as total_votes'))
+            ->groupBy('generate_qrcodes.code_id')
+            ->get();
 
         $response = [];
         $response = [
             'vote_event' => $voteEvent,
-            'candidates' => $candidates,
-            'qrcodes' => $qrcodes,
+            'qrcodes' => $voted_qrcodes,
+            'system_time' => date('Y-m-d H:i:s', time())
         ];
 
-        return view('pdf.test', $response);
+        return view('admin.votecheck', $response);
+    }
+
+    public function postCheckVoteSituation($event_id)
+    {
+        $voted_qrcodes = GenerateQrcode::where('generate_qrcodes.event_id', $event_id)
+            ->where('has_been_voted', 1)
+            ->leftJoin('vote_records', 'generate_qrcodes.code_id', '=', 'vote_records.code_id')
+            ->select('generate_qrcodes.*', DB::raw('COUNT(vote_records.code_id) as total_votes'))
+            ->groupBy('generate_qrcodes.code_id')
+            ->get();
+
+        $result = [];
+        $result = [
+            'qrcodes' => $voted_qrcodes,
+            'system_time' => date('Y-m-d H:i:s', time())
+        ];
+
+        return response()->json($result);
+    }
+
+    public function getVoteResult($event_id)
+    {
+        $voteEvent = VoteEvent::find($event_id);
+        $rank = $this->getRankedCandidates($event_id);
+
+        $response = [];
+        $response = [
+            'vote_event' => $voteEvent,
+            'rank' => $rank
+        ];
+        return view('admin.voteresult', $response);
+    }
+
+    private function getRankedCandidates($event_id)
+    {
+        // 因為rank是特殊字，as 'rank'需要加引號以免error
+        $query = "
+            SELECT cand.cand_id, cand.name, cand.school, 
+                    COUNT(*) AS total, RANK() OVER (ORDER BY COUNT(*) DESC) AS 'rank' 
+            FROM vote_records vr 
+            left join candidates cand on vr.cand_id = cand.cand_id 
+            WHERE vr.event_id = ?
+            GROUP BY cand_id
+        ";
+
+        return DB::select($query, [$event_id]);
+    }
+
+    public function editVote($event_id)
+    {
+        echo 'not yet work';
     }
 
 }

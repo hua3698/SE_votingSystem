@@ -27,7 +27,7 @@ class AuthController extends Controller
             if (Auth::attempt($credentials)) {
                 // 登入成功
                 session()->put('email', $credentials['email']);
-                return redirect()->intended('/admin');
+                return redirect()->intended('/outstand');
             }
 
             // 登入失敗

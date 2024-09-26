@@ -93,8 +93,8 @@
                     </div> --}}
                 </div>
                 <div class="text-center mb-4">
-                    <button id="btnSubmit" type="button" class="btn btn-primary">確認送出</button>
-                    <button type="cancel" class="btn btn-secondary">取消</button>
+                    <button id="btnSubmit" class="btn btn-primary">確認送出</button>
+                    <button id="btnCancel" class="btn btn-secondary">取消</button>
                 </div>
             </form>
         </div>
@@ -178,10 +178,14 @@
             }).done(function(re) {
                 console.log(re)
                 alert('新增成功')
-                location.href = "{{ url('admin') }}"
+                location.href = "{{ url('outstand') }}"
             }).fail(function(re) {
                 alert('發生錯誤：' + re.responseText);
             });
+        })
+
+        $('#btnCancel').on('click', function() {
+            location.href = "{{ url('outstand') }}"
         })
 
         $('.candidate_div').on('click', '.btnDeleteRow', function() {

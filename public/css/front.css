@@ -11,8 +11,10 @@
     background-color: #eee;
     border-radius: 10px;
     display: flex;
-    height: 80px;
+    height: 90px;
     margin-bottom: 1rem;
+    font-size: 1.5rem;
+    align-items: center;
 }
 
 .cand:hover {
@@ -24,6 +26,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.cand .no {
+    padding: 0 20px 0 0;
 }
 
 .cand .intro p {
@@ -53,4 +59,22 @@
 .end #btnVote:hover {
     background: #2a835a;
     cursor: pointer;
+}
+
+.notice {
+    /* background: #e0edff; */
+    padding: 20px 10px;
+}
+
+.modal-body p {
+    margin: 0;
+}
+
+.finished {
+    background: #d1e7dd;
+    /* background: antiquewhite; */
+    padding: 10px;
+    /* border: 1px solid #3ea523; */
+    /* border: 1px solid #e9b65d; */
+    border-radius: 5px;
 }

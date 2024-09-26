@@ -23,6 +23,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            word-break: break-all
         }
 
         th {
@@ -38,7 +39,7 @@
         }
 
         .top {
-            min-height: 300px;
+            min-height: 250px;
             border-bottom: 1px solid;
             padding: 1rem;
         }
@@ -55,35 +56,35 @@
 <body>
     @foreach ($qrcodes as $qrcode)
     <div class="page-break">
-        <h2 class="text-center">{{ $voteEvent->event_name }}</h2>
+        <h1 class="text-center">{{ $voteEvent->event_name }}</h1>
         <div class="top">
             <table>
                 <tr>
                     <td width="70%" style="vertical-align: baseline;">
-                        <h4>注意事項</h4>
-                        <p>1. Bootstrap’s form controls expand on our Rebooted form styles with classes. Use these classes to opt into their customized displays 
-                            for a more consistent rendering across browsers and devices.
-                        </p>
+                        <h3>注意事項</h3>
+                        <p>自2024年開始採取線上投票，請掃描QR code進行投票。</p>
+                        <p>若遇網路或系統問題無法進行電子投票，將由主席宣布後，改採紙本投票。</p>
                     </td>
-                    <td style="text-align: center;">
+                    <td width="30%" style="text-align: center;">
                         <img src="{{ $qrcode->qrcode_url }}" alt="">
+                        <p>http://140.115.2.129/vote/{{ $voteEvent->event_id }}/{{ $qrcode->qrcode_string }}</p>
                     </td>
                 </tr>
             </table>
         </div>
         <div class="down">
-            <h4>候選人</h4>
+            <h3>候選人</h3>
             <div style="padding: 0 20px;">
-                <table class="table" style="font-size: 1.3rem;">
+                <table class="table" style="font-size: 1.5rem;">
                     <tbody>
                         @foreach ($candidates as $key => $cand)
-                        <tr style="height: 80px;">
+                        <tr style="height: 100px;">
                             <th width="15%"></th>
                             <th width="15%" style="text-align: center;">{{ ($key + 1) }}.</th>
                             <th>
                                 <div>
                                     <span>{{ $cand->school }}</span>
-                                    <span>{{ $cand->name }}</span>
+                                    <span><strong>{{ $cand->name }}</strong></span>
                                 </div>
                             </th>
                         </tr>
