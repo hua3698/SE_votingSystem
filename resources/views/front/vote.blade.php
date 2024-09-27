@@ -4,8 +4,7 @@
     <div class="container">
         <h2 class="text-center mb-3">
             <img src="{{ asset('assets/header.jpg') }}" height="10%" width="10%">
-            <span style="color: #8CD790">桃園</span>
-            <span style="color: #30A9DE">區域網路中心</span>
+            <span>桃園區域網路中心</span>
         </h2>
 
         @if ($status === 'error')
@@ -32,7 +31,7 @@
                                         <input name="cand[]" class="form-check-input" type="checkbox" value="{{ $cand->cand_id }}">
                                     </div>
                                 </div>
-                                <div class="no">{{ $key + 1 }}.</div>
+                                <div class="no">{{ $cand['number'] }}號</div>
                                 <div class="intro">
                                     <div>
                                         <p style="font-size: 1.2rem">{{ $cand['school'] }}</p>
@@ -55,9 +54,7 @@
                             <h5 class="modal-title">再次確認</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
-                            <p>Modal body text goes here.</p>
-                        </div>
+                        <div class="modal-body"></div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
                             <button id="btnConfirmToVote" type="button" class="btn btn-primary">確定送出</button>
@@ -86,10 +83,10 @@
                             if($(this).prop('checked') === true) {
                                 checkedCount++
                                 candidates_id.push($(this).val())
-
+                                let candidateNum = $(this).closest('.cand').find('.no').text();
                                 let candidateSchool = $(this).closest('.cand').find('.intro p').text();
                                 let candidateName = $(this).closest('.cand').find('.intro strong').text();
-                                cand_info += '<p class="fs-5"><strong>' + candidateSchool + ' ' + candidateName + '</strong></p>';
+                                cand_info += '<p class="fs-5"><strong>' + candidateNum + candidateSchool + ' ' + candidateName + '</strong></p>';
                             }
                         })
 

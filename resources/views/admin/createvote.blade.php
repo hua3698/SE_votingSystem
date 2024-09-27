@@ -39,12 +39,12 @@
                     </div>
                 </div>
                 <div class="mb-4">
-                    <label for="voteName" class="form-label">設定有哪些候選人</label>
+                    <label for="voteName" class="form-label">設定候選人</label>
                     <div class="candidate_div">
                         <div class="input-group mb-3">
-                            <span class="input-group-text num">1</span>
-                            <input type="text" class="form-control candidate_input" placeholder="請輸入候選人名稱" required>
-                            <input type="text" class="form-control candidate_school" placeholder="請輸入候選人學校">
+                            <input type="number" class="form-control candidate_number" placeholder="編號">
+                            <input type="text" class="form-control candidate_input" placeholder="候選人名稱" required>
+                            <input type="text" class="form-control candidate_school" placeholder="候選人學校">
                             <span class="input-group-text"></span>
                         </div>
                     </div>
@@ -105,14 +105,11 @@
 <script>
     $(function() {
         $('#add_candidate').on('click', function() {
-
-            let lastText = parseInt($('.num').last().text());
-
             $('.candidate_div').append(`
                 <div class="input-group mb-3">
-                    <span class="input-group-text num">${lastText + 1}</span>
-                    <input type="text" class="form-control candidate_input" placeholder="請輸入候選人名稱" required>
-                    <input type="text" class="form-control candidate_school" placeholder="請輸入候選人學校">
+                    <input type="text" class="form-control candidate_number" placeholder="編號">
+                    <input type="text" class="form-control candidate_input" placeholder="候選人名稱" required>
+                    <input type="text" class="form-control candidate_school" placeholder="候選人學校">
                     <span class="input-group-text btnDeleteRow">
                         <svg width="16" height="16" fill="currentColor" class="bi bi-x-lg delete" viewBox="0 0 16 16">
                             <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
@@ -139,10 +136,17 @@
                 return;
             }
 
+            $('.candidate_number').each(function() {
+                if($(this).val().trim() == '') {
+                    alert('候選人編號是空的')
+                }
+            })
+
             let candidates = []
             $('.candidate_input').each(function(idx) {
                 if($(this).val() !== '') {
                     let tmp = {}
+                    tmp.number = $('.candidate_number').eq(idx).val()
                     tmp.name = $(this).val()
                     tmp.school = $('.candidate_school').eq(idx).val()
                     candidates.push(tmp)

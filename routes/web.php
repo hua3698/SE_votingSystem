@@ -39,11 +39,12 @@ Route::middleware(['web', 'auth.check'])->group(function ()
     Route::post('/outstand/vote/{event_id}/check', [AdminController::class, 'postCheckVoteSituation'])->name('admin.vote.check.post');
     Route::get('/outstand/vote/{event_id}/result', [AdminController::class, 'getVoteResult'])->name('admin.vote.result');
     Route::get('/outstand/vote/{event_id}/edit', [AdminController::class, 'editVote'])->name('admin.vote.edit');
-
+    
     Route::put('/outstand/vote/activate', [AdminController::class, 'activateVoteEvent'])->name('activate.vote');
     Route::put('/outstand/vote/deactivate', [AdminController::class, 'deactivateVoteEvent'])->name('deactivate.vote');
-
+    
     Route::get('/outstand/vote/{event_id}/pdf', [AdminController::class, 'testPDF'])->name('test.pdf');
+    Route::get('/outstand/vote/{event_id}/export/detail', [AdminController::class, 'exportDetail'])->name('export.detail');
 });
 
 # 投票

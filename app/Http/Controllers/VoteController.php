@@ -154,7 +154,7 @@ class VoteController extends Controller
     {
         return VoteRecord::leftJoin('candidates', 'vote_records.cand_id', '=', 'candidates.cand_id')
                 ->where('vote_records.code_id', $qrcode_id)
-                ->select('vote_records.code_id', 'candidates.name as cand_name', 'candidates.school as cand_school', 'vote_records.updated_at as vote_time')
+                ->select('vote_records.code_id', 'candidates.number as cand_number', 'candidates.name as cand_name', 'candidates.school as cand_school', 'vote_records.updated_at as vote_time')
                 ->get();
     }
 

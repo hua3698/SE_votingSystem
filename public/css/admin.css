@@ -33,6 +33,10 @@ body {
     margin-left: 1.5rem;
 }
 
+.candidate_div .candidate_number {
+    flex: 0.2;
+} 
+
 .candidate_div svg.delete {
     color: red;
     cursor: pointer;
@@ -52,23 +56,23 @@ body {
     margin-bottom: 10px;
 } 
 
-.vote_detail h4 {
+.admin_container h4 {
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
-.vote_detail p {
+.admin_container p {
     word-wrap: break-word;
     padding: 0 30px;
 }
 
-.vote_detail .block {
+.admin_container .block {
     padding: 3%;
     background-color: #f9f9f9;
     border-radius: 10px;
 }
 
-.vote_detail .threedot {
+.admin_container .threedot {
     width: 45px;
     height: 45px;
     padding: 8px;
@@ -77,23 +81,23 @@ body {
     text-align: center;
 }
 
-.vote_detail .threedot:hover {
+.admin_container .threedot:hover {
     background-color: #cedeff;
     border-radius: 50%;
 }
 
-.vote_detail .top {
+.admin_container .top {
     text-align: center;
     background: antiquewhite;
     padding: 25px;
     border-radius: 10px;
 }
 
-.vote_detail .top h2 {
+.admin_container .top h2 {
     font-size: 2.5rem;
 }
 
-.vote_detail table th, .vote_detail table td {
+.admin_container table th, .admin_container table td {
     background-color: #f9f9f9;
     vertical-align: middle;
 }
@@ -116,6 +120,15 @@ body {
     width: 150px;
 }
 
+.show_qrcode .expand_icon {
+    margin-left: 50px;
+    color: #0d6efd;
+}
+
+.show_qrcode .hide {
+    cursor: pointer;
+}
+
 .bar {
     border-left: 5px solid #3c78cd;
     padding-left: 10px;
@@ -130,30 +143,29 @@ body {
     height: 75px !important;
 }
 
-.result_table .rank_1 {
-    background-color: #ffda69;
-    color: #f98c00;
-    padding: 10px 5px;
-    font-weight: bold;
+.medal {
+    width: 10%;
+    text-align: right;
 }
 
-.result_table .rank_2 {
-    background-color: #ddd;
-    color: #6c757d;
-    padding: 10px 5px;
-    font-weight: bold;
+.medal img {
+    width: 50px;
 }
 
-.result_table .rank_3 {
-    background-color: #cdb057;
-    color: #87500c;
-    padding: 10px 5px;
-    font-weight: bold;
+.detail_table {
+    border: 1px solid;
 }
 
-.result_table .rank_4 {
-    background-color: #dae7f9;
-    color: #0d6efd;
-    padding: 10px 5px;
-    font-weight: bold;
+.detail_table thead th {
+    background: #c8d6eb;
+}
+
+.vote_detail_td p {
+    margin-bottom: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.vote_detail_td p:last-child{
+    margin-bottom: 0;
 }

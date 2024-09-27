@@ -15,7 +15,7 @@
                                 <h5 class="card-title">
                                     <span class="me-3">{{ $event->event_name }}</span>
                                     @if ($event->manual_control === 1)
-                                        @if ($event->vote_is_ongoing === 0 && $event->status !== 2)
+                                        @if ($event->vote_is_ongoing === 0)
                                             <span class="badge text-bg-secondary">尚未開始</span>
                                         @elseif ($event->vote_is_ongoing === 1)
                                             <span class="badge text-bg-success">投票進行中</span>

@@ -63,6 +63,7 @@ class AdminController extends Controller
                 'start' => 'required|date_format:Y-m-d H:i:s',
                 'end' => 'required|date_format:Y-m-d H:i:s|after:start',
                 'candidates' => 'required|array',
+                'candidates' => 'required|integer|min:1|max:10',
                 'candidates.*.name' => 'required|string|max:255', 
                 'candidates.*.school' => 'required|string|max:255', 
                 'qrcode_count' => 'required|integer|min:1',
@@ -86,6 +87,7 @@ class AdminController extends Controller
                 foreach ($validated['candidates'] as $key => $cand) {
                     $candidate = new Candidate();
                     $candidate->event_id = $voteEvent->event_id;
+                    $candidate->number = $cand['number'];
                     $candidate->name = $cand['name'];
                     $candidate->school = $cand['school'];
                     $candidate->save();
@@ -230,6 +232,7 @@ class AdminController extends Controller
             ->leftJoin('vote_records', 'generate_qrcodes.code_id', '=', 'vote_records.code_id')
             ->select('generate_qrcodes.*', DB::raw('COUNT(vote_records.code_id) as total_votes'))
             ->groupBy('generate_qrcodes.code_id')
+            ->orderBy('updated_at', 'desc')
             ->get();
 
         $response = [];
@@ -242,6 +245,7 @@ class AdminController extends Controller
         return view('admin.votecheck', $response);
     }
 
+    // ajax每20秒取資料
     public function postCheckVoteSituation($event_id)
     {
         $voted_qrcodes = GenerateQrcode::where('generate_qrcodes.event_id', $event_id)
@@ -264,11 +268,13 @@ class AdminController extends Controller
     {
         $voteEvent = VoteEvent::find($event_id);
         $rank = $this->getRankedCandidates($event_id);
+        $voteRecord = $this->getVoteRecord($event_id);
 
         $response = [];
         $response = [
             'vote_event' => $voteEvent,
-            'rank' => $rank
+            'rank' => $rank,
+            'records' => $voteRecord
         ];
         return view('admin.voteresult', $response);
     }
@@ -288,9 +294,58 @@ class AdminController extends Controller
         return DB::select($query, [$event_id]);
     }
 
+    private function getVoteRecord($event_id)
+    {
+        $results = DB::table('vote_records as vr')
+                    ->join('generate_qrcodes as gq', 'vr.code_id', '=', 'gq.code_id')
+                    ->join('candidates as cand', 'vr.cand_id', '=', 'cand.cand_id')
+                    ->where('vr.event_id', $event_id)
+                    ->select('vr.code_id', 'gq.qrcode_string', 'cand.number', 'cand.name', 'cand.school', 'vr.updated_at')
+                    ->orderBy('vr.updated_at', 'desc')
+                    ->get();
+
+        $groupedResults = [];
+
+        foreach ($results as $row) {
+            if (!isset($groupedResults[$row->code_id])) {
+                $groupedResults[$row->code_id] = [
+                    'code_id' => $row->code_id,
+                    'qrcode_string' => $row->qrcode_string,
+                    'updated_at' => $row->updated_at,
+                    'vote' => [],
+                ];
+            }
+
+            $groupedResults[$row->code_id]['vote'][] = [
+                'number' => $row->number,
+                'name' => $row->name,
+                'school' => $row->school
+            ];
+        }
+
+        // 按 number 排序
+        foreach ($groupedResults as &$group) {
+            usort($group['vote'], function ($a, $b) {
+                return $a['number'] <=> $b['number'];
+            });
+        }
+
+        $groupedResults = array_values($groupedResults);
+        return $groupedResults;
+    }
+
     public function editVote($event_id)
     {
         echo 'not yet work';
+    }
+
+    public function exportDetail($event_id)
+    {
+        $voteRecord = $this->getVoteRecord($event_id);
+
+        $response = [];
+        $response['records'] = $voteRecord;
+        return view('pdf.votedetail', $response);
     }
 
 }

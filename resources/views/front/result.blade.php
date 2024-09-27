@@ -4,8 +4,7 @@
     <div class="container">
         <h2 class="text-center mb-5">
             <img src="{{ asset('assets/header.jpg') }}" height="10%" width="10%">
-            <span style="color: #8CD790">桃園</span>
-            <span style="color: #30A9DE">區域網路中心</span>
+            <span>桃園區域網路中心</span>
         </h2>
         @if ($status !== 'error')
             <div>
@@ -24,6 +23,7 @@
                     <div>
                         @foreach ($records as $key => $record)
                             <ul class="list-group list-group-horizontal">
+                                <li class="list-group-item">{{ $record->cand_number }}號</li>
                                 <li class="list-group-item">{{ $record->cand_school }}</li>
                                 <li class="list-group-item">{{ $record->cand_name }}</li>
                                 <li class="list-group-item">{{ $record->vote_time }}</li>

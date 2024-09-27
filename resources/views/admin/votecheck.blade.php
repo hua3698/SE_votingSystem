@@ -1,46 +1,78 @@
 @extends('admin.common')
 
 @section('body')
-<div class="container vote_detail">
+<div class="container admin_container">
     <h2 class="text-center fw-bold mb-5">
         {{ $vote_event->event_name }}
     </h2>
-    <div class="shadow block mb-5">
-        <h3 class="text-center fw-bold mb-3">投票狀況</h3>
+    <div class="shadow block mb-3">
+        <h5 class="text-center mb-3">
+            頁面更新時間：
+            <span id="update_time">{{ $system_time }}</span>
+            <span class="fs-6">(每20秒更新一次)</span>
+        </h5>
         <div class="top mb-5">
             <h2>共 <span id="count_vote" class="text-danger">{{ count($qrcodes) }}</span> 位已完成投票</h2>
         </div>
         <div class="px-3 row justify-content-center mb-3">
-            <div class="col-12 col-lg-8 text-center">
+            <div class="col-6">
                 <table class="table">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">QR Code序號</th>
-                        <th scope="col">投了幾位</th>
-                        <th scope="col">投票時間</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>QR Code序號</th>
+                            <th>投了幾位</th>
+                            <th>投票時間</th>
+                        </tr>
+                    </thead>
                     <tbody class="tbody">
                         @foreach ($qrcodes as $key => $qrcode)
+                        @if($key % 2 == 0)
+                            <tr>
+                                <td>{{ $qrcode->qrcode_string }}</td>
+                                <td class="text-primary fs-4">
+                                    <svg width="20" height="20" fill="currentColor" class="bi bi-ticket" viewBox="0 0 16 16">
+                                        <path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6zM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5z"/>
+                                    </svg>
+                                    {{ $qrcode->total_votes }}
+                                </td>
+                                <td>{{ $qrcode->updated_at }}</td>
+                            </tr>
+                        @endif
+                    @endforeach
+                </tbody>
+                </table>
+            </div>
+            <div class="col-6">
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td scope="row">{{ ($key + 1 ) }}</td>
-                            <td>{{ $qrcode->qrcode_string }}</td>
-                            <td class="text-primary fs-4">
-                                <svg width="20" height="20" fill="currentColor" class="bi bi-ticket" viewBox="0 0 16 16">
-                                    <path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6zM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5z"/>
-                                </svg>
-                                {{ $qrcode->total_votes }}
-                            </td>
-                            <td>{{ $qrcode->updated_at }}</td>
+                            <th class="text_hide">QR Code序號</th>
+                            <th>投了幾位</th>
+                            <th>投票時間</th>
                         </tr>
+                    </thead>
+                    <tbody class="tbody">
+                        @foreach ($qrcodes as $key => $qrcode)
+                        @if($key % 2 == 1)
+                            <tr>
+                                <td>{{ $qrcode->qrcode_string }}</td>
+                                <td class="text-primary fs-4">
+                                    <svg width="20" height="20" fill="currentColor" class="bi bi-ticket" viewBox="0 0 16 16">
+                                        <path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6zM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5z"/>
+                                    </svg>
+                                    {{ $qrcode->total_votes }}
+                                </td>
+                                <td>{{ $qrcode->updated_at }}</td>
+                            </tr>
+                        @endif
                         @endforeach
                     </tbody>
                 </table>
-                <div class="spinner-border d-none" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
+            </div>
+            <div class="spinner-border d-none text-center" role="status">
+                <span class="visually-hidden">Loading...</span>
             </div>
         </div>
-        <h6 class="d-flex justify-content-end">頁面更新時間：<span id="update_time">{{ $system_time }}</span></h6>
     </div>
 @endsection
 
