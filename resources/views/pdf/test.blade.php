@@ -44,10 +44,6 @@
             padding: 1rem;
         }
 
-        .top img {
-            /* width: 200px; */
-        }
-
         .down {
             padding: 1rem;
         }
@@ -62,12 +58,13 @@
                 <tr>
                     <td width="70%" style="vertical-align: baseline;">
                         <h3>注意事項</h3>
-                        <p>自2024年開始採取線上投票，請掃描QR code進行投票。</p>
-                        <p>若遇網路或系統問題無法進行電子投票，將由主席宣布後，改採紙本投票。</p>
+                        <p>１、一人最多投 <span class="text-danger fw-bold">{{ $voteEvent->max_vote_count }}</span> 票</p>
+                        <p>２、自2024年首次採取線上投票，請掃描QR code進行投票。重複執行掃瞄將顯示前次投票的結果。</p>
+                        <p>３、若遇網路或系統問題無法進行電子投票，將由主席宣布後，改採紙本投票。本張視同紙本選票，每所學校限領一張，圈選後請對折放入投票箱。</p>
                     </td>
                     <td width="30%" style="text-align: center;">
                         <img src="{{ $qrcode->qrcode_url }}" alt="">
-                        <p>http://140.115.2.129/vote/{{ $voteEvent->event_id }}/{{ $qrcode->qrcode_string }}</p>
+                        <p style="margin: 0">{{ config('app.url') }}vote/{{ $voteEvent->event_id }}/{{ $qrcode->qrcode_string }}</p>
                     </td>
                 </tr>
             </table>
@@ -78,7 +75,7 @@
                 <table class="table" style="font-size: 1.5rem;">
                     <tbody>
                         @foreach ($candidates as $key => $cand)
-                        <tr style="height: 100px;">
+                        <tr style="height: 90px;">
                             <th width="15%"></th>
                             <th width="15%" style="text-align: center;">{{ ($key + 1) }}.</th>
                             <th>

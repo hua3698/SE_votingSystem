@@ -17,15 +17,17 @@
                     </p>
                     <p>您已經完成投票囉!</p>
                 </div>
-                <div>
+                <div class="vote_record">
                     <p class="fs-6">QR Code代號<span class="text-primary">{{ $qrcode_string }}</span></p>
                     <p class="fs-6">投票紀錄</p>
                     <div>
                         @foreach ($records as $key => $record)
                             <ul class="list-group list-group-horizontal">
                                 <li class="list-group-item">{{ $record->cand_number }}號</li>
-                                <li class="list-group-item">{{ $record->cand_school }}</li>
-                                <li class="list-group-item">{{ $record->cand_name }}</li>
+                                <li class="list-group-item">
+                                    <p>{{ $record->cand_school }}</p>
+                                    <p>{{ $record->cand_name }}</p>
+                                </li>
                                 <li class="list-group-item">{{ $record->vote_time }}</li>
                             </ul>
                         @endforeach

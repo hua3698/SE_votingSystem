@@ -1,12 +1,11 @@
 @extends('front.index')
 
 @section('body')
+    <h2 class="title shadow-sm">
+        <img src="{{ asset('assets/header.jpg') }}" height="10%" width="10%">
+        <span>桃園區域網路中心</span>
+    </h2>
     <div class="container">
-        <h2 class="text-center mb-3">
-            <img src="{{ asset('assets/header.jpg') }}" height="10%" width="10%">
-            <span>桃園區域網路中心</span>
-        </h2>
-
         @if ($status === 'error')
             <div class="">
                 <div class="not_available">
@@ -15,17 +14,20 @@
             </div>
         @else
             <div>
-                <h1 class="vote_name fw-bold">{{ $vote_event->event_name }}</h1>
+                <h1 class="vote_name fw-bold text-center">{{ $vote_event->event_name }}</h1>
                 <div class="notice mb-3">
                     <p class="fw-bold">注意事項：</p>
-                    <p>1. 一人最多投 <span class="text-danger fw-bold">{{ $vote_event->max_vote_count }}</span> 票</p>
-                    <p>2. 送出後無法再修改或重新投票，請謹慎操作!</p>
+                    <p>１、一人最少１票，最多 <span class="text-danger fw-bold">{{ $vote_event->max_vote_count }}</span> 票</p>
+                    <p>２、送出後無法再修改或重新投票，請謹慎操作!</p>
+                    <p>３、自2024年首次採取線上投票，請掃描QR code進行投票。重複執行掃瞄將顯示前次投票的結果。</p>
+                    <p>４、若遇網路或系統問題無法進行電子投票，將由主席宣布後，改採紙本投票。本張視同紙本選票，每所學校限領一張，圈選後請對折放入投票箱。</p>
                 </div>
                 <div class="can_vote">
+                    <h4 class="fw-bold">候選人：</h4>
                     @csrf
                     <div class="candidates">
                         @foreach ($candidates as $key => $cand)
-                            <div class="cand">
+                            <div class="cand shadow-sm">
                                 <div class="circle_div col-3">
                                     <div class="form-check vote_check">
                                         <input name="cand[]" class="form-check-input" type="checkbox" value="{{ $cand->cand_id }}">
@@ -51,13 +53,16 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">再次確認</h5>
+                            <h5 class="modal-title">Confirmation</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body"></div>
+                        <div class="modal-body">
+                            <p>送出後無法再修改或重新投票，請確認以下是否為您要投票的候選人</p>
+                            <div class="check_cand mt-3 px-2"></div>
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                            <button id="btnConfirmToVote" type="button" class="btn btn-primary">確定送出</button>
+                            <button id="btnConfirmToVote" type="button" class="btn btn-success">確定送出</button>
                         </div>
                     </div>
                 </div>
@@ -78,6 +83,10 @@
                     $('#btnVote').on('click', function() {
                         let checkedCount = 0
                         let cand_info = ''
+                        let check_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">' +
+                                            '<path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>' +
+                                            '<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/>' +
+                                        '</svg>';
 
                         $('.cand input[type=checkbox]').each(function() {
                             if($(this).prop('checked') === true) {
@@ -86,7 +95,8 @@
                                 let candidateNum = $(this).closest('.cand').find('.no').text();
                                 let candidateSchool = $(this).closest('.cand').find('.intro p').text();
                                 let candidateName = $(this).closest('.cand').find('.intro strong').text();
-                                cand_info += '<p class="fs-5"><strong>' + candidateNum + candidateSchool + ' ' + candidateName + '</strong></p>';
+                                cand_info += '<p class="fs-5 mb-2">' + check_icon +
+                                    '<strong class="ms-2">' + candidateNum + ' ' + candidateName + ' ' + candidateSchool + '</strong></p>';
                             }
                         })
 
@@ -97,7 +107,7 @@
                             alert('至少勾選1位，至多3位候選人')
                             return;
                         } else {
-                            $('.modal-body').html('確定要投給：' + cand_info);
+                            $('.check_cand').html(cand_info);
                             $('#checkModal').modal('show');
                         }
                     })

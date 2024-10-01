@@ -18,7 +18,8 @@
                                 <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
                                 <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
                             </svg>
-                            &nbsp;投票時間</label>
+                            &nbsp;投票時間
+                        </label>
                         <input type="text" class="form-control" id="startTime" placeholder="" value="" required="">
                         <div class="invalid-feedback">
                             Valid first name is required.
@@ -139,6 +140,7 @@
             $('.candidate_number').each(function() {
                 if($(this).val().trim() == '') {
                     alert('候選人編號是空的')
+                    return;
                 }
             })
 

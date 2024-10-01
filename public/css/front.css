@@ -1,5 +1,12 @@
+.title {
+    background: linear-gradient(-45deg, #e73c7e, #23a6d5);
+    background-size: 100% 400%;
+    color: #fff;
+    padding: 20px;
+}
+
 .container {
-    padding: 10%;
+    padding: 0 1rem;
 }
 
 .vote_name {
@@ -18,7 +25,7 @@
 }
 
 .cand:hover {
-    background-color: #ddd;
+    background-color: #ccc;
     cursor: pointer;
 }
 
@@ -48,7 +55,7 @@
 
 .end #btnVote {
     width: 30%;
-    background-color: #37a772;
+    background-color: #437bcd;
     padding: 0.6rem 0.8rem;
     border-radius: 5%;
     color: #fcfcfc;
@@ -57,7 +64,7 @@
 }
 
 .end #btnVote:hover {
-    background: #2a835a;
+    background: #0d6efd;
     cursor: pointer;
 }
 
@@ -77,4 +84,21 @@
     /* border: 1px solid #3ea523; */
     /* border: 1px solid #e9b65d; */
     border-radius: 5px;
+}
+
+.vote_record li {
+    padding: 0.3rem;
+}
+
+.vote_record li:nth-of-type(2) {
+    width: 50%;
+}
+
+.vote_record li:nth-of-type(3) {
+    width: 30%;
+}
+
+.list-group-item {
+    flex-shrink: 0;
+    flex-grow: 1;
 }

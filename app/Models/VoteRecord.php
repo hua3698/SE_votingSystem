@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class VoteRecord extends Model
 {
@@ -34,5 +35,16 @@ class VoteRecord extends Model
     public function generateQrcode()
     {
         return $this->belongsTo(GenerateQrcode::class, 'code_id', 'code_id');
+    }
+
+    public static function getVoteDetails($event_id)
+    {
+        return DB::table('vote_records as vr')
+            ->join('generate_qrcodes as gq', 'vr.code_id', '=', 'gq.code_id')
+            ->join('candidates as cand', 'vr.cand_id', '=', 'cand.cand_id')
+            ->where('vr.event_id', $event_id)
+            ->select('vr.code_id', 'gq.qrcode_string', 'cand.number', 'cand.name', 'cand.school', 'vr.updated_at')
+            ->orderBy('vr.updated_at', 'desc')
+            ->get();
     }
 }
