@@ -7,7 +7,7 @@
     <title>投票明細</title>
     <style>
         table {
-            width: 80%;
+            width: 95%;
             margin: 10px auto;
             border-collapse: collapse;
         }
@@ -23,16 +23,26 @@
         td {
             padding: 5px 10px;
         }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .number {
+            padding: 5px;
+            background: #ddd;
+        }
     </style>
 </head>
 <body>
+    <h1 class="text-center">{{ $event_name }}</h1>
     <table class="table table-bordered detail_table">
             <thead>
                 <tr>
                     <th scope="col" class="text-center">#</th>
                     <th scope="col">QR Code序號</th>
                     <th scope="col">投票明細</th>
-                    <th scope="col">時間</th>
+                    <th scope="col">投票時間</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,7 +53,7 @@
                         <td class="vote_detail_td">
                             @foreach ($record['vote'] as $vote)
                                 <p>
-                                    <span>{{ $vote['number'] }}號</span>
+                                    <span class="number">{{ $vote['number'] }}號</span>
                                     <span>{{ $vote['name'] }}</span>
                                     <span>{{ $vote['school'] }}</span>
                                 </p>

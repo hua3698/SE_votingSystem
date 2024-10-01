@@ -26,7 +26,7 @@
                     <h4 class="fw-bold">候選人：</h4>
                     @csrf
                     <div class="candidates">
-                        @foreach ($candidates as $key => $cand)
+                        @foreach ($candidates as $cand)
                             <div class="cand shadow-sm">
                                 <div class="circle_div col-3">
                                     <div class="form-check vote_check">

@@ -84,9 +84,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($candidates as $key => $cand)
+                    @foreach ($candidates as $cand)
                     <tr>
-                        <th scope="row">{{ ($key + 1) }}</th>
+                        <th scope="row">{{ $cand['number'] }}</th>
                         <td>{{ $cand['name'] }}</td>
                         <td>{{ $cand['school'] }}</td>
                     </tr>

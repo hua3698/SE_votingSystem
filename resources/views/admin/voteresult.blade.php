@@ -59,7 +59,7 @@
                         <th scope="col" class="text-center">#</th>
                         <th scope="col">QR Code序號</th>
                         <th scope="col">投票明細</th>
-                        <th scope="col">時間</th>
+                        <th scope="col">投票時間</th>
                     </tr>
                 </thead>
                 <tbody>

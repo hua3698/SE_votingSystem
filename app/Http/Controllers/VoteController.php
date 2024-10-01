@@ -32,7 +32,9 @@ class VoteController extends Controller
                 return $this->showVoteResult($event_id, $qrcode_string);
             }
 
-            $candidates = Candidate::where('event_id', $event_id)->get();
+            $candidates = Candidate::where('event_id', $event_id)
+                                ->orderBy('number', 'asc')
+                                ->get();
 
             $response = [
                 'status' => 'ok',
@@ -45,7 +47,7 @@ class VoteController extends Controller
         }
         catch (\Exception $e) 
         {
-            Log::error(sprintf('[%s] %s', __METHOD__, $e->getMessage()));
+            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
             return view('hello');
         }
     }
@@ -88,7 +90,7 @@ class VoteController extends Controller
         }
         catch (\Exception $e) 
         {
-            Log::error(sprintf('[%s] %s', __METHOD__, $e->getMessage()));
+            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
             return view('hello');
         }
     }
@@ -96,7 +98,7 @@ class VoteController extends Controller
     private function handleVoteEvent($event_id, $qrcode_string)
     {
         $this->voteEvent = VoteEvent::find($event_id);
-        $this->voteEvent = $this->getVoteStatus($this->voteEvent); // VoteHelper trait
+        $this->addVoteStatus($this->voteEvent); // VoteHelper trait
         $isOpen = $this->checkVoteisOpen();
 
         // 檢查 vote_event 是否存在
@@ -179,7 +181,7 @@ class VoteController extends Controller
         }
         catch (\Exception $e) 
         {
-            Log::error(sprintf('[%s] %s', __METHOD__, $e->getMessage()));
+            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
             return view('hello');
         }
     }

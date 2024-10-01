@@ -105,7 +105,7 @@ class AdminController extends Controller
         }
         catch (\Exception $e) 
         {
-            Log::error(sprintf('[%s] %s', __METHOD__, $e->getMessage()));
+            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
             return response()->json(['error' => '建立投票活動時發生錯誤。', 'details' => $e->getMessage()], 500);
         }
     }
@@ -114,13 +114,15 @@ class AdminController extends Controller
     public function getVoteEvent($event_id)
     {
         $voteEvent = VoteEvent::find($event_id);
-        $voteEvent = $this->getVoteStatus($voteEvent);
+        $this->addVoteStatus($voteEvent);
 
         if (!$voteEvent) {
             return response()->json(['error' => 'Vote Event not found'], 404);
         }
 
-        $candidates = Candidate::where('event_id', $event_id)->get();
+        $candidates = Candidate::where('event_id', $event_id)
+                                ->orderBy('number', 'asc')
+                                ->get();
         $qrcodes = $this->getQrcodeInfo($event_id);
 
         $response = [];
@@ -137,12 +139,14 @@ class AdminController extends Controller
     {
         try {
             $voteEvent = VoteEvent::find($event_id);
-            $voteEvent = $this->getVoteStatus($voteEvent);
+            $this->addVoteStatus($voteEvent);
 
             //檢查當前狀態是否可以編輯 (only allow 尚未開始階段)
             $this->validEditPermission($voteEvent);
 
-            $candidates = Candidate::where('event_id', $event_id)->get();
+            $candidates = Candidate::where('event_id', $event_id)
+                                ->orderBy('number', 'asc')
+                                ->get();
 
             $response = [];
             $response = [
@@ -153,7 +157,7 @@ class AdminController extends Controller
         }
         catch (\Exception $e) 
         {
-            Log::error(sprintf('[%s] %s', __METHOD__, $e->getMessage()));
+            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
             return view('hello');
         }
     }
@@ -166,7 +170,9 @@ class AdminController extends Controller
     public function generatePDF($event_id)
     {
         $voteEvent = VoteEvent::find($event_id);
-        $candidates = Candidate::where('event_id', $event_id)->get();
+        $candidates = Candidate::where('event_id', $event_id)
+                                ->orderBy('number', 'asc')
+                                ->get();
         $qrcodes = $this->getQrcodeInfo($event_id);
 
         // 初始化 DOMPDF
@@ -193,7 +199,9 @@ class AdminController extends Controller
     public function testPDF($event_id)
     {
         $voteEvent = VoteEvent::find($event_id);
-        $candidates = Candidate::where('event_id', $event_id)->get();
+        $candidates = Candidate::where('event_id', $event_id)
+                                ->orderBy('number', 'asc')
+                                ->get();
         $qrcodes = $this->getQrcodeInfo($event_id);
 
         $response = [];
@@ -228,10 +236,12 @@ class AdminController extends Controller
             $voteEvent = VoteEvent::find($validated['event_id']);
 
             if ($voteEvent) {
+                // 檢查是否可以啟動投票
                 $this->validActivatePermission($voteEvent);
 
-                $voteEvent->vote_is_ongoing = 1;
-                $voteEvent->save();
+                VoteEvent::where('event_id', $validated['event_id'])
+                            ->update(['vote_is_ongoing' => 1]);
+
                 return response()->json(['message' => '投票活動已啟用'], 200);
             }
 
@@ -239,7 +249,7 @@ class AdminController extends Controller
         }
         catch (\Exception $e) 
         {
-            Log::error(sprintf('[%s] %s', __METHOD__, $e->getMessage()));
+            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
             return view('hello');
         }
     }
@@ -257,8 +267,9 @@ class AdminController extends Controller
             if ($voteEvent) {
                 $this->validDeactivatePermission($voteEvent);
 
-                $voteEvent->vote_is_ongoing = 2;
-                $voteEvent->save();
+                VoteEvent::where('event_id', $validated['event_id'])
+                            ->update(['vote_is_ongoing' => 2]);
+
                 return response()->json(['message' => '投票活動已停用'], 200);
             }
 
@@ -266,7 +277,7 @@ class AdminController extends Controller
         }
         catch (\Exception $e) 
         {
-            Log::error(sprintf('[%s] %s', __METHOD__, $e->getMessage()));
+            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
             return view('hello');
         }
     }
@@ -274,7 +285,7 @@ class AdminController extends Controller
     public function checkVoteSituation($event_id)
     {
         $voteEvent = VoteEvent::find($event_id);
-        $voteEvent = $this->getVoteStatus($voteEvent);
+        $this->addVoteStatus($voteEvent);
         $voted_qrcodes = GenerateQrcode::getVotedQrcodes($event_id);
 
         $response = [];
@@ -320,7 +331,7 @@ class AdminController extends Controller
         }
         catch (\Exception $e) 
         {
-            Log::error(sprintf('[%s] %s', __METHOD__, $e->getMessage()));
+            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
             return view('hello');
         }
     }
@@ -361,10 +372,14 @@ class AdminController extends Controller
 
     public function exportDetail($event_id)
     {
+        $eventName = VoteEvent::where('event_id', $event_id)->value('event_name');
         $voteRecord = $this->getVoteRecord($event_id);
 
         $response = [];
-        $response['records'] = $voteRecord;
+        $response = [
+            'records' => $voteRecord,
+            'event_name' => $eventName 
+        ];
         return view('pdf.votedetail', $response);
     }
 

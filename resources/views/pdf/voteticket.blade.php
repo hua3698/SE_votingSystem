@@ -74,10 +74,10 @@
             <div style="padding: 0 20px;">
                 <table class="table" style="font-size: 1.5rem;">
                     <tbody>
-                        @foreach ($candidates as $key => $cand)
+                        @foreach ($candidates as $cand)
                         <tr style="height: 90px;">
                             <th width="15%"></th>
-                            <th width="15%" style="text-align: center;">{{ ($key + 1) }}.</th>
+                            <th width="15%" style="text-align: center;">{{ $cand['number'] }}.</th>
                             <th>
                                 <div>
                                     <span>{{ $cand->school }}</span>
