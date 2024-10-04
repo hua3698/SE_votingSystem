@@ -26,7 +26,7 @@
                         <h1 class="fw-bold mb-0 fs-2">Vote</h1>
                     </div>
                     <div class="modal-body p-5 pt-0">
-                        <form  method="POST" action="{{ route('login.submit') }}">
+                        <form method="POST" action="{{ route('login.submit') }}">
                             @csrf
                             <div class="form-floating mb-4">
                                 <input type="email" name="email" class="form-control rounded-3" id="floatingInput" placeholder="name@example.com">

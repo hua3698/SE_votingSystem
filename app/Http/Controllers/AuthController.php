@@ -19,6 +19,10 @@ class AuthController extends Controller
     {
         try
         {
+            if(!isset($request->email) || !isset($request->password)) {
+                return view('hello');
+            }
+
             $credentials = $request->validate([
                 'email' => 'required|email',
                 'password' => 'required|min:6',
@@ -37,7 +41,7 @@ class AuthController extends Controller
         }
         catch (\Exception $e) 
         {
-            echo $e;
+            return view('hello');
         }
     }
 }

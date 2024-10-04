@@ -18,7 +18,7 @@
                 <p>已完成投票！</p>
             </div>
             <div class="vote_name text-center">
-                <p class="fs-5 text-secondary">QR Code代號</p>
+                <p class="fs-5 text-secondary">QR Code序號</p>
                 <p class="fs-3">{{ $qrcode_string }}</p>
             </div>
             <div class="vote_record">
