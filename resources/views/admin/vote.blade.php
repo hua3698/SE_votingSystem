@@ -164,7 +164,9 @@
                             <tr>
                                 <th scope="row"><strong>{{ ($key + 1) }}</strong></th>
                                 <td><img src="{{ $qrcode->qrcode_url }}" alt="QR Code"></td>
-                                <td>{{ $qrcode->qrcode_string }}</td>
+                                <td>
+                                    <a href="https://mfa.tyrc.edu.tw/vote/{{ $vote_event->event_id }}/{{ $qrcode->qrcode_string }}" target="_blank">{{ $qrcode->qrcode_string }}</a>
+                                </td>
                                 <td class="text-center">
                                     @if ($qrcode->has_been_voted === 1)
                                         <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">

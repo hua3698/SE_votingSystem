@@ -18,12 +18,12 @@
 
         <div class="container">
             <div class="notice">
-                <p class="fw-bold">說明</p>
+                <p class="fw-bold">◆ 說明</p>
                 <p>本次投票依據【TANet 桃園區域網路中心傑出網路管理人員選拔實施要點】辦理</p>
                 <p>投票方式由每單位一票，每票最多圈選三名，超過三名之選票以廢票計。</p>
             </div>
             <div class="notice mb-3">
-                <p class="fw-bold">注意事項</p>
+                <p class="fw-bold">◆ 注意事項</p>
                 <p>１、每張QR code序號最少１票，最多可投 <span class="text-danger fw-bold">{{ $vote_event->max_vote_count }}</span> 票</p>
                 <p>２、送出後無法再修改或重新投票，請謹慎操作!</p>
                 <p>３、自2024年首次改採線上投票，請掃描QR code進行投票。投票後可再執行QR code掃瞄查詢該選票投票內容。</p>
@@ -31,7 +31,7 @@
                 <p>５、候選人以收件先後排序列出。</p>
             </div>
             <div class="notice mb-3">
-                <p class="fw-bold">候選人簡報（人員名單依收件先後排序）</p>
+                <p class="fw-bold">◆ 候選人簡報（人員名單依收件先後排序）</p>
                 <p>1. <a href="{{ asset('assets/1_啟英高中_李栢松.pdf') }}" target="_blank">啟英高中 李栢松 組長</a></p>
                 <p>2. <a href="{{ asset('assets/2_連江縣教網中心_吳貽樺.pdf') }}" target="_blank">連江縣教網中心 吳貽樺 組員</a></p>
                 <p>3. <a href="{{ asset('assets/3_長庚大學_吳凱威.pdf') }}" target="_blank">長庚大學 吳凱威 專員</a></p>

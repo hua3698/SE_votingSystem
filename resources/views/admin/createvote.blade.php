@@ -44,8 +44,8 @@
                     <div class="candidate_div">
                         <div class="input-group mb-3">
                             <input type="number" class="form-control candidate_number" placeholder="編號">
-                            <input type="text" class="form-control candidate_input" placeholder="候選人名稱" required>
                             <input type="text" class="form-control candidate_school" placeholder="候選人學校">
+                            <input type="text" class="form-control candidate_input" placeholder="候選人名稱" required>
                             <span class="input-group-text"></span>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
                             <svg width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
                             </svg>
-                            Button
+                            新增
                         </button>
                     </span>
                 </div>

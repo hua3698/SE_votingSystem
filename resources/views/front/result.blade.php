@@ -17,11 +17,11 @@
                 </p>
                 <p>已完成投票！</p>
             </div>
-            <div class="vote_name text-center">
+            <div class="vote_name text-center mb-4">
                 <p class="fs-5 text-secondary">QR Code序號</p>
                 <p class="fs-3">{{ $qrcode_string }}</p>
             </div>
-            <div class="vote_record">
+            <div class="vote_record mb-4">
                 <p class="fs-5 text-secondary text-center">投票紀錄</p>
                 <div>
                     @foreach ($records as $key => $record)
@@ -35,6 +35,20 @@
                         </ul>
                     @endforeach
                 </div>
+            </div>
+            <div class="vote_record">
+                <p class="fs-5 text-secondary text-center">再次提醒</p>
+                <p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dot" viewBox="0 0 16 16">
+                        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                    </svg>
+                    送出後已無法修改或重新投票</p>
+                <p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dot" viewBox="0 0 16 16">
+                        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                    </svg>
+                    待主持人宣布投票結束後，才會公布最終結果
+                </p>
             </div>
         @endif
     </div>

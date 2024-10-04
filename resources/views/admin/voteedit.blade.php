@@ -2,26 +2,31 @@
 
 @section('body')
 <div class="container admin_container">
-    <h2 class="text-center mb-5"><span class="fw-bold">[編輯]</span> {{ $vote_event->event_name }} </h2>
+    <h3 class="fw-bold me-3 text-center">[編輯]</h3>
     <div class="shadow block mb-5">
         <div class="mb-5">
             <div>
+                <div class="edit_time fs-5 mb-4">
+                    <label for="voteName" class="form-label">
+                        <strong>投票活動名稱</strong>
+                    </label>
+                    <input type="text" class="form-control" id="voteName" required value="{{ $vote_event->event_name }}">
+                </div>
                 <div class="edit_time row fs-5">
                     <span class="col-6">
                         <label for="startTime" class="form-label">
-                            <strong>投票開始：</strong> 
+                            <strong>投票開始</strong> 
                         </label>
-                        <input type="text" class="form-control" id="startTime" placeholder="" value="{{ $vote_event->start_time }}" required="">
+                        <input type="text" class="form-control" id="startTime" value="{{ $vote_event->start_time }}" required="">
                         <div class="invalid-feedback">
                             Valid first name is required.
                         </div>
-                        
                     </span>
                     <span class="col-6">
                         <label for="startTime" class="form-label">
-                            <strong>投票結束：</strong> 
+                            <strong>投票結束</strong> 
                         </label>
-                        <input type="text" class="form-control" id="startTime" placeholder="" value="{{ $vote_event->end_time }}" required="">
+                        <input type="text" class="form-control" id="endTime" value="{{ $vote_event->end_time }}" required="">
                         <div class="invalid-feedback">
                             Valid first name is required.
                         </div>
@@ -62,37 +67,49 @@
                                 <option value="5" {{ $vote_event->number_of_winners == "5" ? 'selected' : '' }}>5</option>
                             </select>
                         </th>
-                        <th scope="col">
-                            <input type="number" class="form-control" id="qrcode" required value="{{ $vote_event->number_of_qrcodes }}">
-                        </th>
+                        <th scope="col">{{ $vote_event->number_of_qrcodes }}</th>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <p class="card-text fs-5">
-            <span class="bar">
-                <strong>候選人</strong>
-            </span>
-        </p>
+        <p class="card-text fs-5 fw-bold">候選人</p>
         <div class="col-12 mb-3 px-3">
             <table class="table table-bordered table-hover detail_table">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">候選人名稱</th>
+                        <th scope="col" width="15%">#</th>
                         <th scope="col">候選人學校</th>
+                        <th scope="col">候選人名稱</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($candidates as $cand)
                     <tr>
-                        <th scope="row">{{ $cand['number'] }}</th>
-                        <td>{{ $cand['name'] }}</td>
-                        <td>{{ $cand['school'] }}</td>
+                        <th scope="row">
+                            <input type="number" class="form-control" value="{{ $cand['number'] }}">
+                        </th>
+                        <td>
+                            <input type="text" class="form-control" value="{{ $cand['school'] }}">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" value="{{ $cand['name'] }}">
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+            <span>
+                <button id="add_candidate" type="button" class="btn btn-outline-success">
+                    <svg width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+                    </svg>
+                    新增
+                </button>
+            </span>
+        </div>
+        <div class="text-center my-4">
+            <button id="btnSubmit" class="btn btn-primary">確認送出</button>
+            <button id="btnCancel" class="btn btn-secondary">取消</button>
         </div>
     </div>
 @endsection
@@ -100,7 +117,18 @@
 @section('script_js')
 
 <script>
-    
+    $('#add_candidate').on('click', function() {
+
+    })
+
+    $('#btnSubmit').on('click', function() {
+        alert('還沒好啦')
+    })
+
+    $('#btnCancel').on('click', function() {
+            history.back()
+    })
+
     const set_datepicker = () => {
             let today = new Date();
             let str_today = dateFormat(today)
