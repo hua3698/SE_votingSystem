@@ -1,7 +1,7 @@
 .title {
-    background: linear-gradient(-45deg, #e73c7e, #23a6d5);
+    /* background: linear-gradient(-45deg, #e73c7e, #23a6d5);
     background-size: 100% 400%;
-    color: #fff;
+    color: #fff; */
     padding: 20px;
 }
 
@@ -9,9 +9,15 @@
     padding: 0 1rem;
 }
 
+.title_background {
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 15% 0;
+}
+
 .vote_name {
     word-wrap: break-word;
-    padding: 1rem 0;
+    /* padding: 1rem 0; */
 }
 
 .cand {

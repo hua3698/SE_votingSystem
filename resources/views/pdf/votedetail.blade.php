@@ -54,8 +54,8 @@
                             @foreach ($record['vote'] as $vote)
                                 <p>
                                     <span class="number">{{ $vote['number'] }}號</span>
-                                    <span>{{ $vote['name'] }}</span>
                                     <span>{{ $vote['school'] }}</span>
+                                    <span>{{ $vote['name'] }}</span>
                                 </p>
                             @endforeach
                         </td>

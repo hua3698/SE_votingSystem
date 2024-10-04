@@ -25,6 +25,7 @@ class VoteController extends Controller
         try
         {
             $result = $this->handleVoteEvent($event_id, $qrcode_string);
+
             if ($result['status'] === 'error') {
                 return view('front.vote', $result);
             }
@@ -70,7 +71,7 @@ class VoteController extends Controller
                 return view('front.vote', $result);
             } 
             elseif ($result['status'] === 'voted') {
-                $this->showVoteResult($validated['event_id'], $validated['qrcode_string']);
+                return response()->json(['status' => 'voted'], 400);
             }
 
             // 寫入投票紀錄
@@ -98,6 +99,7 @@ class VoteController extends Controller
     private function handleVoteEvent($event_id, $qrcode_string)
     {
         $this->voteEvent = VoteEvent::find($event_id);
+
         $this->addVoteStatus($this->voteEvent); // VoteHelper trait
         $isOpen = $this->checkVoteisOpen();
 
@@ -111,12 +113,13 @@ class VoteController extends Controller
 
         // 檢查 QR code 是否存在、是否已經投過票
         $this->generateQrcode = GenerateQrcode::where('qrcode_string', $qrcode_string)->first();
+
         if (!$this->generateQrcode) {
             return [
                 'status' => 'error',
                 'error_msg' => 'QR code not found'
             ];
-        } elseif ($this->generateQrcode->has_been_voted === 1) {
+        } elseif ($this->generateQrcode['has_been_voted'] === 1) {
             return [
                 'status' => 'voted',
                 'error_msg' => '已經投過票囉'
@@ -166,7 +169,7 @@ class VoteController extends Controller
         {
             $qrcode = GenerateQrcode::where('qrcode_string', $qrcode_string)->first();
 
-            if($qrcode->has_been_voted === 1) {
+            if($qrcode['has_been_voted'] === 1) {
                 $records = $this->getVoteRecords($qrcode->code_id);
                 $response = [
                     'status' => 'ok',

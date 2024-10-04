@@ -110,16 +110,16 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">候選人名稱</th>
                             <th scope="col">候選人學校</th>
+                            <th scope="col">候選人名稱</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($candidates as $cand)
                         <tr>
                             <th scope="row">{{ $cand['number'] }}</th>
-                            <td>{{ $cand['name'] }}</td>
                             <td>{{ $cand['school'] }}</td>
+                            <td>{{ $cand['name'] }}</td>
                         </tr>
                         @endforeach
                     </tbody>

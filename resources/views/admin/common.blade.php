@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>桃園區網線上投票平台 - 管理端</title>
+        <link rel="icon" href="{{ asset('assets/header.jpg') }}" type="image/x-icon">
         <link href="{{ asset('plugins/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />

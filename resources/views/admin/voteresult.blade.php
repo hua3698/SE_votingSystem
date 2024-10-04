@@ -70,9 +70,9 @@
                             <td class="vote_detail_td">
                                 @foreach ($record['vote'] as $vote)
                                     <p>
-                                        <span>{{ $vote['number'] }}號</span>
-                                        <span>{{ $vote['name'] }}</span>
+                                        <span style="padding: 5px; background: #ddd;">{{ $vote['number'] }}號</span>
                                         <span>{{ $vote['school'] }}</span>
+                                        <span>{{ $vote['name'] }}</span>
                                     </p>
                                 @endforeach
                             </td>
