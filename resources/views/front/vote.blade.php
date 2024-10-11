@@ -19,24 +19,16 @@
         <div class="container">
             <div class="notice">
                 <p class="fw-bold">◆ 說明</p>
-                <p>本次投票依據【TANet 桃園區域網路中心傑出網路管理人員選拔實施要點】辦理</p>
-                <p>投票方式由每單位一票，每票最多圈選三名，超過三名之選票以廢票計。</p>
+                <p>１、本次投票依據【TANet 桃園區域網路中心傑出網路管理人員選拔實施要點】辦理。</p>
+                <p>２、投票方式由每單位一票，每票最多圈選三名，超過三名之選票以廢票計。</p>
             </div>
             <div class="notice mb-3">
                 <p class="fw-bold">◆ 注意事項</p>
-                <p>１、每張QR code序號最少１票，最多可投 <span class="text-danger fw-bold">{{ $vote_event->max_vote_count }}</span> 票</p>
-                <p>２、送出後無法再修改或重新投票，請謹慎操作!</p>
-                <p>３、自2024年首次改採線上投票，請掃描QR code進行投票。投票後可再執行QR code掃瞄查詢該選票投票內容。</p>
-                <p>４、若遇網路或系統問題無法進行電子投票，將由主席宣布後，改採紙本投票。本張視同紙本選票，各單位限領一張，圈選後請對折放入投票箱。</p>
-                <p>５、候選人以收件先後排序列出。</p>
+                <p>１、自2024年首次改採線上投票，請掃描QR code進行投票。投票後可再執行QR code掃瞄查詢該選票投票內容。</p>
+                <p>２、若遇網路或系統問題無法進行電子投票，將由主席宣布後，改採紙本投票。本張視同紙本選票，各單位限領一張，圈選後請對折放入投票箱。</p>
             </div>
             <div class="notice mb-3">
-                <p class="fw-bold">◆ 候選人簡報（人員名單依收件先後排序）</p>
-                <p>1. <a href="{{ asset('assets/1_啟英高中_李栢松.pdf') }}" target="_blank">啟英高中 李栢松 組長</a></p>
-                <p>2. <a href="{{ asset('assets/2_連江縣教網中心_吳貽樺.pdf') }}" target="_blank">連江縣教網中心 吳貽樺 組員</a></p>
-                <p>3. <a href="{{ asset('assets/3_長庚大學_吳凱威.pdf') }}" target="_blank">長庚大學 吳凱威 專員</a></p>
-                <p>4. <a href="{{ asset('assets/4_國防大學_江彥廷.pdf') }}" target="_blank">國防大學 江彥廷 中尉系統管制官</a></p>
-                <p>5. <a href="{{ asset('assets/5_育達高中_張以勤.pdf') }}" target="_blank">育達高中 張以勤 組長</a></p>
+                <p class="fw-bold"><a href="{{ route('vote.candidate', ['event_id' => $vote_event->event_id]) }}">點擊前往查看候選人介紹</a></p>
             </div>
             <div class="can_vote">
                 <h4 class="fw-bold">請勾選想要投票的候選人</h4>
@@ -73,9 +65,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>送出後無法重新投票，請確認以下您所選名單再送出</p>
+                        <p>送出後無法重新投票，請確認以下您所選名單再送出。最多可圈選{{ $vote_event->max_vote_count }}位</p>
                         <div class="check_cand my-3 px-2"></div>
-                        <p id="max_candidiate">ps.最多可選{{ $vote_event->max_vote_count }}位候選人</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
@@ -129,8 +120,6 @@
                             title: "請至少勾選1位，至多 {{ $vote_event->max_vote_count }} 位候選人",
                         });
                     } else {
-                        if(checkedCount == {{ $vote_event->max_vote_count ?? 0 }}) $('#max_candidiate').hide()
-                        else $('#max_candidiate').show()
                         $('.check_cand').html(cand_info);
                         $('#checkModal').modal('show');
                     }

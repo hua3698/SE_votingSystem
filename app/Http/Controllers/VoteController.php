@@ -167,12 +167,14 @@ class VoteController extends Controller
     {
         try
         {
+            $eventName = VoteEvent::where('event_id', $event_id)->value('event_name');
             $qrcode = GenerateQrcode::where('qrcode_string', $qrcode_string)->first();
 
             if($qrcode['has_been_voted'] === 1) {
                 $records = $this->getVoteRecords($qrcode->code_id);
                 $response = [
                     'status' => 'ok',
+                    'event_name' => $eventName,
                     'records' => $records,
                     'qrcode_string' => $qrcode_string
                 ];
@@ -187,5 +189,15 @@ class VoteController extends Controller
             Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
             return view('hello');
         }
+    }
+
+    public function showAllCandidate($event_id)
+    {
+        $eventName = VoteEvent::where('event_id', $event_id)->value('event_name');
+
+        $response = [
+            'event_name' => $eventName,
+        ];
+        return view('front.candidate', $response);
     }
 }

@@ -16,7 +16,8 @@
                         <th scope="col" class="text-center">名次</th>
                         <th scope="col">學校</th>
                         <th scope="col">姓名</th>
-                        <th scope="col">總得票數</th>
+                        <th class="right" scope="col">總得票數</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody class="fs-4">
@@ -32,7 +33,8 @@
                             </td>
                             <td>{{ $rank->school }}</td>
                             <td>{{ $rank->name }}</td>
-                            <td>{{ $rank->total }}</td>
+                            <td class="right">{{ $rank->total }}</td>
+                            <td></td>
                         </tr>
                     @endforeach
                 </tbody>

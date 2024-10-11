@@ -4,11 +4,6 @@
     <div class="container admin_container">
         <h2 class="text-center fw-bold mb-5">
             {{ $vote_event->event_name }} 
-            @if ($vote_event->manual_control === 1 && $vote_event->vote_is_ongoing === 0)
-                <button id="btnActivateVote" type="button" class="btn btn-outline-primary">開放投票</button>
-            @elseif ($vote_event->manual_control === 1 && $vote_event->vote_is_ongoing === 1)
-                <button id="btnDectivateVote" type="button" class="btn btn-outline-danger">結束投票</button>
-            @endif
         </h2>
         <div class="shadow block mb-5">
             <div class="d-flex justify-content-between mb-5">
@@ -30,6 +25,12 @@
                             @else 
                                 <span class="fs-6 badge text-bg-danger">已結束</span>
                             @endif
+                        @endif
+                        
+                        @if ($vote_event->manual_control === 1 && $vote_event->vote_is_ongoing === 0)
+                            <button id="btnActivateVote" type="button" class="btn btn-outline-primary">開放投票</button>
+                        @elseif ($vote_event->manual_control === 1 && $vote_event->vote_is_ongoing === 1)
+                            <button id="btnDectivateVote" type="button" class="btn btn-outline-danger">結束投票</button>
                         @endif
                     </p>
                     <p class="card-text fs-5">
@@ -72,6 +73,12 @@
                                     </svg>
                                     查看開票結果
                                 </a>
+                                <a id="btnDelete" class="list-group-item list-group-item-action">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                                    </svg>
+                                    刪除投票活動
+                                </a>
                             @endif
                         </ul>
                     </div>
@@ -109,7 +116,7 @@
                 <table class="table table-bordered table-hover detail_table">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">序號</th>
                             <th scope="col">候選人學校</th>
                             <th scope="col">候選人名稱</th>
                         </tr>
@@ -197,6 +204,32 @@
         $('.show_qrcode tbody').hide()
         $('.hide').on('click', function() {
             $('.show_qrcode tbody').toggle()
+        })
+
+        $('#btnDelete').on('click', function(e) {
+            e.preventDefault()
+
+            let del = confirm('確定要刪除投票嗎?')
+
+            if (del) {
+                let post_data = {}
+                post_data._token = "{{ csrf_token() }}"
+                post_data.event_id = {{ $vote_event->event_id }}
+                post_data.del = 1
+
+                $.ajax({
+                    type: 'PUT',
+                    url: "{{ route('del.vote') }}",
+                    contentType: 'application/json',
+                    data: JSON.stringify(post_data),
+                }).done(function(re) {
+                    console.log(re)
+                    alert('設定成功')
+                    location.href = "{{ url('outstand') }}"
+                }).fail(function(re) {
+                    alert('發生錯誤：' + re.responseText);
+                });
+            }
         })
 
         $('#btnActivateVote').on('click', function() {

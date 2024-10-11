@@ -41,6 +41,7 @@ Route::middleware(['web', 'auth.check'])->group(function ()
     Route::post('/outstand/{event_id}/check', [AdminController::class, 'postCheckVoteSituation'])->name('vote.check.post');
     Route::get('/outstand/{event_id}/result', [AdminController::class, 'getVoteResult'])->name('admin.vote.result');
     
+    Route::put('/outstand/delete', [AdminController::class, 'deleteVoteEvent'])->name('del.vote');
     Route::put('/outstand/activate', [AdminController::class, 'activateVoteEvent'])->name('activate.vote');
     Route::put('/outstand/deactivate', [AdminController::class, 'deactivateVoteEvent'])->name('deactivate.vote');
     
@@ -49,6 +50,7 @@ Route::middleware(['web', 'auth.check'])->group(function ()
 });
 
 # 投票
+Route::get('/vote/{event_id}/candidate', [VoteController::class, 'showAllCandidate'])->name('vote.candidate');
 Route::get('/vote/{event_id}/{qrcode_string}', [VoteController::class, 'showVotePage']);
 Route::post('/vote', [VoteController::class, 'doVote'])->name('vote');
 Route::get('/vote/{event_id}/{qrcode_string}/result', [VoteController::class, 'showVoteResult'])->name('vote.result');

@@ -1,7 +1,7 @@
 @extends('admin.common')
 
 @section('body')
-    <div class="container">
+    <div class="container mb-3">
         <div class="all_vote">
             <div class="title d-flex justify-content-between mb-3">
                 <h4>所有投票 ({{ $total }})</h4>
@@ -32,8 +32,8 @@
                                         @endif
                                     @endif
                                 </h5>
-                                <p class="card-text mb-0 mt-3">開放時間</p>
-                                <p class="text-primary">{{ $event->start_time }} ~ {{ $event->end_time }}</p>
+                                <p class="mb-0">開始時間 <span class="text-primary">{{ $event->start_time }}</span></p>
+                                <p class="mb-0">結束時間 <span class="text-primary">{{ $event->end_time }}</span></p>
                                 {{-- <a href="{{ route('admin.vote.get', ['event_id' => $event->event_id]) }}" class="btn btn-primary">查看詳細內容</a> --}}
                             </div>
                         </div>

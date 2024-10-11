@@ -184,3 +184,7 @@ body {
     padding-right: 30px;
     margin-bottom: 1rem;
 }
+
+.right {
+    text-align: right;
+}

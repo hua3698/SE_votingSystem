@@ -24,7 +24,7 @@ class AdminController extends Controller
     {
         try
         {
-            $voteEvents = VoteEvent::orderBy('created_at', 'desc')->get()->map(function ($event) {
+            $voteEvents = VoteEvent::where('is_delete', 0)->orderBy('created_at', 'desc')->get()->map(function ($event) {
                 $now = Carbon::now();
                 $start = Carbon::parse($event->start_time);
                 $end = Carbon::parse($event->end_time);
@@ -39,11 +39,9 @@ class AdminController extends Controller
                 return $event;
             });
 
-            $count = VoteEvent::count();
-
             $response = [];
             $response['vote_event'] = $voteEvents;
-            $response['total'] = $count;
+            $response['total'] = count($voteEvents);
 
             return view('admin.index', $response);
         }
@@ -61,7 +59,7 @@ class AdminController extends Controller
             $validated = $request->validate([
                 'vote_name' => 'required|string|max:255',
                 'start' => 'required|date_format:Y-m-d H:i:s',
-                'end' => 'required|date_format:Y-m-d H:i:s|after:start',
+                'end' => 'required|date_format:Y-m-d H:i:s|after_or_equal:start',
                 'candidates' => 'required|array',
                 'candidates.*.number' => 'required|string|min:1|max:10',
                 'candidates.*.name' => 'required|string|max:255', 
@@ -75,13 +73,17 @@ class AdminController extends Controller
             DB::transaction(function () use ($validated) {
                 $voteEvent = new VoteEvent();
                 $voteEvent->event_name = $validated['vote_name'];
-                $voteEvent->start_time = $validated['start'];
-                $voteEvent->end_time = $validated['end'];
                 $voteEvent->max_vote_count = $validated['max_vote'];
                 $voteEvent->number_of_qrcodes = $validated['qrcode_count'];
                 $voteEvent->number_of_candidates = count($validated['candidates']);
                 $voteEvent->number_of_winners = $validated['max_winner'];
                 $voteEvent->manual_control = $validated['manual_control'];
+
+                if($validated['manual_control'] == 0) {
+                    $voteEvent->start_time = $validated['start'];
+                    $voteEvent->end_time = $validated['end'];
+                }
+
                 $voteEvent->save();
 
                 foreach ($validated['candidates'] as $key => $cand) {
@@ -240,7 +242,10 @@ class AdminController extends Controller
                 $this->validActivatePermission($voteEvent);
 
                 VoteEvent::where('event_id', $validated['event_id'])
-                            ->update(['vote_is_ongoing' => 1]);
+                            ->update([
+                                'vote_is_ongoing' => 1,
+                                'start_time' => date('Y-m-d H:i:s', time()),
+                            ]);
 
                 return response()->json(['message' => '投票活動已啟用'], 200);
             }
@@ -268,9 +273,40 @@ class AdminController extends Controller
                 $this->validDeactivatePermission($voteEvent);
 
                 VoteEvent::where('event_id', $validated['event_id'])
-                            ->update(['vote_is_ongoing' => 2]);
+                            ->update([
+                                'vote_is_ongoing' => 2,
+                                'end_time' => date('Y-m-d H:i:s', time()),
+                            ]);
 
                 return response()->json(['message' => '投票活動已停用'], 200);
+            }
+
+            return response()->json(['message' => '投票活動不存在'], 404);
+        }
+        catch (\Exception $e) 
+        {
+            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
+            return view('hello');
+        }
+    }
+
+    public function deleteVoteEvent(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'event_id' => 'required|integer',
+            ]);
+
+            $voteEvent = VoteEvent::find($validated['event_id']);
+
+            if ($voteEvent) {
+                // 檢查是否可以刪除投票
+                $this->validDeletePermission($voteEvent);
+
+                VoteEvent::where('event_id', $validated['event_id'])
+                            ->update(['is_delete' => 1]);
+
+                return response()->json(['message' => '投票活動已刪除'], 200);
             }
 
             return response()->json(['message' => '投票活動不存在'], 404);

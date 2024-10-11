@@ -37,6 +37,20 @@ trait VoteHelper
         }
     }
 
+    protected function validDeletePermission(&$voteEvent)
+    {
+        $this->addVoteStatus($voteEvent);
+
+        // 結束投票後才可以刪除
+        if($voteEvent->manual_control === 0 && $voteEvent->status === 2) {
+        }
+        elseif ($voteEvent->manual_control === 1 && $voteEvent->vote_is_ongoing === 2) {
+        }
+        else {
+            throw new \Exception();
+        }
+    }
+
     protected function validActivatePermission(&$voteEvent)
     {
         $this->addVoteStatus($voteEvent);
