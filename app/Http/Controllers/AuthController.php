@@ -44,4 +44,10 @@ class AuthController extends Controller
             return view('hello');
         }
     }
+
+    public function logout()
+    {
+        session()->put('email', '');
+        return redirect()->route('login.form');
+    }
 }

@@ -2,23 +2,26 @@ body {
     background-color: #f2f3f5;
 }
 
-.header {
+.header-bar {
     background-color: #3b7ad5;
-    /* background-color: #fdfdfd; */
-    height: 80px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     position: sticky;
     top: 0;
     z-index: 100;
 }
 
-.header .container {
+.header-bar .container {
     padding: 20px 0;
 }
 
-.header a {
+.header-bar a {
     color: #fff;
     text-decoration: none;
+}
+
+.login {
+    display: flex;
+    justify-content: end;
 }
 
 .vote_form_div {

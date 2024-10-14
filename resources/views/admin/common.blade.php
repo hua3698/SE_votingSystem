@@ -22,11 +22,24 @@
         <script src="{{ asset('js/main.js') }}"></script>
     </head>
     <body>
-        <div class="header shadow">
-            <div class="container">
-                <div class="title">
-                    <h2><a href="{{ url('outstand') }}">桃園區網線上投票平台 - 管理端</a></h2>
+        <div class="header mb-5">
+            <div class="header-bar shadow">
+                <div class="container">
+                    <div class="title">
+                        <h2><a href="{{ url('outstand') }}">桃園區網線上投票平台 - 管理端</a></h2>
+                    </div>
                 </div>
+            </div>
+            <div class="login px-5">
+                @if(session('email'))
+                    <div class="pe-3">{{ session('email') }}</div>
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        登出
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                @endif
             </div>
         </div>
         @yield('body')
