@@ -29,8 +29,6 @@
                         
                         @if ($vote_event->manual_control === 1 && $vote_event->vote_is_ongoing === 0)
                             <button id="btnActivateVote" type="button" class="btn btn-outline-primary">開放投票</button>
-                        @elseif ($vote_event->manual_control === 1 && $vote_event->vote_is_ongoing === 1)
-                            <button id="btnDectivateVote" type="button" class="btn btn-outline-danger">結束投票</button>
                         @endif
                     </p>
                     <p class="card-text fs-5">
@@ -73,6 +71,8 @@
                                     </svg>
                                     查看開票結果
                                 </a>
+                            @endif
+                            @if (($vote_event->manual_control === 1 && $vote_event->vote_is_ongoing !== 1) || ($vote_event->manual_control === 0 && $vote_event->status !== 1))
                                 <a id="btnDelete" class="list-group-item list-group-item-action">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
                                         <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>

@@ -27,7 +27,7 @@ class VoteController extends Controller
             $result = $this->handleVoteEvent($event_id, $qrcode_string);
 
             if ($result['status'] === 'error') {
-                return view('front.vote', $result);
+                throw new \Exception(json_encode($result));
             }
             elseif ($result['status'] === 'voted') {
                 return $this->showVoteResult($event_id, $qrcode_string);
@@ -49,7 +49,7 @@ class VoteController extends Controller
         catch (\Exception $e) 
         {
             Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
-            return view('hello');
+            return redirect()->route('vote.candidate');
         }
     }
 
@@ -92,7 +92,7 @@ class VoteController extends Controller
         catch (\Exception $e) 
         {
             Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
-            return view('hello');
+            return redirect()->route('vote.candidate');
         }
     }
 
@@ -187,17 +187,15 @@ class VoteController extends Controller
         catch (\Exception $e) 
         {
             Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
-            return view('hello');
+            return redirect()->route('vote.candidate');
         }
     }
 
-    public function showAllCandidate($event_id)
+    public function showAllCandidate()
     {
-        $eventName = VoteEvent::where('event_id', $event_id)->value('event_name');
+        // $eventName = VoteEvent::where('event_id', $event_id)->value('event_name');
 
-        $response = [
-            'event_name' => $eventName,
-        ];
+        $response = [];
         return view('front.candidate', $response);
     }
 }

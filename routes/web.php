@@ -50,7 +50,7 @@ Route::middleware(['web', 'auth.check'])->group(function ()
 });
 
 # 投票
-Route::get('/vote/{event_id}/candidate', [VoteController::class, 'showAllCandidate'])->name('vote.candidate');
+Route::get('/vote/candidate', [VoteController::class, 'showAllCandidate'])->name('vote.candidate');
 Route::get('/vote/{event_id}/{qrcode_string}', [VoteController::class, 'showVotePage']);
 Route::post('/vote', [VoteController::class, 'doVote'])->name('vote');
 Route::get('/vote/{event_id}/{qrcode_string}/result', [VoteController::class, 'showVoteResult'])->name('vote.result');

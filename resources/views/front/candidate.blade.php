@@ -7,7 +7,7 @@
 </h2>
 
 <div class="title_background mb-3" style="background-image: url({{ asset('assets/back4.jpeg') }}); ">
-    <h1 class="vote_name fw-bold text-center" >{{ $event_name }}</h1>
+    <h1 class="vote_name fw-bold text-center" >TANet桃園區網路中心傑出網路管理人員選拔(桃園區網第74次管理會議)</h1>
 </div>
 
 <div class="container">
@@ -18,9 +18,6 @@
         <p>3. <a href="{{ asset('assets/3_長庚大學_吳凱威.pdf') }}" target="_blank">長庚大學 吳凱威 專員</a></p>
         <p>4. <a href="{{ asset('assets/4_國防大學_江彥廷.pdf') }}" target="_blank">國防大學 江彥廷 中尉系統管制官</a></p>
         <p>5. <a href="{{ asset('assets/5_育達高中_張以勤V2.pdf') }}" target="_blank">育達高中 張以勤 組長</a></p>
-    </div>
-    <div class="notice mb-3">
-        <iframe src="https://1drv.ms/p/c/779ffd2e69cec3c7/IQTIfAGoLKJrS6jqg2mnRvhoAUZh1IUiKN_k0o5oJp6QGH0?em=2&amp;wdAr=1.7777777777777777" width="100%" height="288px" frameborder="0">這是 <a target="_blank" href="https://office.com/webapps">Office</a> 提供的內嵌 <a target="_blank" href="https://office.com">Microsoft Office</a> 簡報。</iframe>
     </div>
 </div>
 @endsection

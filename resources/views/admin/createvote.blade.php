@@ -8,7 +8,7 @@
         <div class="vote_form_div">
             <div class="mb-4">
                 <label for="voteName" class="form-label">投票活動名稱</label>
-                <input type="text" class="form-control" id="voteName" value="TANet桃園區網路中心傑出網路管理人員選拔( 桃園區域網路中心管理委員會第74次會議)">
+                <input type="text" class="form-control" id="voteName" value="TANet桃園區網路中心傑出網路管理人員選拔(桃園區網第74次管理會議)">
             </div>
             <div class="row mb-4">
                 <div class="col-12 col-md-6 mb-3">

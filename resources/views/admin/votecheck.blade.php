@@ -148,7 +148,7 @@
                         }).done(function(re) {
                             console.log(re)
                             alert('設定成功')
-                            location.reload()
+                            location.href = "{{ route('admin.vote.result', ['event_id' => $vote_event->event_id]) }}"
                         }).fail(function(re) {
                             alert('發生錯誤：' + re.responseText);
                         });

@@ -4,6 +4,10 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -24,7 +28,25 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
-            //
+            \Log::error($e->getMessage());
         });
+
+
+        $this->renderable(function (Throwable $e, Request $request) {
+            // 404、405、500 error會轉到首頁
+            if (
+                $e instanceof NotFoundHttpException ||
+                $e instanceof MethodNotAllowedHttpException
+            ){
+                    return redirect()->route('vote.candidate');
+            }
+
+            if ($e instanceof HttpException && $e->getStatusCode() === 500) {
+                return redirect()->route('vote.candidate');
+            }
+                // If the error is not handled, return null to let the default handler handle it
+            return null;
+        });
+
     }
 }
