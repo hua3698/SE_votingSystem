@@ -1,21 +1,20 @@
 @extends('front.index')
 
 @section('body')
-    @if ($status === 'error')
+    <h2 class="title">
+        <img src="{{ asset('assets/header.jpg') }}" height="10%" width="10%">
+        <span>桃園區域網路中心</span>
+    </h2>
+    <div class="title_background mb-3" style="background-image: url({{ asset('assets/back4.jpeg') }}); ">
+        <h1 class="vote_name fw-bold text-center" >{{ $vote_event->event_name }}</h1>
+    </div>
+    @if ($status !== 'ok')
         <div class="container">
             <div class="not_available">
-                {{ $error_msg }}
+                <p class="fw-bold fs-1">{{ $error_msg }}</p>
             </div>
         </div>
     @else
-        <h2 class="title">
-            <img src="{{ asset('assets/header.jpg') }}" height="10%" width="10%">
-            <span>桃園區域網路中心</span>
-        </h2>
-        <div class="title_background mb-3" style="background-image: url({{ asset('assets/back4.jpeg') }}); ">
-            <h1 class="vote_name fw-bold text-center" >{{ $vote_event->event_name }}</h1>
-        </div>
-
         <div class="container">
             <div class="notice">
                 <p class="fw-bold">◆ 說明</p>

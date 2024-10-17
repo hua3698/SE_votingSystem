@@ -42,9 +42,9 @@
             <table class="table table-bordered detail_table">
                 <thead>
                     <tr>
-                        <th scope="col">每人最多可以投幾票</th>
-                        <th scope="col">最多選出幾名winner</th>
-                        <th scope="col">設定發放的Qrcode數</th>
+                        <th scope="col">每票最多圈選人數</th>
+                        <th scope="col">獎勵名額</th>
+                        <th scope="col">產生的選票數量</th>
                     </tr>
                 </thead>
                 <tbody>

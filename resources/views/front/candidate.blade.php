@@ -7,7 +7,7 @@
 </h2>
 
 <div class="title_background mb-3" style="background-image: url({{ asset('assets/back4.jpeg') }}); ">
-    <h1 class="vote_name fw-bold text-center" >TANet桃園區網路中心傑出網路管理人員選拔(桃園區網第74次管理會議)</h1>
+    <h1 class="vote_name fw-bold text-center" >TANet桃園區網路中心第六屆傑出網路管理人員選拔(桃園區網第74次管理會議)</h1>
 </div>
 
 <div class="container">

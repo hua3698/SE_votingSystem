@@ -8,7 +8,7 @@
         <div class="vote_form_div">
             <div class="mb-4">
                 <label for="voteName" class="form-label">投票活動名稱</label>
-                <input type="text" class="form-control" id="voteName" value="TANet桃園區網路中心傑出網路管理人員選拔(桃園區網第74次管理會議)">
+                <input type="text" class="form-control" id="voteName" value="TANet桃園區網路中心第六屆傑出網路管理人員選拔(桃園區網第74次管理會議)">
             </div>
             <div class="row mb-4">
                 <div class="col-12 col-md-6 mb-3">
@@ -53,7 +53,7 @@
             </div>
             <div class="row mb-4">
                 <div class="col-md-6">
-                    <label for="country" class="form-label">每人最多可以投幾票</label>
+                    <label for="country" class="form-label">每票最多圈選人數</label>
                     <select class="form-select" required="" name="max_vote">
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -63,7 +63,7 @@
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <label for="country" class="form-label">最多選出幾名winner</label>
+                    <label for="country" class="form-label">獎勵名額</label>
                     <select class="form-select" required="" name="max_winner">
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -78,7 +78,7 @@
             </div>
             <div class="row mb-4">
                 <div class="col-md-6 col-12">
-                    <label for="qrcode" class="form-label">設定發放的Qrcode數</label>
+                    <label for="qrcode" class="form-label">產生的選票數量</label>
                     <input type="number" class="form-control" id="qrcode" min="1">
                 </div>
                 {{-- <div class="col-sm-4">

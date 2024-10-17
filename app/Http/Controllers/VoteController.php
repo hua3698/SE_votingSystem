@@ -30,7 +30,13 @@ class VoteController extends Controller
                 throw new \Exception(json_encode($result));
             }
             elseif ($result['status'] === 'voted') {
+                // 已經投過票，顯示投票結果頁
                 return $this->showVoteResult($event_id, $qrcode_string);
+            }
+            elseif ($result['status'] === 'notopen') {
+                // 不在投票開放時間內，顯示尚未開放的文字
+                $result['vote_event'] = $this->voteEvent;
+                return view('front.vote', $result);
             }
 
             $candidates = Candidate::where('event_id', $event_id)
@@ -129,7 +135,7 @@ class VoteController extends Controller
         // 檢查是否開放投票
         if (!$isOpen) {
             return [
-                'status' => 'error',
+                'status' => 'notopen',
                 'error_msg' => '目前不在開放投票的時間內'
             ];
         }

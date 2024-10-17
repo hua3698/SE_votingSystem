@@ -28,6 +28,8 @@ trait VoteHelper
     //檢查當前狀態是否可以編輯 (only allow 尚未開始階段)
     protected function validEditPermission(&$voteEvent)
     {
+        $this->addVoteStatus($voteEvent);
+
         if($voteEvent->manual_control === 0 && $voteEvent->status === 0) {
         }
         elseif ($voteEvent->manual_control === 1 && $voteEvent->vote_is_ongoing === 0) {
@@ -41,10 +43,10 @@ trait VoteHelper
     {
         $this->addVoteStatus($voteEvent);
 
-        // 結束投票後才可以刪除
-        if($voteEvent->manual_control === 0 && $voteEvent->status === 2) {
+        // 進行中無法刪除
+        if($voteEvent->manual_control === 0 && $voteEvent->status !== 1) {
         }
-        elseif ($voteEvent->manual_control === 1 && $voteEvent->vote_is_ongoing === 2) {
+        elseif ($voteEvent->manual_control === 1 && $voteEvent->vote_is_ongoing !== 1) {
         }
         else {
             throw new \Exception();

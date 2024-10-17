@@ -14,7 +14,7 @@
                                 <span class="fs-6 badge text-bg-secondary">尚未開始</span>
                             @elseif ($vote_event->vote_is_ongoing === 1)
                                 <span class="fs-6 badge text-bg-success">投票進行中</span>
-                                @else 
+                            @else
                                 <span class="fs-6 badge text-bg-danger">已結束</span>
                             @endif
                         @else
@@ -93,16 +93,16 @@
                 <table class="table table-bordered detail_table">
                     <thead>
                         <tr>
-                            <th scope="col">每人最多可以投幾票</th>
-                            <th scope="col">最多選出幾名winner</th>
-                            <th scope="col">設定發放的Qrcode數</th>
+                            <th width="33%">每票最多圈選人數</th>
+                            <th width="33%">獎勵名額</th>
+                            <th width="33%">產生的選票數量</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <th scope="col">{{ $vote_event->max_vote_count }}</th>
-                            <th scope="col">{{ $vote_event->number_of_winners }}</th>
-                            <th scope="col">{{ $vote_event->number_of_qrcodes }}</th>
+                            <td>{{ $vote_event->max_vote_count }}</td>
+                            <td>{{ $vote_event->number_of_winners }}</td>
+                            <td>{{ $vote_event->number_of_qrcodes }}</td>
                         </tr>
                     </tbody>
                 </table>
