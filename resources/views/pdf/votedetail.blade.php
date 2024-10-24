@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>投票明細</title>
+    <title>{{ $event_name }}</title>
     <style>
         table {
             width: 95%;
@@ -35,7 +35,7 @@
     </style>
 </head>
 <body>
-    <h1 class="text-center">{{ $event_name }}</h1>
+    <h1 class="text-center">選票驗證</h1>
     <table class="table table-bordered detail_table">
             <thead>
                 <tr>
