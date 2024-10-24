@@ -1,0 +1,22 @@
+body {
+    background-color: #f2f3f5;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+
+.modal_box {
+    width: 400px;
+}
+
+.modal-content {
+    background-color: #fdfdfd;
+}
+
+.modal-header {
+    justify-content: center;
+}

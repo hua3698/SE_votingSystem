@@ -1,0 +1,110 @@
+.title {
+    /* background: linear-gradient(-45deg, #e73c7e, #23a6d5);
+    background-size: 100% 400%;
+    color: #fff; */
+    padding: 20px;
+}
+
+.container {
+    padding: 0 1rem;
+}
+
+.title_background {
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 15% 0;
+}
+
+.vote_name {
+    word-wrap: break-word;
+    /* padding: 1rem 0; */
+}
+
+.cand {
+    background-color: #eee;
+    border-radius: 10px;
+    display: flex;
+    height: 90px;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    align-items: center;
+}
+
+.cand:hover {
+    background-color: #ccc;
+    cursor: pointer;
+}
+
+.cand .circle_div, .intro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cand .no {
+    padding: 0 20px 0 0;
+}
+
+.cand .intro p {
+    margin-bottom: 0;
+}
+
+.vote_check input {
+    width: 30px;
+    height: 30px;
+}
+
+.end {
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.end #btnVote {
+    width: 30%;
+    background-color: #437bcd;
+    padding: 0.6rem 0.8rem;
+    border-radius: 5%;
+    color: #fcfcfc;
+    margin: auto;
+    border: none;
+}
+
+.end #btnVote:hover {
+    background: #0d6efd;
+    cursor: pointer;
+}
+
+.notice {
+    /* background: #e0edff; */
+    padding: 10px 0;
+}
+
+.modal-body p {
+    margin: 0;
+}
+
+.finished {
+    background: #d1e7dd;
+    /* background: antiquewhite; */
+    padding: 10px;
+    /* border: 1px solid #3ea523; */
+    /* border: 1px solid #e9b65d; */
+    border-radius: 5px;
+}
+
+.vote_record li {
+    padding: 0.3rem;
+}
+
+.vote_record li:nth-of-type(2) {
+    width: 50%;
+}
+
+.vote_record li:nth-of-type(3) {
+    width: 30%;
+}
+
+.list-group-item {
+    flex-shrink: 0;
+    flex-grow: 1;
+}

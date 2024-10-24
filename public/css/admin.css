@@ -1,0 +1,193 @@
+body {
+    background-color: #f2f3f5;
+}
+
+.header-bar {
+    background-color: #3b7ad5;
+    margin-bottom: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-bar .container {
+    padding: 20px 0;
+}
+
+.header-bar a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.login {
+    display: flex;
+    justify-content: end;
+}
+
+.vote_form_div {
+    margin: 0 15%;
+}
+
+.form-check .form-check-input {
+    margin-left: 0;
+}
+
+.form-check .form-check-label {
+    margin-left: 1.5rem;
+}
+
+.candidate_div .candidate_number {
+    flex: 0.2;
+} 
+
+.candidate_div svg.delete {
+    color: red;
+    cursor: pointer;
+}
+
+.vote_group .card {
+    cursor: pointer;
+}
+
+.vote_group .card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 5px 10px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+}
+
+.vote_group>.col {
+    margin-top: 10px;
+    margin-bottom: 10px;
+} 
+
+.admin_container h4 {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.admin_container p {
+    word-wrap: break-word;
+    padding: 0 30px;
+}
+
+.admin_container .block {
+    padding: 3%;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+}
+
+.admin_container .threedot {
+    width: 45px;
+    height: 45px;
+    padding: 8px;
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+}
+
+.admin_container .threedot:hover {
+    background-color: #cedeff;
+    border-radius: 50%;
+}
+
+.admin_container .top {
+    text-align: center;
+    background: antiquewhite;
+    padding: 25px;
+    border-radius: 10px;
+}
+
+.admin_container .top h2 {
+    font-size: 2.5rem;
+}
+
+.admin_container table th, .admin_container table td {
+    background-color: #f9f9f9;
+    vertical-align: middle;
+}
+
+.underline {
+    border-bottom: 2px solid #aaa;
+    margin-bottom: 10px;
+}
+
+.qrcode_header {
+    display: flex;
+    justify-content: start;
+}
+
+.show_qrcode table {
+    vertical-align: baseline;
+}
+
+.show_qrcode img {
+    width: 150px;
+}
+
+.show_qrcode .expand_icon {
+    margin-left: 50px;
+    color: #0d6efd;
+}
+
+.show_qrcode .hide {
+    cursor: pointer;
+}
+
+.bar {
+    border-left: 5px solid #3c78cd;
+    padding-left: 10px;
+}
+
+.check {
+    background-image: '';
+}
+
+.result_table td {
+    font-size: 1.3rem;
+    height: 75px !important;
+}
+
+.medal {
+    width: 10%;
+    text-align: right;
+}
+
+.medal img {
+    width: 50px;
+}
+
+.detail_table {
+    /* border: 1px solid; */
+}
+
+.detail_table thead th {
+    background: #c8d6eb;
+}
+
+.vote_detail_td p {
+    margin-bottom: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.vote_detail_td p:last-child{
+    margin-bottom: 0;
+}
+
+.table>thead {
+    border-bottom: 1px solid #aaa;
+}
+
+.edit_title {
+    display: flex;
+    justify-content: center;
+}
+
+.edit_time {
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-bottom: 1rem;
+}
+
+.right {
+    text-align: right;
+}
