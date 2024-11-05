@@ -33,8 +33,14 @@ Route::middleware(['web', 'auth.check'])->group(function ()
         return view('admin.createvote');
     });
 
+    Route::get('/outstand/createuser', function () {
+        return view('admin.createuser');
+    });
+
+    Route::get('/outstand/{event_id}', [AdminController::class, 'getVoteEvent'])
+            ->where('event_id', '[0-9]+')
+            ->name('admin.vote.get');
     Route::post('/outstand/createvote', [AdminController::class, 'createVoteEvent'])->name('create.vote');
-    Route::get('/outstand/{event_id}', [AdminController::class, 'getVoteEvent'])->name('admin.vote.get');
     Route::get('/outstand/{event_id}/edit', [AdminController::class, 'voteEventEditPage'])->name('vote.edit.page');
     Route::put('/outstand/{event_id}/edit', [AdminController::class, 'editVoteEvent'])->name('vote.edit');
     Route::post('/outstand/{event_id}/pdf', [AdminController::class, 'generatePDF'])->name('admin.vote.pdf');
@@ -48,6 +54,11 @@ Route::middleware(['web', 'auth.check'])->group(function ()
     
     Route::get('/outstand/{event_id}/pdf', [AdminController::class, 'testPDF'])->name('test.pdf');
     Route::get('/outstand/{event_id}/export/detail', [AdminController::class, 'exportDetail'])->name('export.detail');
+
+    Route::get('/outstand/users', [AdminController::Class, 'adminUserList']);
+    Route::post('/outstand/user', [AdminController::Class, 'createUser'])->name('create.user');
+    Route::put('/outstand/user', [AdminController::Class, 'updateUser'])->name('update.user');
+    Route::delete('/outstand/user', [AdminController::Class, 'deleteUser'])->name('delete.user');
 });
 
 # 投票

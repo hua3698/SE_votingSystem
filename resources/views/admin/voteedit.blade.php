@@ -17,19 +17,13 @@
                         <label for="startTime" class="form-label">
                             <strong>投票開始</strong> 
                         </label>
-                        <input type="text" class="form-control" id="startTime" value="{{ $vote_event->start_time }}" required="">
-                        <div class="invalid-feedback">
-                            Valid first name is required.
-                        </div>
+                        <input type="text" class="form-control" id="startTime" value="{{ $vote_event->start_time }}" disabled>
                     </span>
                     <span class="col-6">
                         <label for="startTime" class="form-label">
                             <strong>投票結束</strong> 
                         </label>
-                        <input type="text" class="form-control" id="endTime" value="{{ $vote_event->end_time }}" required="">
-                        <div class="invalid-feedback">
-                            Valid first name is required.
-                        </div>
+                        <input type="text" class="form-control" id="endTime" value="{{ $vote_event->end_time }}" disabled>
                     </span>
                 </div>
                 <div class="form-check">
@@ -49,7 +43,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="col">
+                        <td scope="col">
                             <select class="form-select" required="" name="max_vote">
                                 <option value="1" {{ $vote_event->max_vote_count == "1" ? 'selected' : '' }}>1</option>
                                 <option value="2" {{ $vote_event->max_vote_count == "2" ? 'selected' : '' }}>2</option>
@@ -57,8 +51,8 @@
                                 <option value="4" {{ $vote_event->max_vote_count == "4" ? 'selected' : '' }}>4</option>
                                 <option value="5" {{ $vote_event->max_vote_count == "5" ? 'selected' : '' }}>5</option>
                             </select>
-                        </th>
-                        <th scope="col">
+                        </td>
+                        <td scope="col">
                             <select class="form-select" required="" name="max_winner">
                                 <option value="1" {{ $vote_event->number_of_winners == "1" ? 'selected' : '' }}>1</option>
                                 <option value="2" {{ $vote_event->number_of_winners == "2" ? 'selected' : '' }}>2</option>
@@ -66,8 +60,8 @@
                                 <option value="4" {{ $vote_event->number_of_winners == "4" ? 'selected' : '' }}>4</option>
                                 <option value="5" {{ $vote_event->number_of_winners == "5" ? 'selected' : '' }}>5</option>
                             </select>
-                        </th>
-                        <th scope="col">{{ $vote_event->number_of_qrcodes }}</th>
+                        </td>
+                        <td scope="col" id="qrcode">{{ $vote_event->number_of_qrcodes }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -82,17 +76,17 @@
                         <th scope="col">候選人名稱</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="candidate_tbody">
                     @foreach ($candidates as $cand)
                     <tr>
                         <th scope="row">
-                            <input type="number" class="form-control" value="{{ $cand['number'] }}">
+                            <input type="number" class="form-control candidate_number" value="{{ $cand['number'] }}">
                         </th>
                         <td>
-                            <input type="text" class="form-control" value="{{ $cand['school'] }}">
+                            <input type="text" class="form-control candidate_school" value="{{ $cand['school'] }}">
                         </td>
                         <td>
-                            <input type="text" class="form-control" value="{{ $cand['name'] }}">
+                            <input type="text" class="form-control candidate_name" value="{{ $cand['name'] }}">
                         </td>
                     </tr>
                     @endforeach
@@ -118,16 +112,136 @@
 
 <script>
     $('#add_candidate').on('click', function() {
+        $('.candidate_tbody').append(`
+            <tr>
+                <th scope="row">
+                    <input type="number" class="form-control candidate_number" value="">
+                </th>
+                <td>
+                    <input type="text" class="form-control candidate_school" value="">
+                </td>
+                <td>
+                    <input type="text" class="form-control candidate_name" value="">
+                </td>
+            </tr>
+        `);
+    })
 
+    $('input[name=manual_control]').on('change', function() {
+            if($('input[name=manual_control]').prop('checked') === false) {
+                $('#startTime').prop('disabled', false)
+                $('#endTime').prop('disabled', false)
+            } else {
+                $('#startTime').prop('disabled', true)
+                $('#endTime').prop('disabled', true)
+            }
+        })
+
+    $('#btnCancel').on('click', function() {
+        const currentUrl = window.location.href;
+        const newUrl = currentUrl.replace(/\/edit$/, "");
+        window.location.href = newUrl;
     })
 
     $('#btnSubmit').on('click', function() {
-        alert('還沒好啦')
+        let voteName = $('#voteName').val()
+        let start = $('input[id="startTime"]').val()
+        let end = $('input[id="endTime"]').val()
+        let startTime = moment(start, "YYYY-MM-DD HH:mm:ss");
+        let endTime = moment(end, "YYYY-MM-DD HH:mm:ss");
+        let qrcodeCount = $('#qrcode').html()
+        let boolManual = $('input[name=manual_control]').prop('checked') ? 1 : 0
+        let max_vote = $('select[name=max_vote]').val()
+        let max_winner = $('select[name=max_winner]').val()
+
+        let error = [];
+        error = validateInput(startTime, endTime, boolManual)
+
+        if(error.length > 0) {
+            let error_msg = ''
+            error.forEach(error => {
+                error_msg += `<p>${error}</p>`
+            });
+            Swal.fire({
+                title: "Notice",
+                html: error_msg,
+            });
+
+            return;
+        }
+
+        let candidates = []
+        $('.candidate_number').each(function(idx) {
+            if($(this).val() !== '') {
+                let tmp = {}
+                tmp.number = $(this).val()
+                tmp.name = $('.candidate_name').eq(idx).val()
+                tmp.school = $('.candidate_school').eq(idx).val()
+                candidates.push(tmp)
+            }
+        })
+
+        if(candidates.length < 1) {
+            alert('必須至少要有一位候選人')
+        }
+
+        const post_data = {}
+        post_data._token = "{{ csrf_token() }}"
+        post_data.vote_name = voteName
+        post_data.start = start
+        post_data.end = end
+        post_data.candidates = candidates
+        post_data.qrcode_count = qrcodeCount
+        post_data.manual_control = boolManual
+        post_data.max_vote = max_vote
+        post_data.max_winner = max_winner
+
+        console.log(post_data)
+
+        $.ajax({
+            type: 'PUT',
+            url: "{{ route('vote.edit', ['event_id' => $vote_event->event_id]) }}",
+            contentType: 'application/json',
+            data: JSON.stringify(post_data),
+        }).done(function(re) {
+            console.log(re)
+            alert('更新成功')
+            const currentUrl = window.location.href;
+            const newUrl = currentUrl.replace(/\/edit$/, "");
+            window.location.href = newUrl;
+        }).fail(function(re) {
+            console.log(re)
+        });
     })
 
-    $('#btnCancel').on('click', function() {
-            history.back()
-    })
+    const validateInput = (startTime, endTime, boolManual) => {
+            let error = []
+
+            if($('#voteName').val().trim() == '') {
+                error.push('請填寫投票名稱')
+            }
+
+            if(boolManual == 0) {
+                if(endTime.isBefore(startTime) || endTime.isSame(startTime)) {
+                    error.push('結束時間不可以早於開始時間')
+                }
+            }
+
+            $('.input-group').each(function(index) {
+                let num = $(this).find('.candidate_number').val()
+                let school = $('.candidate_school').eq(index).val().trim()
+                let name = $('.candidate_name').eq(index).val().trim()
+
+                if(num == '' && school == '' && name == '') {
+                    return;
+                } else if(num == '' || school == '' || name == '') {
+                    error.push('請填寫候選人資訊')
+                    return false;
+                }
+            })
+
+            return error
+        }
 
     const set_datepicker = () => {
             let today = new Date();

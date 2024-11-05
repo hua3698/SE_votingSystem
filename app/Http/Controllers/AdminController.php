@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\VoteEvent;
 use App\Models\Candidate;
 use App\Models\GenerateQrcode;
@@ -15,6 +16,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use chillerlan\QRCode\{QRCode, QROptions};
 use App\Traits\VoteHelper;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -54,59 +56,25 @@ class AdminController extends Controller
     // 新增投票活動
     public function createVoteEvent(Request $request) 
     {
-        try
-        {
-            $validated = $request->validate([
-                'vote_name' => 'required|string|max:255',
-                'start' => 'required|date_format:Y-m-d H:i:s',
-                'end' => 'required|date_format:Y-m-d H:i:s|after_or_equal:start',
-                'candidates' => 'required|array',
-                'candidates.*.number' => 'required|string|min:1|max:10',
-                'candidates.*.name' => 'required|string|max:255', 
-                'candidates.*.school' => 'required|string|max:255', 
-                'qrcode_count' => 'required|integer|min:1',
-                'manual_control' => 'required|integer',  // 是否手動控制投票活動
-                'max_vote' => 'integer|min:1|max:10', // 每張qrcode最多可以投幾票，目前1~10
-                'max_winner' => 'integer|min:1|max:10' // 共有幾位得名者，目前1~10
-            ]);
-
+        try {
+            $validated = $this->validateVoteEventData($request);
+            
             DB::transaction(function () use ($validated) {
-                $voteEvent = new VoteEvent();
-                $voteEvent->event_name = $validated['vote_name'];
-                $voteEvent->max_vote_count = $validated['max_vote'];
-                $voteEvent->number_of_qrcodes = $validated['qrcode_count'];
-                $voteEvent->number_of_candidates = count($validated['candidates']);
-                $voteEvent->number_of_winners = $validated['max_winner'];
-                $voteEvent->manual_control = $validated['manual_control'];
-
-                if($validated['manual_control'] == 0) {
-                    $voteEvent->start_time = $validated['start'];
-                    $voteEvent->end_time = $validated['end'];
-                }
-
-                $voteEvent->save();
-
-                foreach ($validated['candidates'] as $key => $cand) {
-                    $candidate = new Candidate();
-                    $candidate->event_id = $voteEvent->event_id;
-                    $candidate->number = $cand['number'];
-                    $candidate->name = $cand['name'];
-                    $candidate->school = $cand['school'];
-                    $candidate->save();
-                }
-
+                // 儲存投票活動和候選人
+                $this->saveVoteEvent($validated);
+                
+                // 生成 QR Codes
                 for ($i = 0; $i < $validated['qrcode_count']; $i++) {
                     $generateQrcode = new GenerateQrcode();
-                    $generateQrcode->event_id = $voteEvent->event_id;
-                    $generateQrcode->qrcode_string = md5($voteEvent->event_id . '_' . ($i + 1));
+                    $generateQrcode->event_id = $validated['event_id'];
+                    $generateQrcode->qrcode_string = md5($validated['event_id'] . '_' . ($i + 1));
                     $generateQrcode->save();
                 }
             });
 
             return response()->json(['message' => '投票活動新增成功'], 200);
-        }
-        catch (\Exception $e) 
-        {
+        } 
+        catch (\Exception $e) {
             Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
             return response()->json(['error' => '建立投票活動時發生錯誤。', 'details' => $e->getMessage()], 500);
         }
@@ -164,9 +132,69 @@ class AdminController extends Controller
         }
     }
 
-    public function editVoteEvent($event_id)
+    public function editVoteEvent(Request $request, $event_id)
     {
-        return view('hello');
+        try {
+            $validated = $this->validateVoteEventData($request);
+            $this->saveVoteEvent($validated, $event_id);
+
+            return response()->json(['message' => '投票活動更新成功'], 200);
+        } 
+        catch (\Exception $e) {
+            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
+            return response()->json(['error' => '更新投票活動時發生錯誤。', 'details' => $e->getMessage()], 500);
+        }
+    }
+
+    private function validateVoteEventData(Request $request)
+    {
+        return $request->validate([
+            'vote_name' => 'required|string|max:255',
+            'start' => 'required|date_format:Y-m-d H:i:s',
+            'end' => 'required|date_format:Y-m-d H:i:s|after_or_equal:start',
+            'candidates' => 'required|array',
+            'candidates.*.number' => 'required|string|min:1|max:10',
+            'candidates.*.name' => 'required|string|max:255', 
+            'candidates.*.school' => 'required|string|max:255', 
+            'qrcode_count' => 'required|integer|min:1',
+            'manual_control' => 'required|integer',
+            'max_vote' => 'integer|min:1|max:10',
+            'max_winner' => 'integer|min:1|max:10'
+        ]);
+    }
+
+    private function saveVoteEvent(array $validated, $event_id = null)
+    {
+        DB::transaction(function () use ($validated, $event_id) {
+            // 如果有 event_id，則為更新，否則為新建
+            $voteEvent = $event_id ? VoteEvent::findOrFail($event_id) : new VoteEvent();
+            $voteEvent->event_name = $validated['vote_name'];
+            $voteEvent->max_vote_count = $validated['max_vote'];
+            $voteEvent->number_of_qrcodes = $validated['qrcode_count'];
+            $voteEvent->number_of_candidates = count($validated['candidates']);
+            $voteEvent->number_of_winners = $validated['max_winner'];
+            $voteEvent->manual_control = $validated['manual_control'];
+
+            if ($validated['manual_control'] == 0) {
+                $voteEvent->start_time = $validated['start'];
+                $voteEvent->end_time = $validated['end'];
+            }
+
+            $voteEvent->save();
+
+            // 更新候選人資料：先刪除舊的候選人，再新增
+            if ($event_id) {
+                Candidate::where('event_id', $event_id)->delete();
+            }
+            foreach ($validated['candidates'] as $cand) {
+                $candidate = new Candidate();
+                $candidate->event_id = $voteEvent->event_id;
+                $candidate->number = $cand['number'];
+                $candidate->name = $cand['name'];
+                $candidate->school = $cand['school'];
+                $candidate->save();
+            }
+        });
     }
 
     public function generatePDF($event_id)
@@ -419,4 +447,75 @@ class AdminController extends Controller
         return view('pdf.votedetail', $response);
     }
 
+    public function adminUserList()
+    {
+        $adminUser = User::all();
+
+        $response = [];
+        $response = [
+            'users' => $adminUser,
+        ];
+        return view('admin.user', $response);
+    }
+
+    public function createUser(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8'
+        ]);
+
+        try {
+            $adminUser = new User();
+            $adminUser->name = $validatedData['name'];
+            $adminUser->email = $validatedData['email'];
+            $adminUser->password = Hash::make($validatedData['password']);
+            $adminUser->save();
+
+            return response()->json(['message' => '新增成功'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => '新增失敗，請重試', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function deleteUser(Request $request)
+    {
+        $validatedData = $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = User::where('email', $validatedData['email'])->first();
+
+        if ($user) {
+            $user->delete();
+            return response()->json(['message' => '使用者已刪除'], 200);
+        } else {
+            return response()->json(['message' => '找不到使用者'], 404);
+        }
+    }
+
+    public function updateUser(Request $request)
+    {
+        $validatedData = $request->validate([
+            'user_id' => 'required',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email'
+        ]);
+
+        $user = User::findOrFail($validatedData['user_id']);
+
+        // 更新用戶資料
+        $user->name = $validatedData['name'];
+        $user->email = $validatedData['email'];
+
+        // // 如果有提供新密碼，則更新
+        // if (!empty($validatedData['password'])) {
+        //     $user->password = Hash::make($validatedData['password']);
+        // }
+
+        $user->save();
+
+        return response()->json(['message' => '用戶更新成功'], 200);
+    }
 }

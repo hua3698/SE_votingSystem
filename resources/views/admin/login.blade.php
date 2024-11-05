@@ -1,14 +1,32 @@
-<!-- resources/views/auth/login.blade.php -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登入</title>
-    <link href="{{ asset('plugins/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/login.css') }}" rel="stylesheet">
-</head>
+@extends('admin.common')
+
+@section('body')
+<style>
+    body {
+        background-color: #f2f3f5;
+    }
+
+    .login_container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 60vh;
+    }
+
+    .modal_box {
+        width: 400px;
+    }
+
+    .modal-content {
+        background-color: #fdfdfd;
+    }
+
+    .modal-header {
+        justify-content: center;
+    }
+</style>
 <body>
+
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -18,7 +36,7 @@
             </ul>
         </div>
     @endif
-    <div class="container">
+    <div class="login_container">
         <div class="modal_box">
             <div class="modal-dialog" role="document">
                 <div class="modal-content rounded-4 shadow">
@@ -43,5 +61,4 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+@endsection

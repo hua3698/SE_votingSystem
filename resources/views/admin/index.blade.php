@@ -4,7 +4,7 @@
     <div class="container mb-3">
         <div class="all_vote">
             <div class="title d-flex justify-content-between mb-3">
-                <h4>所有投票 ({{ $total }})</h4>
+                <h4 class="fw-bold">所有投票 ({{ $total }})</h4>
                 <button id="add_new_vote" class="btn-success">建立新的投票</button>
             </div>
             <div class="vote_group row">

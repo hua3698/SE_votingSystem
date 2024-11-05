@@ -10,9 +10,12 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     // 顯示登入畫面
-    public function showLogin()
+    public function showLogin(Request $request)
     {
-        return view('auth.login');
+        if($request->session()->get('email')) {
+            return redirect()->intended('/outstand'); 
+        }
+        return view('admin.login');
     }
 
     public function login(Request $request)
