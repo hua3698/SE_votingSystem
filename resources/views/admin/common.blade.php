@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>軟體工程第十一組 - </title>
+        <title>軟體工程第十一組 - koyuki</title>
         <link rel="icon" href="{{ asset('assets/ncu.avif') }}" type="image/x-icon">
         <link href="{{ asset('plugins/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
