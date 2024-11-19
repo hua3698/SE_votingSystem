@@ -172,7 +172,7 @@
                                 <th scope="row"><strong>{{ ($key + 1) }}</strong></th>
                                 <td><img src="{{ $qrcode->qrcode_url }}" alt="QR Code"></td>
                                 <td>
-                                    <a href="http://140.115.2.129/vote/{{ $vote_event->event_id }}/{{ $qrcode->qrcode_string }}" target="_blank">{{ $qrcode->qrcode_string }}</a>
+                                    <a href="http://104.199.234.96/vote/{{ $vote_event->event_id }}/{{ $qrcode->qrcode_string }}" target="_blank">{{ $qrcode->qrcode_string }}</a>
                                 </td>
                                 <td class="text-center">
                                     @if ($qrcode->has_been_voted === 1)

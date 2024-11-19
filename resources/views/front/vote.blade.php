@@ -10,7 +10,7 @@
     @else
         <h2 class="title">
             <img src="{{ asset('assets/ncu.avif') }}" height="10%" width="10%">
-            <span>軟體工程第XX組 - 投票管理系統</span>
+            <span>軟體工程第十一組 - 投票管理系統</span>
         </h2>
         <div class="title_background mb-3" style="background-image: url({{ asset('assets/back4.jpeg') }}); ">
             <h1 class="vote_name fw-bold text-center" >{{ $vote_event->event_name }}</h1>
@@ -19,13 +19,11 @@
         <div class="container">
             <div class="notice">
                 <p class="fw-bold">◆ 說明</p>
-                <p>１、本次投票依據【TANet 桃園區域網路中心傑出網路管理人員選拔實施要點】辦理。</p>
-                <p>２、投票方式由每單位一票，每票最多圈選三名，超過三名之選票以廢票計。</p>
+                <p>１、。</p>
             </div>
             <div class="notice mb-3">
                 <p class="fw-bold">◆ 注意事項</p>
-                <p>１、自2024年首次改採線上投票，請掃描QR code進行投票。投票後可再執行QR code掃瞄查詢該選票投票內容。</p>
-                <p>２、若遇網路或系統問題無法進行電子投票，將由主席宣布後，改採紙本投票。本張視同紙本選票，各單位限領一張，圈選後請對折放入投票箱。</p>
+                <p>１、</p>
             </div>
             <div class="notice mb-3">
                 <p class="fw-bold"><a href="{{ route('vote.candidate', ['event_id' => $vote_event->event_id]) }}">點擊前往查看候選人介紹</a></p>

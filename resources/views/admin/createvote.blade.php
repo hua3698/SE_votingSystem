@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div class="mb-4">
-                <label for="voteName" class="form-label">設定候選人</label>
+                <label class="form-label">設定候選人</label>
                 <div class="candidate_div">
                     <div class="input-group mb-3">
                         <input type="number" class="form-control candidate_number" placeholder="編號" min="1">
@@ -53,7 +53,7 @@
             </div>
             <div class="row mb-4">
                 <div class="col-md-6">
-                    <label for="country" class="form-label">每人最多可以投幾票</label>
+                    <label class="form-label">每人最多可以投幾票</label>
                     <select class="form-select" required="" name="max_vote">
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -63,7 +63,7 @@
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <label for="country" class="form-label">最多選出幾名winner</label>
+                    <label class="form-label">最多選出幾名winner</label>
                     <select class="form-select" required="" name="max_winner">
                         <option value="1">1</option>
                         <option value="2">2</option>

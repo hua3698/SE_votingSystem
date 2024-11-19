@@ -3,7 +3,7 @@
 @section('body')
     <h2 class="title shadow-sm">
         <img src="{{ asset('assets/ncu.avif') }}" height="10%" width="10%">
-        <span>軟體工程第XX組 - 投票管理系統</span>
+        <span>軟體工程第十一組 - 投票管理系統</span>
     </h2>
     <div class="container">
         @if ($status !== 'error')
