@@ -6,6 +6,6 @@
         <title>Voting System</title>
     </head>
     <body>
-        Hello World! 子珺到此一遊
+        Hello World! 子珺到此一遊!
     </body>
 </html>
