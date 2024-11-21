@@ -48,6 +48,8 @@ Route::middleware(['web', 'auth.check'])->group(function ()
     Route::post('/outstand/{event_id}/check', [AdminController::class, 'postCheckVoteSituation'])->name('vote.check.post');
     Route::get('/outstand/{event_id}/result', [AdminController::class, 'getVoteResult'])->name('admin.vote.result');
     
+    Route::put('/outstand/lock', [AdminController::class, 'lockVoteEvent'])->name('lock.vote');
+    Route::put('/outstand/unlock', [AdminController::class, 'unlockVoteEvent'])->name('unlock.vote');
     Route::put('/outstand/delete', [AdminController::class, 'deleteVoteEvent'])->name('del.vote');
     Route::put('/outstand/activate', [AdminController::class, 'activateVoteEvent'])->name('activate.vote');
     Route::put('/outstand/deactivate', [AdminController::class, 'deactivateVoteEvent'])->name('deactivate.vote');

@@ -41,7 +41,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content rounded-4 shadow">
                     <div class="modal-header p-5 pb-4 border-bottom-0 mb-3">
-                        <h1 class="fw-bold mb-0 fs-2">Vote</h1>
+                        <h1 class="fw-bold mb-0 fs-2">管理員登入</h1>
                     </div>
                     <div class="modal-body p-5 pt-0">
                         <form method="POST" action="{{ route('login.submit') }}">

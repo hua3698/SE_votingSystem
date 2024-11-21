@@ -61,15 +61,7 @@ class AdminController extends Controller
             
             DB::transaction(function () use ($validated) {
                 // 儲存投票活動和候選人
-                $this->saveVoteEvent($validated);
-                
-                // 生成 QR Codes
-                for ($i = 0; $i < $validated['qrcode_count']; $i++) {
-                    $generateQrcode = new GenerateQrcode();
-                    $generateQrcode->event_id = $validated['event_id'];
-                    $generateQrcode->qrcode_string = md5($validated['event_id'] . '_' . ($i + 1));
-                    $generateQrcode->save();
-                }
+                $voteEvent = $this->saveVoteEvent($validated);
             });
 
             return response()->json(['message' => '投票活動新增成功'], 200);
@@ -165,7 +157,7 @@ class AdminController extends Controller
 
     private function saveVoteEvent(array $validated, $event_id = null)
     {
-        DB::transaction(function () use ($validated, $event_id) {
+        return DB::transaction(function () use ($validated, $event_id) {
             // 如果有 event_id，則為更新，否則為新建
             $voteEvent = $event_id ? VoteEvent::findOrFail($event_id) : new VoteEvent();
             $voteEvent->event_name = $validated['vote_name'];
@@ -182,9 +174,10 @@ class AdminController extends Controller
 
             $voteEvent->save();
 
-            // 更新候選人資料：先刪除舊的候選人，再新增
+            // 更新候選人資料：先刪除舊的候選人及QRcode，再新增
             if ($event_id) {
                 Candidate::where('event_id', $event_id)->delete();
+                GenerateQrcode::where('event_id', $event_id)->delete();
             }
             foreach ($validated['candidates'] as $cand) {
                 $candidate = new Candidate();
@@ -194,6 +187,14 @@ class AdminController extends Controller
                 $candidate->school = $cand['school'];
                 $candidate->save();
             }
+            // 生成 QR Codes
+            for ($i = 0; $i < $validated['qrcode_count']; $i++) {
+                $generateQrcode = new GenerateQrcode();
+                $generateQrcode->event_id = $voteEvent->event_id;
+                $generateQrcode->qrcode_string = md5($voteEvent->event_id . '_' . ($i + 1) . '_' . date("Ymd"));
+                $generateQrcode->save();
+            }
+            return $voteEvent;
         });
     }
 
@@ -346,6 +347,56 @@ class AdminController extends Controller
         }
     }
 
+    public function lockVoteEvent(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'event_id' => 'required|integer',
+            ]);
+
+            $voteEvent = VoteEvent::find($validated['event_id']);
+
+            if ($voteEvent) {
+                $voteEvent->is_locked = 1;
+                $voteEvent->save();
+
+                return response()->json(['message' => '投票活動已鎖定'], 200);
+            }
+
+            return response()->json(['message' => '投票活動不存在'], 404);
+        }
+        catch (\Exception $e) 
+        {
+            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
+            return view('hello');
+        }
+    }
+
+    public function unlockVoteEvent(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'event_id' => 'required|integer',
+            ]);
+
+            $voteEvent = VoteEvent::find($validated['event_id']);
+
+            if ($voteEvent) {
+                $voteEvent->is_locked = 0;
+                $voteEvent->save();
+
+                return response()->json(['message' => '投票活動已解除鎖定'], 200);
+            }
+
+            return response()->json(['message' => '投票活動不存在'], 404);
+        }
+        catch (\Exception $e) 
+        {
+            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
+            return view('hello');
+        }
+    }
+
     public function checkVoteSituation($event_id)
     {
         $voteEvent = VoteEvent::find($event_id);
@@ -383,6 +434,10 @@ class AdminController extends Controller
             $this->validGetResultPermission($voteEvent);
 
             $rank = Candidate::getCandidateRanking($event_id);
+            foreach ($rank as &$candidate) {
+                $candidate->name = $this->maskName($candidate->name);
+            }
+
             $voteRecord = $this->getVoteRecord($event_id);
 
             $response = [];
@@ -398,6 +453,16 @@ class AdminController extends Controller
             Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
             return view('hello');
         }
+    }
+
+    private function maskName($name) {
+        $length = mb_strlen($name);
+        $firstChar = mb_substr($name, 0, 1);
+        $lastChar = mb_substr($name, -1);
+        if ($length <= 2) {
+            return $firstChar . '*' . $lastChar;
+        }
+        return $firstChar . str_repeat('*', $length - 2) . $lastChar;
     }
 
     private function getVoteRecord($event_id)
@@ -418,7 +483,7 @@ class AdminController extends Controller
 
             $groupedResults[$row->code_id]['vote'][] = [
                 'number' => $row->number,
-                'name' => $row->name,
+                'name' => $this->maskName($row->name),
                 'school' => $row->school
             ];
         }
@@ -431,6 +496,7 @@ class AdminController extends Controller
         }
 
         $groupedResults = array_values($groupedResults);
+
         return $groupedResults;
     }
 

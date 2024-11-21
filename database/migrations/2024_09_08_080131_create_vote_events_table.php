@@ -23,6 +23,7 @@ return new class extends Migration
             $table->tinyInteger('manual_control')->default(0)->comment('是否手動控制投票活動');
             $table->string('vote_is_ongoing')->default(0)->comment('只有在manual_control=1才有效，0:尚未開始,1:投票進行中,2:已結束');
             $table->integer('is_delete')->default(0)->comment('是否已刪除');
+            $table->integer('is_lock')->default(0);
             $table->timestamps();
         });
     }

@@ -72,14 +72,30 @@
                                     查看開票結果
                                 </a>
                             @endif
-                            @if (($vote_event->manual_control === 1 && $vote_event->vote_is_ongoing !== 1) || ($vote_event->manual_control === 0 && $vote_event->status !== 1))
-                                <a id="btnDelete" class="list-group-item list-group-item-action">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-                                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                            @if ($vote_event->is_locked === 1)
+                                <a id="btnUnlock" href="#" class="list-group-item list-group-item-action">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock" viewBox="0 0 16 16">
+                                        <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2M3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1z"/>
                                     </svg>
-                                    刪除投票活動
+                                    解除鎖定投票
                                 </a>
+                            @else
+                                <a id="btnLock" href="#" class="list-group-item list-group-item-action">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
+                                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1"/>
+                                    </svg>
+                                    鎖定投票
+                                </a>
+                                @if (($vote_event->manual_control === 1 && $vote_event->vote_is_ongoing !== 1) || ($vote_event->manual_control === 0 && $vote_event->status !== 1))
+                                    <a id="btnDelete" href="#" class="list-group-item list-group-item-action">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                                        </svg>
+                                        刪除投票活動
+                                    </a>
+                                @endif
                             @endif
+                            
                         </ul>
                     </div>
                     <div class="threedot">
@@ -206,10 +222,60 @@
             $('.show_qrcode tbody').toggle()
         })
 
+        $('#btnLock').on('click', function(e) {
+            e.preventDefault()
+
+            let lock = confirm('確定要鎖定投票嗎? (鎖定後無法刪除)')
+
+            if(lock) {
+                let post_data = {}
+                post_data._token = "{{ csrf_token() }}"
+                post_data.event_id = {{ $vote_event->event_id }}
+
+                $.ajax({
+                    type: 'PUT',
+                    url: "{{ route('lock.vote') }}",
+                    contentType: 'application/json',
+                    data: JSON.stringify(post_data),
+                }).done(function(re) {
+                    console.log(re)
+                    alert('設定成功')
+                    location.reload()
+                }).fail(function(re) {
+                    alert('發生錯誤：' + re.responseText);
+                });
+            }
+        })
+
+        $('#btnUnlock').on('click', function(e) {
+            e.preventDefault()
+
+            let lock = confirm('確定要解除鎖定嗎?')
+
+            if(lock) {
+                let post_data = {}
+                post_data._token = "{{ csrf_token() }}"
+                post_data.event_id = {{ $vote_event->event_id }}
+
+                $.ajax({
+                    type: 'PUT',
+                    url: "{{ route('unlock.vote') }}",
+                    contentType: 'application/json',
+                    data: JSON.stringify(post_data),
+                }).done(function(re) {
+                    console.log(re)
+                    alert('設定成功')
+                    location.reload()
+                }).fail(function(re) {
+                    alert('發生錯誤：' + re.responseText);
+                });
+            }
+        })
+
         $('#btnDelete').on('click', function(e) {
             e.preventDefault()
 
-            let del = confirm('確定要刪除投票嗎?')
+            let del = confirm('確定要刪除投票嗎? (只有畫面刪除，資料庫不刪除)')
 
             if (del) {
                 let post_data = {}
@@ -239,7 +305,6 @@
                 let post_data = {}
                 post_data._token = "{{ csrf_token() }}"
                 post_data.event_id = {{ $vote_event->event_id }}
-                post_data.activate = 1
 
                 $.ajax({
                     type: 'PUT',
@@ -263,7 +328,6 @@
                 let post_data = {}
                 post_data._token = "{{ csrf_token() }}"
                 post_data.event_id = {{ $vote_event->event_id }}
-                post_data.activate = 1
 
                 $.ajax({
                     type: 'PUT',

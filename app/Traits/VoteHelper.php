@@ -43,13 +43,15 @@ trait VoteHelper
     {
         $this->addVoteStatus($voteEvent);
 
-        // 進行中無法刪除
-        if($voteEvent->manual_control === 0 && $voteEvent->status !== 1) {
-        }
-        elseif ($voteEvent->manual_control === 1 && $voteEvent->vote_is_ongoing !== 1) {
-        }
-        else {
-            throw new \Exception();
+        if($voteEvent->is_locked != 1) {
+            // 進行中無法刪除
+            if($voteEvent->manual_control === 0 && $voteEvent->status !== 1) {
+            }
+            elseif ($voteEvent->manual_control === 1 && $voteEvent->vote_is_ongoing !== 1) {
+            }
+            else {
+                throw new \Exception();
+            }
         }
     }
 

@@ -36,9 +36,9 @@
             <table class="table table-bordered detail_table">
                 <thead>
                     <tr>
-                        <th scope="col">每票最多圈選人數</th>
-                        <th scope="col">獎勵名額</th>
-                        <th scope="col">產生的選票數量</th>
+                        <th width="33%" scope="col">每票最多圈選人數</th>
+                        <th width="33%" scope="col">獎勵名額</th>
+                        <th width="33%" scope="col">產生的選票數量</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -61,7 +61,9 @@
                                 <option value="5" {{ $vote_event->number_of_winners == "5" ? 'selected' : '' }}>5</option>
                             </select>
                         </td>
-                        <td scope="col" id="qrcode">{{ $vote_event->number_of_qrcodes }}</td>
+                        <td scope="col">
+                            <input type="number" class="form-control" id="qrcode" min="1" value="{{ $vote_event->number_of_qrcodes }}">
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -149,7 +151,7 @@
         let end = $('input[id="endTime"]').val()
         let startTime = moment(start, "YYYY-MM-DD HH:mm:ss");
         let endTime = moment(end, "YYYY-MM-DD HH:mm:ss");
-        let qrcodeCount = $('#qrcode').html()
+        let qrcodeCount = $('#qrcode').val()
         let boolManual = $('input[name=manual_control]').prop('checked') ? 1 : 0
         let max_vote = $('select[name=max_vote]').val()
         let max_winner = $('select[name=max_winner]').val()
