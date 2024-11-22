@@ -7,6 +7,7 @@ use App\Http\Controllers\VoteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Middleware\CheckIfAuthenticated;
+use App\Http\Middleware\UserLogin;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,28 @@ Route::get('/', function () {
     return view('hello');
 });
 
+Route::get('/user/login', [AuthController::class, 'showUserLogin'])->name('user.login.form');
+Route::post('/user/login', [AuthController::class, 'userLogin'])->name('user.login');
+Route::post('/user/logout', [AuthController::class, 'userLogout'])->name('user.logout');
+
+# 投票
+Route::middleware([UserLogin::class])->group(function () 
+{
+    Route::get('/user', [UserController::class, 'userPage']);
+
+    Route::post('/vote', [VoteController::class, 'doVote'])->name('vote');
+    Route::get('/vote/{event_id}/{qrcode_string}', [VoteController::class, 'showVotePage']);
+    Route::get('/vote/{event_id}/{qrcode_string}/result', [VoteController::class, 'showVoteResult'])->name('vote.result');
+});
+
+Route::get('/vote', function() {
+    return view('front.temp');
+});
+Route::get('/vote/candidate', [VoteController::class, 'showAllCandidate'])->name('vote.candidate');
+
+
+##########################################################################
+# 後台
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login.form');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -56,7 +79,6 @@ Route::middleware([CheckIfAuthenticated::class])->group(function ()
     Route::get('/outstand/vote/{event_id}/check', [VoteController::class, 'checkVoteSituation'])->name('vote.check');
     Route::post('/outstand/vote/{event_id}/check', [VoteController::class, 'postCheckVoteSituation'])->name('vote.check.post');
     Route::get('/outstand/vote/{event_id}/result', [VoteController::class, 'getVoteResult'])->name('admin.vote.result');
-
     Route::put('/outstand/vote/delete', [VoteController::class, 'deleteVoteEvent'])->name('del.vote');
     Route::put('/outstand/vote/activate', [VoteController::class, 'activateVoteEvent'])->name('activate.vote');
     Route::put('/outstand/vote/deactivate', [VoteController::class, 'deactivateVoteEvent'])->name('deactivate.vote');
@@ -65,9 +87,3 @@ Route::middleware([CheckIfAuthenticated::class])->group(function ()
     Route::get('/outstand/vote/{event_id}/export/detail', [VoteController::class, 'exportDetail'])->name('export.detail');
 
 });
-
-# 投票
-Route::get('/vote/candidate', [VoteController::class, 'showAllCandidate'])->name('vote.candidate');
-Route::get('/vote/{event_id}/{qrcode_string}', [VoteController::class, 'showVotePage']);
-Route::post('/vote', [VoteController::class, 'doVote'])->name('vote');
-Route::get('/vote/{event_id}/{qrcode_string}/result', [VoteController::class, 'showVoteResult'])->name('vote.result');

@@ -1,4 +1,4 @@
-@extends('front.index')
+@extends('front.common')
 
 @section('body')
     @if ($status === 'error')
@@ -8,10 +8,6 @@
             </div>
         </div>
     @else
-        <h2 class="title">
-            <img src="{{ asset('assets/ncu.avif') }}" height="10%" width="10%">
-            <span>軟體工程第十一組 - 投票管理系統</span>
-        </h2>
         <div class="title_background mb-3" style="background-image: url({{ asset('assets/back4.jpeg') }}); ">
             <h1 class="vote_name fw-bold text-center" >{{ $vote_event->event_name }}</h1>
         </div>

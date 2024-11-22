@@ -277,6 +277,7 @@ class VoteController extends Controller
         $candidates = Candidate::where('event_id', $event_id)
                                 ->orderBy('number', 'asc')
                                 ->get();
+
         $qrcodes = $this->getQrcodeInfo($event_id);
 
         $response = [];
@@ -371,6 +372,7 @@ class VoteController extends Controller
     private function getQrcodeInfo($event_id)
     {
         $qrcodes = GenerateQrcode::where('event_id', $event_id)->get();
+
         foreach ($qrcodes as $key => $qrcode) {
             $url = config('app.url') . 'vote/' . $event_id . '/' . $qrcode->qrcode_string; 
             $images = (new QRCode)->render($url);
@@ -484,6 +486,20 @@ class VoteController extends Controller
         ];
 
         return view('admin.vote.check', $response);
+    }
+
+    // ajax每20秒取資料
+    public function postCheckVoteSituation($event_id)
+    {
+        $voted_qrcodes = GenerateQrcode::getVotedQrcodes($event_id);
+
+        $result = [];
+        $result = [
+            'qrcodes' => $voted_qrcodes,
+            'system_time' => date('Y-m-d H:i:s', time())
+        ];
+
+        return response()->json($result);
     }
 
     public function getVoteResult($event_id)

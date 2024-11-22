@@ -1,8 +1,7 @@
-@extends('admin.common')
+@extends('front.common')
 
 @section('body')
 <link href="{{ asset('css/login.css') }}" rel="stylesheet">
-
 <div>
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -18,10 +17,10 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content rounded-4 shadow">
                     <div class="modal-header p-5 pb-4 border-bottom-0 mb-3">
-                        <h1 class="fw-bold mb-0 fs-2">管理員登入</h1>
+                        <h1 class="fw-bold mb-0 fs-2">登入</h1>
                     </div>
                     <div class="modal-body p-5 pt-0">
-                        <form method="POST" action="{{ route('login.submit') }}">
+                        <form method="POST" action="{{ route('user.login') }}">
                             @csrf
                             <div class="form-floating mb-4">
                                 <input type="email" name="email" class="form-control rounded-3" id="floatingInput" placeholder="name@example.com">

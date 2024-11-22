@@ -2,11 +2,11 @@ body {
     background-color: #f2f3f5;
 }
 
-.container {
+.login_container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 90vh;
+    height: 60vh;
 }
 
 .modal_box {

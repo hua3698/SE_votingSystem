@@ -49,20 +49,6 @@ class AdminController extends Controller
         }
     }
 
-    // ajax每20秒取資料
-    public function postCheckVoteSituation($event_id)
-    {
-        $voted_qrcodes = GenerateQrcode::getVotedQrcodes($event_id);
-
-        $result = [];
-        $result = [
-            'qrcodes' => $voted_qrcodes,
-            'system_time' => date('Y-m-d H:i:s', time())
-        ];
-
-        return response()->json($result);
-    }
-
     public function adminList()
     {
         $adminUser = Admin::all();

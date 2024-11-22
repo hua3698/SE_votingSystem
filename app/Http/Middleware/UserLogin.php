@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckIfAuthenticated
+class UserLogin
 {
     /**
      * Handle an incoming request.
@@ -15,10 +15,10 @@ class CheckIfAuthenticated
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $email = $request->session()->get('administrator');
+        $email = $request->session()->get('frontuser');
 
         if (!$email) {
-            return redirect()->route('login.form');
+            return redirect()->route('user.login.form');
         }
 
         return $next($request);

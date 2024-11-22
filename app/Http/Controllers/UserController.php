@@ -26,6 +26,12 @@ class UserController extends Controller
         }
     }
 
+    public function userPage()
+    {
+        return view('front.user.info');
+    }
+
+    // 後台
     public function userList()
     {
         $adminUser = User::all();
