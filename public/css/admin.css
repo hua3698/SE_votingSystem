@@ -4,7 +4,6 @@ body {
 
 .header-bar {
     background-color: #3b7ad5;
-    margin-bottom: 20px;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -19,9 +18,46 @@ body {
     text-decoration: none;
 }
 
-.login {
+.second_bar {
+    background: #fff;
+    margin-bottom: 2rem;
+}
+
+.second_bar > .container {
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+}
+
+.category_block a {
+    text-decoration: none;
+    color: #343a40;
+    font-size: 1rem;
+}
+
+.category_block span {
+    position: relative;
+    padding: 10px;
+}
+
+.category_block span:hover {
+    background-color: #eee;
+}
+
+.category_block span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #ccc;
+    transition: width 0.3s ease;
+}
+
+.category_block span:hover::after {
+    width: 100%;
 }
 
 .vote_form_div {
@@ -163,6 +199,16 @@ body {
     background: #c8d6eb;
 }
 
+.user_table thead th {
+    background: #4CAF50;
+    color: #FFF;
+}
+
+.user_table .icon {
+    text-align: center;
+    cursor: pointer;
+}
+
 .vote_detail_td p {
     margin-bottom: 0.5rem;
     padding-left: 0.5rem;
@@ -190,4 +236,28 @@ body {
 
 .right {
     text-align: right;
+}
+
+.add_user {
+    border-radius: 10px;
+}
+
+.index_page {
+    display: flex;
+}
+
+.index_page a {
+    text-decoration: none;
+    color: #343a40;
+    font-size: 1.5rem;
+}
+
+.modalInput {
+    border-radius: 2px;
+    border-color: rgba(0, 0, 0, .08);
+    color: #656565;
+    background-color: #fff;
+    padding: 4px 8px;
+    width: 250px;
+    line-height: 25px;
 }

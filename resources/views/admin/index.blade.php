@@ -48,7 +48,7 @@
 <script>
     $(function() {
         $('#add_new_vote').on('click', function() {
-            window.location.href="{{ url('outstand/createvote') }}"
+            window.location.href="{{ url('/outstand/vote/create') }}"
         })
 
         $('.card').on('click', function() {
