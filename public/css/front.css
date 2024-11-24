@@ -36,7 +36,7 @@
 }
 
 
-.arrow-icon {
+/* .arrow-icon {
     position: absolute;
     left: 60px;
     top: 55%;
@@ -44,7 +44,7 @@
     width: 60px;
     height: auto;
     animation: bounce 2s infinite;
-}
+} */
 
 @keyframes bounce {
     0%, 100% {
