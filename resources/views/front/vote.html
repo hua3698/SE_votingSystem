@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>軟體工程第十一組 - 投票管理系統</title>
+    <link rel="icon" href="../../../public/assets/NCU.Logo.png" type="image/x-icon">
+    <link href="{{ asset('plugins/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="../../../public/css/front.css" rel="stylesheet">
+
+    <script src="{{ asset('plugins/jquery/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('plugins/bootstrap/bootstrap.bundle.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 等待所有 DOM 元素加載完成
+        document.addEventListener('DOMContentLoaded', function() {
+            // 使用 Bootstrap 5 的方式創建模態框實例
+            var myModal = new bootstrap.Modal(document.getElementById('noticeModal'));
+            // 顯示模態框
+            myModal.show();
+        });
+    </script>
+
+</head>
+<body>
+    <div class="container">
+        <div class="not_available">
+            </div>
+        </div>
+        <h2 class="title">
+            <img src="../../../public/assets/NCU.Logo.png">
+            <span >軟體工程第十一組 - 投票管理系統</span>
+        </h2>
+
+
+        <div class="title_background " >
+            <div class="title_content">
+                <img src="../../../public/assets/vote.icon.png" alt="">
+                <h1 class="vote_name fw-bold text-center" >投票主題：軟功組長參選!!</h1>
+            </div>
+            <button type="button" class="notice-btn" data-bs-toggle="modal" data-bs-target="#noticeModal">
+                查看投票說明與注意事項
+            </button>
+            <div class="deadline">截止日期：2024 年 12 月 31 日 23:59</div>
+        </div>
+        <!-- <img class="arrow-icon" src="../../../public/assets/arrow.png" alt="箭頭"> -->
+
+        <!-- 模態框 -->
+        <div class="modal fade" id="noticeModal" tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="noticeModalLabel">投票說明與注意事項</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- 投票說明 -->
+                        <div class="notice">
+                            <p class="fw-bold">◆ 說明</p>
+                            <p>1. 每位投票者僅能進行一次投票，請謹慎選擇。</p>
+                            <p>2. 投票資料將全程保密，僅用於計票分析。</p>
+                            <p>3. 投票截止時間為 2024 年 12 月 31 日 23:59。</p>
+                            <p>4. 點擊「送出投票」按鈕後，將無法進行修改。</p>
+                        </div>
+                        <!-- 注意事項 -->
+                        <div class="notice">
+                            <p class="fw-bold">◆ 注意事項</p>
+                            <p>1. 每人僅限投票一次，重複投票無效。</p>
+                            <p>2. 投票結果將於 2024 年 1 月 5 日 公佈。</p>
+                            <p>3. 如果遇到技術問題，請聯繫負責人（聯繫方式：example@domain.com）。</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="vote_container">
+            <div class="can_vote">
+                <div class="vote_header">
+                    <h4 class="fw-bold">請勾選想要投票的候選人</h4>
+                    <div class="notice">
+                        <p class="fw-bold"><a href="">點擊前往查看候選人介紹</a></p>
+                    </div>
+                </div>
+                <div class="candidates">
+                    <!-- 第一個候選人 -->
+                    <div class="cand shadow-sm">
+                        <img class="jiikawa" src="../../../public/assets/吉伊卡哇.png" alt="">
+                        <div class="intro">
+                            <div>
+                                <p style="font-size: 1.2rem"></p>
+                                <strong></strong>
+                            </div>
+                        </div>
+                        <div class="no">1號吉伊卡哇</div>
+                        
+                        <div class="circle_div col-3">
+                            <div class="form-check vote_check">
+                                <input name="cand[]" class="form-check-input" type="checkbox" value="" >
+                            </div>
+                        </div>
+                    </div>
+             
+                    <!-- 第二個候選人 -->
+                    <div class="cand shadow-sm">
+                        <img class="jiikawa" src="../../../public/assets/吉伊卡哇.png" alt="">
+                        <div class="intro">
+                            <div>
+                                <p style="font-size: 1.2rem"></p>
+                                <strong></strong>
+                            </div>
+                        </div>
+                        <div class="no">2號吉伊卡哇</div>
+                        <div class="circle_div col-3">
+                            <div class="form-check vote_check">
+                                <input name="cand[]" class="form-check-input" type="checkbox" value="" >
+                            </div>
+                        </div>
+                    </div>
+             
+                    <!-- 第三個候選人 -->
+                    <div class="cand shadow-sm">
+                        <img class="jiikawa" src="../../../public/assets/吉伊卡哇.png" alt="">
+                        <div class="intro">
+                            <div>
+                                <p style="font-size: 1.2rem"></p>
+                                <strong></strong>
+                            </div>
+                        </div>
+                        <div class="no">3號吉伊卡哇</div>
+                        <div class="circle_div col-3">
+                            <div class="form-check vote_check">
+                                <input name="cand[]" class="form-check-input" type="checkbox" value="" >
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 第四個候選人 -->
+                    <div class="cand shadow-sm">
+                        <img class="jiikawa" src="../../../public/assets/吉伊卡哇.png" alt="">
+                        <div class="intro">
+                            <div>
+                                <p style="font-size: 1.2rem"></p>
+                                <strong></strong>
+                            </div>
+                        </div>
+                        <div class="no">4號吉伊卡哇</div>
+                        <div class="circle_div col-3">
+                            <div class="form-check vote_check">
+                                <input name="cand[]" class="form-check-input" type="checkbox" value="" >
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 第五個候選人 -->
+                    <div class="cand shadow-sm">
+                        <img class="jiikawa" src="../../../public/assets/吉伊卡哇.png" alt="">
+                        <div class="intro">
+                            <div>
+                                <p style="font-size: 1.2rem"></p>
+                                <strong></strong>
+                            </div>
+                        </div>
+                        <div class="no">5號吉伊卡哇</div>
+                        <div class="circle_div col-3">
+                            <div class="form-check vote_check">
+                                <input name="cand[]" class="form-check-input" type="checkbox" value="" >
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 第六個候選人 -->
+                    <div class="cand shadow-sm">
+                        <img class="jiikawa" src="../../../public/assets/吉伊卡哇.png" alt="">
+                        <div class="intro">
+                            <div>
+                                <p style="font-size: 1.2rem"></p>
+                                <strong></strong>
+                            </div>
+                        </div>
+                        <div class="no">6號吉伊卡哇</div>
+                        <div class="circle_div col-3">
+                            <div class="form-check vote_check">
+                                <input name="cand[]" class="form-check-input" type="checkbox" value="" >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="end">
+                    <button id="btnVote">送出投票</button>
+                </div>
+             </div>
+        </div>
+
+        <div class="modal fade" id="checkModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>送出後無法重新投票，請確認以下您所選名單再送出。最多可圈選位</p>
+                        <div class="check_cand my-3 px-2"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button id="btnConfirmToVote" type="button" class="btn btn-success">確定送出</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+</html>
