@@ -1,7 +1,20 @@
 @extends('front.common')
 
 @section('body')
-<link href="{{ asset('css/login.css') }}" rel="stylesheet">
+<link href="{{ asset('css/member_login.css') }}" rel="stylesheet">
+<style>
+    /* 登入頁樣式 */
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #c1dfc4, #eff8ee);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        box-sizing: border-box;
+    }
+</style>
 <div>
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -12,29 +25,21 @@
             </ul>
         </div>
     @endif
-    <div class="login_container">
-        <div class="modal_box">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content rounded-4 shadow">
-                    <div class="modal-header p-5 pb-4 border-bottom-0 mb-3">
-                        <h1 class="fw-bold mb-0 fs-2">登入</h1>
-                    </div>
-                    <div class="modal-body p-5 pt-0">
-                        <form method="POST" action="{{ route('user.login') }}">
-                            @csrf
-                            <div class="form-floating mb-4">
-                                <input type="email" name="email" class="form-control rounded-3" id="floatingInput" placeholder="name@example.com">
-                                <label for="floatingInput">Email</label>
-                            </div>
-                            <div class="form-floating mb-5">
-                                <input type="password" name="password" class="form-control rounded-3" id="floatingPassword" placeholder="Password">
-                                <label for="floatingPassword">Password</label>
-                            </div>
-                            <button class="w-100 mb-3 btn btn-lg rounded-3 btn-primary" type="submit">登入</button>
-                        </form>
-                    </div>
+    <div class="login-container">
+        <div class="login-box">
+            <h1>會員登入</h1>
+            <form method="POST" action="{{ route('user.login') }}">
+                @csrf
+                <div class="input-group">
+                    <label for="email">電子郵件</label>
+                    <input type="email" name="email" class="form-control rounded-3" id="email" placeholder="請輸入電子郵件">
                 </div>
-            </div>
+                <div class="input-group">
+                    <label for="password">密碼</label>
+                    <input type="password" name="password" class="form-control rounded-3" id="password" placeholder="請輸入密碼">
+                </div>
+                <button type="submit" class="login-button">登入</button>
+            </form>
         </div>
     </div>
 </div>

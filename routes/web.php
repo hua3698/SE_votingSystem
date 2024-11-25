@@ -24,9 +24,17 @@ Route::get('/', function () {
     return view('hello');
 });
 
+Route::get('/index', function () {
+    return view('front.index');
+});
+
+Route::get('/user/register', function() {
+    return view('front.user.register');
+});
+Route::post('/user/register', [AuthController::class, 'userRegister'])->name('user.register');
 Route::get('/user/login', [AuthController::class, 'showUserLogin'])->name('user.login.form');
 Route::post('/user/login', [AuthController::class, 'userLogin'])->name('user.login');
-Route::post('/user/logout', [AuthController::class, 'userLogout'])->name('user.logout');
+Route::get('/user/logout', [AuthController::class, 'userLogout'])->name('user.logout');
 
 # 投票
 Route::middleware([UserLogin::class])->group(function () 

@@ -134,6 +134,7 @@ body {
     justify-content: center;
     align-items: center;
     flex: 1;
+    margin-top: 15%;
 }
 
 .register-box {
@@ -198,6 +199,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed;
 }
 
 .footer-logo {

@@ -1,6 +1,6 @@
 /* 頁首 */
 .header {
-    position: fixed; /* 固定在頁面頂部 */
+    /* position: fixed; 固定在頁面頂部 */
     width: 100%;
     height: 84px;
     left: 0;
@@ -11,7 +11,7 @@
     align-items: center;
     padding: 0 20px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    /* z-index: 1000; */
 }
 
 /* Logo 區塊 */
@@ -120,7 +120,7 @@
 /* 篩選區塊容器 */
 /* 篩選區塊容器 */
 .filter-bar {
-    position: fixed; /* 固定在 header 下方 */
+    /* position: fixed; 固定在 header 下方 */
     top: 84px; /* 與 header 高度一致 */
     left: 0; /* 確保篩選區塊從視窗左側開始 */
     width: 100%; /* 占據整個視窗寬度 */
@@ -208,13 +208,13 @@
 /* 活動區塊容器 */
 /* 活動區塊容器 */
 .activity-container {
-    position: fixed;
+    /* position: fixed; */
     top: calc(84px + 50px); /* header + filter-bar 的高度 */
     left: 0;
     right: 0;
     bottom: 0; /* 保持距離底部 */
     background: linear-gradient(to right, #c1dfc4 0%, #eff8ee 100%);
-    display: flex;
+    /* display: flex; */
     flex-direction: column; /* 將活動卡片和頁數按鈕排列為列 */
     align-items: center; /* 水平居中 */
     overflow-y: auto;
@@ -232,22 +232,40 @@
     padding: 20px; /* 整體內邊距 */
     width: 100%;
     max-width: 1200px;
-    margin-left: 60px; /* 距離左邊框 */
+    /* margin-left: 60px; 距離左邊框 */
     box-sizing: border-box;
+    justify-items: center;
 }
 
 /* 單個活動卡片 */
 /* 單個活動卡片 */
 .activity-card {
+    position: relative; /* 設置相對定位以承載絕對定位的子元素 */
     background: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     text-align: center;
-    padding: 20px; /* 增加內邊距 */
-    width: 250px; /* 增加卡片的寬度 */
-    height: 380px; /* 增加卡片的高度 */
+    padding: 20px;
+    width: 250px;
+    height: 380px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+/* 活動狀態標籤 */
+.status {
+    position: absolute; /* 絕對定位，定位於父容器 */
+    top: 10px; /* 距離卡片頂部 */
+    left: 50%; /* 水平居中 */
+    transform: translateX(-50%); /* 偏移自身寬度的一半，實現居中效果 */
+    background-color: rgba(0, 128, 0, 0.8); /* 半透明綠色背景 */
+    color: white; /* 白色文字 */
+    padding: 5px 10px; /* 內邊距 */
+    border-radius: 5px; /* 圓角效果 */
+    font-size: 14px; /* 字體大小 */
+    font-weight: bold; /* 字體加粗 */
+    z-index: 10; /* 確保文字在圖片上方 */
 }
 
 /* 卡片圖片 */
@@ -349,37 +367,33 @@
 
 /* 頁尾樣式 */
 .footer {
-    background-color: #ffffff; /* 頁尾背景色 */
-    color: #444; /* 文字顏色 */
-    text-align: center; /* 置中對齊 */
-    padding: 20px 10px; /* 上下內邊距 */
-    font-size: 14px; /* 文字大小 */
-    border-top: 1px solid #ccc; /* 頁尾頂部分隔線 */
+    background: #ffffff;
+    border-top: 1px solid #ccc;
+    text-align: center;
+    padding: 10px 20px;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     bottom: 0;
-    left: 0;
-    width: 100%; /* 滿版寬度 */
-    box-sizing: border-box;
+    width: 100%;
 }
 
-/* 頁尾 Logo 區塊 */
 .footer-logo {
     display: flex;
-    justify-content: center; /* 水平置中 */
-    align-items: center; /* 垂直置中 */
-    margin-bottom: 5px; /* 與文字的間距 */
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
     font-weight: bold;
-    font-size: 16px; /* 調整文字大小 */
+    color: #333;
 }
 
-/* 頁尾 Logo 圖片 */
-.footer-logo .logo-image {
-    width: 24px; /* Logo 寬度 */
-    height: 24px; /* Logo 高度 */
-    margin-right: 8px; /* 圖片與文字間距 */
+.footer-logo img {
+    width: 30px;
+    height: 30px;
 }
 
-/* 頁尾文字區塊 */
 .footer-text {
-    font-size: 12px; /* 較小字體 */
-    color: #666; /* 次要文字顏色 */
+    font-size: 14px;
+    color: #666;
 }

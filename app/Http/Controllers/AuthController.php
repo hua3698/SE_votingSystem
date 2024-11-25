@@ -98,7 +98,11 @@ class AuthController extends Controller
     {
         Auth::guard('web')->logout();
         session()->forget('frontuser');
-        return redirect()->route('login.form');
+        return redirect()->route('user.login.form');
     }
 
+    public function userRegister()
+    {
+        // return view('');
+    }
 }
