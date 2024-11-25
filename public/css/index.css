@@ -1,0 +1,385 @@
+/* 頁首 */
+.header {
+    position: fixed; /* 固定在頁面頂部 */
+    width: 100%;
+    height: 84px;
+    left: 0;
+    top: 0;
+    background: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+/* Logo 區塊 */
+.logo {
+    display: flex;
+    align-items: center; /* 確保 LOGO 和文字都垂直置中 */
+    margin-left: 40px; /* 與左邊界保持一定距離 */
+}
+
+.logo img {
+    width: 40px; /* LOGO 圖片大小 */
+    height: 40px;
+    margin-right: 10px; /* LOGO 與文字間距 */
+}
+
+.logo a {
+    text-decoration: none;
+    font-size: 16px; /* 字體大小 */
+    font-weight: bold;
+    color: #333;
+    line-height: 1; /* 確保文字不會受行高影響偏移 */
+    display: flex; /* 確保文字作為塊級元素居中 */
+    align-items: center; /* 垂直置中文字內容 */
+}
+
+/* 直線分隔樣式 */
+.divider {
+    width: 2px; /* 分隔線寬度 */
+    height: 40px; /* 分隔線高度 */
+    background-color: #e4e4e4; /* 分隔線顏色 */
+    margin: 0 20px; /* 與兩側元素的間距設置為相同 */
+}
+
+/* 導航欄 */
+.nav-links {
+    display: flex;
+    align-items: center;
+}
+
+.nav-links ul {
+    display: flex;
+    gap: 5px; /* 探索跟會員中心按鈕之間的距離 */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    list-style: none;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333; /* 預設顏色 */
+    font-size: 16px;
+    padding: 8px 15px; /* 增加可點擊區域 */
+    border-radius: 5px; /* 圓角設計 */
+    transition: all 0.3s ease; /* 添加平滑過渡效果 */
+}
+
+/* 鼠標懸停效果 */
+.nav-links a:hover {
+    background-color: #f5f5f5;
+    color: #444444; /* 白色文字 */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 添加陰影效果 */
+    transform: translateY(-2px); /* 微微上移，增加動態效果 */
+}
+
+/* 登入和註冊按鈕容器 */
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-left: auto; /* 將按鈕推到右側 */
+    margin-right: 80px; /* 與右邊邊界保持適當距離 */
+}
+
+/* 按鈕通用樣式 */
+.buttons .button {
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* 登入按鈕樣式 */
+.buttons .login {
+    color: #333;
+    border: 1px solid #333;
+    background-color: transparent;
+}
+
+/* 註冊按鈕樣式 */
+.buttons .register {
+    color: white;
+    border: none;
+    background-color: #444444;
+}
+
+/* 按鈕懸停效果 */
+.buttons .button:hover {
+    opacity: 0.8;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 增加陰影效果 */
+}
+/* 第二區塊編輯區！！！！！！！！！！！ */
+/* 篩選區塊容器 */
+/* 篩選區塊容器 */
+.filter-bar {
+    position: fixed; /* 固定在 header 下方 */
+    top: 84px; /* 與 header 高度一致 */
+    left: 0; /* 確保篩選區塊從視窗左側開始 */
+    width: 100%; /* 占據整個視窗寬度 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0; /* 移除左右間距 */
+    background: linear-gradient(
+        to right,
+        #c1dfc4 0%,
+        #eff8ee 100%
+    ); /* 背景與網頁漸層一致 */
+    z-index: 999; /* 確保在 header 之下的頂層 */
+    margin: 0; /* 確保不被其他元素影響 */
+}
+
+/* 篩選按鈕區域 */
+.filter-buttons {
+    display: flex;
+    gap: 10px; /* 按鈕之間的間距 */
+    margin-left: 60px; /* 距離左邊框 */
+}
+
+/* 篩選按鈕樣式 */
+.filter {
+    padding: 6px 8px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    background-color: #ffffff; /* 淺灰色背景 */
+    color: #444444; /* 按鈕文字顏色 */
+    cursor: pointer;
+    transition: all 0.3s ease; /* 增加過渡效果 */
+    font-size: 12px;
+}
+
+.filter:hover {
+    background-color: #006400; /* 懸停時深綠色背景 */
+    border: 1px solid #006400;
+    color: white; /* 白色文字 */
+}
+
+.filter.active {
+    background-color: #006400; /* 當前激活按鈕 */
+    color: white;
+    border-color: #004d00;
+}
+
+/* 搜尋欄和搜尋按鈕區域 */
+.filter-tools {
+    display: flex;
+    align-items: center; /* 垂直置中 */
+    gap: 10px; /* 搜尋欄和按鈕之間的間距 */
+    margin-right: 60px; /* 距離右邊框 */
+}
+
+/* 搜尋欄輸入框 */
+.search-input {
+    padding: 8px 15px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    font-size: 12px;
+    width: 130px; /* 固定寬度 */
+    height: 30px; /* 如果需要固定高度，設定此屬性 */
+    box-sizing: border-box;
+}
+
+/* 搜尋按鈕樣式 */
+.search-button {
+    padding: 6px 8px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    font-size: 12px;
+    background-color: #ffffff; /* 淺灰色背景 */
+    color: #333; /* 按鈕文字顏色 */
+    cursor: pointer;
+    transition: all 0.3s ease; /* 添加平滑過渡效果 */
+}
+
+.search-button:hover {
+    background-color: #006400; /* 懸停時深綠色背景 */
+    border: 1px solid #006400;
+    color: white; /* 白色文字 */
+}
+/* 第三區塊編輯區！！！！！！！！！！！ */
+/* 活動區塊容器 */
+/* 活動區塊容器 */
+.activity-container {
+    position: fixed;
+    top: calc(84px + 50px); /* header + filter-bar 的高度 */
+    left: 0;
+    right: 0;
+    bottom: 0; /* 保持距離底部 */
+    background: linear-gradient(to right, #c1dfc4 0%, #eff8ee 100%);
+    display: flex;
+    flex-direction: column; /* 將活動卡片和頁數按鈕排列為列 */
+    align-items: center; /* 水平居中 */
+    overflow-y: auto;
+    padding: 0;
+}
+
+/* 活動卡片的排列 */
+.activity-grid {
+    display: grid; /* 使用網格布局 */
+    grid-template-columns: repeat(
+        3,
+        1fr
+    ); /* 每行分為三列，每列的寬度為 1fr，即等分寬度 */
+    gap: 50px; /* 卡片之間的間距 */
+    padding: 20px; /* 整體內邊距 */
+    width: 100%;
+    max-width: 1200px;
+    margin-left: 60px; /* 距離左邊框 */
+    box-sizing: border-box;
+}
+
+/* 單個活動卡片 */
+/* 單個活動卡片 */
+.activity-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    padding: 20px; /* 增加內邊距 */
+    width: 250px; /* 增加卡片的寬度 */
+    height: 380px; /* 增加卡片的高度 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 卡片圖片 */
+.activity-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 5px;
+}
+
+/* 活動名稱 */
+.activity-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+    margin-top: 5px; /* 如果需要，增加名稱與圖片的貼合感 */
+    margin-bottom: 5px; /* 控制名稱與下一部分內容的距離 */
+}
+
+/* 活動日期 */
+.activity-date {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+/* 活動資訊容器 */
+.activity-info {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #444;
+}
+
+/* 活動參與人數 */
+.activity-participants {
+    font-size: 14px;
+    color: #006400;
+    font-weight: bold;
+}
+
+/* 活動剩餘天數 */
+.activity-days {
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+}
+
+.vote-now {
+    font-size: 16px; /* 字體大小 */
+    font-weight: bold; /* 字體加粗 */
+    color: #006400; /* 深綠色文字 */
+    text-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* 卡片懸停效果 */
+.activity-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* 分頁按鈕容器 */
+.pagination {
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center;
+    gap: 10px; /* 按鈕之間的間距 */
+    padding: 20px 0;
+    width: 100%; /* 確保居中對齊 */
+    box-sizing: border-box;
+}
+
+/* 分頁按鈕樣式 */
+.page-button {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.page-button:hover {
+    background-color: #006400;
+    color: white;
+    border-color: #006400;
+}
+
+.page-button.active {
+    background-color: #006400;
+    color: white;
+    border-color: #004d00;
+}
+
+/* 頁尾樣式 */
+.footer {
+    background-color: #ffffff; /* 頁尾背景色 */
+    color: #444; /* 文字顏色 */
+    text-align: center; /* 置中對齊 */
+    padding: 20px 10px; /* 上下內邊距 */
+    font-size: 14px; /* 文字大小 */
+    border-top: 1px solid #ccc; /* 頁尾頂部分隔線 */
+    bottom: 0;
+    left: 0;
+    width: 100%; /* 滿版寬度 */
+    box-sizing: border-box;
+}
+
+/* 頁尾 Logo 區塊 */
+.footer-logo {
+    display: flex;
+    justify-content: center; /* 水平置中 */
+    align-items: center; /* 垂直置中 */
+    margin-bottom: 5px; /* 與文字的間距 */
+    font-weight: bold;
+    font-size: 16px; /* 調整文字大小 */
+}
+
+/* 頁尾 Logo 圖片 */
+.footer-logo .logo-image {
+    width: 24px; /* Logo 寬度 */
+    height: 24px; /* Logo 高度 */
+    margin-right: 8px; /* 圖片與文字間距 */
+}
+
+/* 頁尾文字區塊 */
+.footer-text {
+    font-size: 12px; /* 較小字體 */
+    color: #666; /* 次要文字顏色 */
+}
