@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>軟體工程第十一組 - koyuki</title>
-        <link rel="icon" href="{{ asset('assets/ncu.avif') }}" type="image/x-icon">
+        <link rel="icon" href="{{ asset('assets/NCU.Logo.png') }}" type="image/x-icon">
         <link href="{{ asset('plugins/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
@@ -30,7 +30,7 @@
         </div>
         <div class="second_bar shadow-sm">
             <div class="container">
-                @if(session('email'))
+                @if(session('administrator'))
                     <div class="category_block">
                         <a href="{{ url('outstand') }}" class="me-3">
                             <span>管理投票活動</span>
@@ -43,7 +43,7 @@
                         </a>
                     </div>
                     <div class="login">
-                        <span class="pe-3">{{ session('email') }}</span>
+                        <span class="pe-3">{{ session('administrator') }}</span>
                         <a href="{{ route('logout') }}" class="btn btn-outline-secondary" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             登出
                         </a>
