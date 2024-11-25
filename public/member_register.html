@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="UTF-8" />
+        <title>投票吧－會員註冊</title>
+        <link rel="stylesheet" href="css/member_register.css" />
+    </head>
+    <body>
+        <header class="header">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="assets/logo.png" alt="Logo" /> 投票吧
+                </a>
+            </div>
+            <div class="divider"></div>
+            <nav class="nav-links">
+                <ul>
+                    <li><a href="index.html">探索</a></li>
+                    <li><a href="#">會員中心</a></li>
+                </ul>
+            </nav>
+
+            <div class="buttons">
+                <a href="member_login.html" class="button login">登入</a>
+                <a href="member_register.html" class="button register">註冊</a>
+            </div>
+        </header>
+
+        <div class="register-container">
+            <div class="register-box">
+                <h1>會員註冊</h1>
+                <form>
+                    <div class="input-group">
+                        <label for="nickname">暱稱 </label>
+                        <input
+                            type="text"
+                            id="nickname"
+                            placeholder="請輸入暱稱(最多10個字)"
+                            required
+                        />
+                    </div>
+                    <div class="input-group">
+                        <label for="email">電子郵件</label>
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="請輸入電子郵件"
+                            required
+                        />
+                    </div>
+                    <div class="input-group">
+                        <label for="password">密碼</label>
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="請輸入密碼"
+                            required
+                        />
+                    </div>
+                    <button type="submit" class="register-button">註冊</button>
+                </form>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="footer-logo">
+                <img src="assets/logo.png" alt="Logo" />
+                投票吧
+            </div>
+            <div class="footer-text">
+                中央大學資訊管理學系碩士班｜軟體工程｜期末作業用無盈利用途
+            </div>
+        </footer>
+    </body>
+</html>
