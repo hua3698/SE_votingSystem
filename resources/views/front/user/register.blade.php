@@ -26,6 +26,12 @@
                 @endforeach
             </ul>
         </div>
+    @elseif (session('success'))
+        <div class="alert alert-success">
+            <ul>
+                <li>{{ session('success') }}，請前往登入頁</li>
+            </ul>
+        </div>
     @endif
     <div class="register-container">
         <div class="register-box">
@@ -37,6 +43,7 @@
                     <input
                         type="text"
                         id="nickname"
+                        name="name"
                         placeholder="請輸入暱稱(最多10個字)"
                         required
                     />
@@ -46,6 +53,7 @@
                     <input
                         type="email"
                         id="email"
+                        name="email"
                         placeholder="請輸入電子郵件"
                         required
                     />
@@ -55,6 +63,7 @@
                     <input
                         type="password"
                         id="password"
+                        name="password"
                         placeholder="請輸入密碼"
                         required
                     />

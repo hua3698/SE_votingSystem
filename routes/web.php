@@ -72,7 +72,7 @@ Route::middleware([CheckIfAuthenticated::class])->group(function ()
     Route::delete('/outstand/admin', [AdminController::Class, 'deleteAdmin'])->name('delete.admin');
 
     Route::get('/outstand/user/list', [UserController::Class, 'userList']);
-
+    Route::delete('/outstand/user', [UserController::Class, 'deleteUser'])->name('delete.user');
 
     Route::get('/outstand/vote/{event_id}', [VoteController::class, 'getVoteEvent'])
             ->where('event_id', '[0-9]+')
