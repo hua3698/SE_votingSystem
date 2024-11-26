@@ -198,8 +198,9 @@ class VoteController extends Controller
     {
         // $eventName = VoteEvent::where('event_id', $event_id)->value('event_name');
 
-        $response = [];
-        return view('front.candidate', $response);
+        //$response = [];
+        $candidates = Candidate::take(6)->get();
+        return view('front.candidate', ['candidates' => $candidates]);
     }
 
     
