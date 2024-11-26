@@ -35,7 +35,7 @@ Route::post('/user/login', [AuthController::class, 'userLogin'])->name('user.log
 Route::get('/user/logout', [AuthController::class, 'userLogout'])->name('user.logout');
 
 Route::get('/vote/{event_id}', [VoteController::class, 'showSingleVote'])->name('front.vote');
-Route::get('/vote/candidate', [VoteController::class, 'showAllCandidate'])->name('vote.candidate');
+Route::get('/vote/{id}/candidate', [VoteController::class, 'showAllCandidate'])->name('vote.candidate');
 
 # 投票
 Route::middleware([UserLogin::class])->group(function () 

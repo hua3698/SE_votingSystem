@@ -239,12 +239,12 @@ class VoteController extends Controller
         }
     }
 
-    public function showAllCandidate()
+    public function showAllCandidate($event_id)
     {
         // $eventName = VoteEvent::where('event_id', $event_id)->value('event_name');
 
         //$response = [];
-        $candidates = Candidate::take(6)->get();
+        $candidates = Candidate::where('event_id', $event_id)->get();
         return view('front.candidate', ['candidates' => $candidates]);
     }
 
