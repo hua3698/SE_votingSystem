@@ -17,8 +17,11 @@ class Candidate extends Model
     protected $fillable = [
         'event_id',
         'name',
-        'vote_count',
+        'votes_count',
         'notes',
+        'specialty',
+        'manifesto',
+        'achievements'
     ];
 
     public $timestamps = true;

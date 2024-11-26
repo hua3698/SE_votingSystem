@@ -87,6 +87,19 @@
         </div>
 
         <div class="candidate-wrapper">
+            @foreach ($candidates as $candidate)
+            <div class="candidate-card">
+                <img src="{{ asset('assets/' . $candidate->name . '.jpg') }}" alt="候選人 {{ $candidate->cand_id }}" class="img-fluid mb-3">
+                <h5 class="candidate-name">{{ $candidate->name }}</h5>
+                <div class="info-box">
+                    <p><strong>特長：</strong>{{ $candidate->specialty ?? '無資料' }}</p>         
+                    <p><strong>政見發表：</strong>{{ $candidate->manifesto ?? '無資料' }}</p>               
+                    <p><strong>過去成就：</strong>{{ $candidate->achievements ?? '無資料' }}</p>
+                    <p><strong>競選口號：「{{ $candidate->slogan ?? '無資料' }}」</strong></p>
+                </div>
+            </div>
+            @endforeach
+
             <!-- 候選人 1 -->
             <div class="candidate-card">
                 <img src="{{ asset('assets/chiikwa.jpg') }}" alt="候選人 1" class="img-fluid mb-3">
