@@ -34,7 +34,6 @@
                                 </h5>
                                 <p class="mb-0">開始時間 <span class="text-primary">{{ $event->start_time }}</span></p>
                                 <p class="mb-0">結束時間 <span class="text-primary">{{ $event->end_time }}</span></p>
-                                {{-- <a href="{{ route('admin.vote.get', ['event_id' => $event->event_id]) }}" class="btn btn-primary">查看詳細內容</a> --}}
                             </div>
                         </div>
                     </div>
@@ -48,7 +47,7 @@
 <script>
     $(function() {
         $('#add_new_vote').on('click', function() {
-            window.location.href="{{ url('outstand/createvote') }}"
+            window.location.href="{{ url('/outstand/vote/create') }}"
         })
 
         $('.card').on('click', function() {

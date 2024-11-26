@@ -4,8 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>軟體工程第十一組 - 投票管理系統</title>
-        <link rel="icon" href="{{ asset('assets/ncu.avif') }}" type="image/x-icon">
+        <title>軟體工程第十一組 - koyuki</title>
+        <link rel="icon" href="{{ asset('assets/NCU.Logo.png') }}" type="image/x-icon">
         <link href="{{ asset('plugins/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
@@ -23,23 +23,34 @@
     
     </head>
     <body>
-        <div class="header mb-5">
-            <div class="header-bar shadow">
-                <div class="container">
-                    <div class="title">
-                        <h2><a href="{{ url('outstand') }}">軟體工程第十一組 - 投票管理系統</a></h2>
-                    </div>
-                </div>
+        <div class="header-bar">
+            <div class="container">
+                <h2><a href="{{ url('outstand') }}">投票管理系統 - 管理後台</a></h2>
             </div>
-            <div class="login px-5">
-                @if(session('email'))
-                    <div class="pe-3">{{ session('email') }}</div>
-                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        登出
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
+        </div>
+        <div class="second_bar shadow-sm">
+            <div class="container">
+                @if(session('administrator'))
+                    <div class="category_block">
+                        <a href="{{ url('outstand') }}" class="me-3">
+                            <span>管理投票活動</span>
+                        </a>
+                        <a href="{{ url('outstand/admin/list') }}" class="me-3">
+                            <span>後台管理員</span>
+                        </a>
+                        <a href="{{ url('outstand/user/list') }}" class="me-3">
+                            <span>使用者列表</span>
+                        </a>
+                    </div>
+                    <div class="login">
+                        <span class="pe-3">{{ session('administrator') }}</span>
+                        <a href="{{ route('logout') }}" class="btn btn-outline-secondary" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            登出
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </div>
                 @endif
             </div>
         </div>

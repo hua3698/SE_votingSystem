@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>軟體工程第十一組 - 投票管理系統</title>
+    <link rel="icon" href="../../../public/assets/NCU.Logo.png" type="image/x-icon">
+    <link href="{{ asset('plugins/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="../../../public/css/front.css" rel="stylesheet">
+
+    <script src="{{ asset('plugins/jquery/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('plugins/bootstrap/bootstrap.bundle.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    
+
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="../../../public/assets/logo.png" alt="Logo" /> 投票吧
+            </a>
+        </div>
+        <div class="divider"></div>
+        <nav class="nav-links">
+            <ul>
+                <li><a href="index.html">探索</a></li>
+                <li><a href="#">會員中心</a></li>
+            </ul>
+        </nav>
+
+        <div class="buttons">
+            <!-- <a href="member_login.html" class="button login">會員資料</a> -->
+            <a href="member_register.html" class="button register">登出</a>
+        </div>
+    </header>
+
+    <div class="activity-container">
+        <div class="content-wrapper">
+
+            <div class="title_background " >
+                <div class="deadline">截止日期：2024 年 12 月 31 日 23:59</div>
+                <div class="title_content">
+                    <img src="../../../public/assets/a1.png" alt="" class="activity-image">
+                </div>
+                <div class="vote-title-container">
+                    <img src="../../../public/assets/vote.icon.png" alt="投票圖示">
+                    <h1 class="vote_name fw-bold">投活動名稱活動名稱活動名稱活動名稱（要限制26個字）</h1>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="notice">
+                        <p class="fw-bold">◆ 說明</p>
+                        <p>1. 每位投票者僅能進行一次投票，請謹慎選擇。</p>
+                        <p>2. 投票資料將全程保密，僅用於計票分析。</p>
+                        <p>3. 投票截止時間為 2024 年 12 月 31 日 23:59。</p>
+                        <p>4. 點擊「送出投票」按鈕後，將無法進行修改。</p>
+                    </div>
+                    <div class="notice">
+                        <p class="fw-bold">◆ 注意事項</p>
+                        <p>1. 每人僅限投票一次，重複投票無效。</p>
+                        <p>2. 投票結果將於 2024 年 1 月 5 日 公佈。</p>
+                        <p>3. 如果遇到技術問題，請聯繫負責人（聯繫方式：example@domain.com）。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vote_container">
+                <div class="can_vote">
+                    <div class="vote_header">
+                        <h4 class="fw-bold">請勾選想要投票的候選人</h4>
+                        <div class="notice">
+                            <p class="fw-bold"><a href="">點擊前往查看候選人介紹</a></p>
+                        </div>
+                    </div>
+
+                    <div class="candidates">
+                        <div class="cand shadow-sm">
+                            <img class="jiikawa" src="../../../public/assets/吉伊卡哇.png" alt="">
+                            <div class="intro">
+                                <div>
+                                    <p style="font-size: 1.2rem"></p>
+                                    <strong></strong>
+                                </div>
+                            </div>
+                            <div class="no">1號吉伊卡哇</div>
+                            
+                            <div class="circle_div col-3">
+                                <div class="form-check vote_check">
+                                    <input name="cand[]" class="form-check-input" type="checkbox" value="" >
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="cand shadow-sm">
+                            <img class="jiikawa" src="../../../public/assets/吉伊卡哇.png" alt="">
+                            <div class="intro">
+                                <div>
+                                    <p style="font-size: 1.2rem"></p>
+                                    <strong></strong>
+                                </div>
+                            </div>
+                            <div class="no">2號吉伊卡哇</div>
+                            <div class="circle_div col-3">
+                                <div class="form-check vote_check">
+                                    <input name="cand[]" class="form-check-input" type="checkbox" value="" >
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="cand shadow-sm">
+                            <img class="jiikawa" src="../../../public/assets/吉伊卡哇.png" alt="">
+                            <div class="intro">
+                                <div>
+                                    <p style="font-size: 1.2rem"></p>
+                                    <strong></strong>
+                                </div>
+                            </div>
+                            <div class="no">3號吉伊卡哇</div>
+                            <div class="circle_div col-3">
+                                <div class="form-check vote_check">
+                                    <input name="cand[]" class="form-check-input" type="checkbox" value="" >
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                    <div class="end">
+                        <button id="btnVote">送出投票</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="modal fade" id="checkModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>送出後無法重新投票，請確認以下您所選名單再送出。最多可圈選位</p>
+                        <div class="check_cand my-3 px-2"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button id="btnConfirmToVote" type="button" class="btn btn-success">確定送出</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 頁尾 -->
+        <footer class="footer">
+            <div class="footer-logo">
+                <img
+                    src="../../../public/assets/logo.png"
+                    alt="投票吧 Logo"
+                    class="logo-image"
+                />
+                投票吧
+            </div>
+            <div class="footer-text">
+                中央大學資訊管理學系碩士班｜軟體工程｜期末作業用無盈利用途
+            </div>
+        </footer>
+    </div>
+    
+</body>
+</html>

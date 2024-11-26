@@ -1,22 +1,15 @@
-@extends('front.index')
+@extends('front.common')
 
 @section('body')
-    <h2 class="title shadow-sm">
-        <img src="{{ asset('assets/ncu.avif') }}" height="10%" width="10%">
-        <span>軟體工程第十一組 - 投票管理系統</span>
-    </h2>
-    <div class="container">
-        @if ($status !== 'error')
-            <div class="vote_record my-3">
-                <p class="fs-2 fw-bold text-center">{{ $event_name }}</p>
+    @if ($status !== 'error')
+        <div class="title_background" >
+            <div class="title_content">
+                <img src="{{ asset('assets/vote.icon.png') }}" alt="">
+                <h1 class="vote_name fw-bold text-center" >投票主題：{{ $event_name }}</h1>
             </div>
-            <div class="finished shadow-sm text-center fs-3 my-3">
-                <p class="my-3" style="color: #198754">
-                    <svg width="30" height="30" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
-                        <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
-                        <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/>
-                    </svg>
-                </p>
+        </div>
+        <div class="container">
+            <div class="text-center fs-3 my-3">
                 <p>已完成投票！</p>
             </div>
             <div class="vote_name text-center mb-4">
@@ -38,6 +31,6 @@
                     @endforeach
                 </div>
             </div>
-        @endif
-    </div>
+        </div>
+    @endif
 @endsection
