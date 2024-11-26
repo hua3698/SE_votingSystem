@@ -22,6 +22,32 @@ class VoteController extends Controller
     private $voteEvent;
     private $generateQrcode;
 
+    public function showVotes()
+    {
+        try
+        {
+            $votes = VoteEvent::orderBy('end_time', 'desc')->get();
+            foreach ($votes as $key => $vote) {
+                $this->voteEvent = $vote;
+                $this->addVoteStatus($this->voteEvent);
+                $this->addRemainDate($this->voteEvent);
+                $votes[$key] = $this->voteEvent;
+            }
+
+            $response = [
+                'votes' => $votes,
+            ];
+
+            return view('front.index', $response);
+        }
+        catch (\Exception $e) 
+        {
+            echo $e->getMessage();
+            // Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
+            // return redirect()->route('index');
+        }
+    }
+
     //
     public function showVotePage($event_id, $qrcode_string) 
     {
@@ -52,7 +78,33 @@ class VoteController extends Controller
         catch (\Exception $e) 
         {
             Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
-            return redirect()->route('vote.candidate');
+            return redirect()->route('index');
+        }
+    }
+
+    public function showSingleVote($event_id)
+    {
+        try
+        {
+            $this->voteEvent = VoteEvent::find($event_id);
+            $this->addVoteStatus($this->voteEvent);
+
+            $candidates = Candidate::where('event_id', $event_id)
+                                ->orderBy('number', 'asc')
+                                ->get();
+
+            $response = [
+                'status' => 'ok',
+                'vote_event' => $this->voteEvent,
+                'candidates' => $candidates,
+            ];
+
+            return view('front.vote', $response);
+        }
+        catch (\Exception $e) 
+        {
+            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
+            return redirect()->route('index');
         }
     }
 
@@ -95,7 +147,7 @@ class VoteController extends Controller
         catch (\Exception $e) 
         {
             Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
-            return redirect()->route('vote.candidate');
+            return redirect()->route('index');
         }
     }
 
@@ -103,7 +155,7 @@ class VoteController extends Controller
     {
         $this->voteEvent = VoteEvent::find($event_id);
 
-        $this->addVoteStatus($this->voteEvent); // VoteHelper trait
+        $this->addVoteStatus($this->voteEvent);
         $isOpen = $this->checkVoteisOpen();
 
         // 檢查 vote_event 是否存在
@@ -142,14 +194,7 @@ class VoteController extends Controller
 
     private function checkVoteisOpen()
     {
-        if($this->voteEvent->manual_control == VoteStatus::MANUAL_CONTROL_ENABLED &&
-            $this->voteEvent->vote_is_ongoing == VoteStatus::VOTE_IS_ONGOING) 
-        {
-            // 手動開啟投票 且 投票進行中
-        }
-        else if($this->voteEvent->manual_control == VoteStatus::MANUAL_CONTROL_DISABLED &&
-            $this->voteEvent->status == VoteStatus::TIME_IN_THE_PROGRESS) 
-        {
+        if($this->voteEvent->status == VoteStatus::TIME_IN_THE_PROGRESS) {
             // 當下處於投票時間內
         }
         else {
@@ -162,7 +207,7 @@ class VoteController extends Controller
     {
         return VoteRecord::leftJoin('candidates', 'vote_records.cand_id', '=', 'candidates.cand_id')
                 ->where('vote_records.code_id', $qrcode_id)
-                ->select('vote_records.code_id', 'candidates.number as cand_number', 'candidates.name as cand_name', 'candidates.school as cand_school', 'vote_records.updated_at as vote_time')
+                ->select('vote_records.code_id', 'candidates.number as cand_number', 'candidates.name as cand_name', 'vote_records.updated_at as vote_time')
                 ->get();
     }
 
@@ -190,7 +235,7 @@ class VoteController extends Controller
         catch (\Exception $e) 
         {
             Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
-            return redirect()->route('vote.candidate');
+            return redirect()->route('index');
         }
     }
 
@@ -216,9 +261,7 @@ class VoteController extends Controller
                 'candidates' => 'required|array',
                 'candidates.*.number' => 'required|string|min:1|max:10',
                 'candidates.*.name' => 'required|string|max:255', 
-                'candidates.*.school' => 'required|string|max:255', 
                 'qrcode_count' => 'required|integer|min:1',
-                'manual_control' => 'required|integer',  // 是否手動控制投票活動
                 'max_vote' => 'integer|min:1|max:10', // 每張qrcode最多可以投幾票，目前1~10
                 'max_winner' => 'integer|min:1|max:10' // 共有幾位得名者，目前1~10
             ]);
@@ -230,13 +273,8 @@ class VoteController extends Controller
                 $voteEvent->number_of_qrcodes = $validated['qrcode_count'];
                 $voteEvent->number_of_candidates = count($validated['candidates']);
                 $voteEvent->number_of_winners = $validated['max_winner'];
-                $voteEvent->manual_control = $validated['manual_control'];
-
-                if($validated['manual_control'] == 0) {
-                    $voteEvent->start_time = $validated['start'];
-                    $voteEvent->end_time = $validated['end'];
-                }
-
+                $voteEvent->start_time = $validated['start'];
+                $voteEvent->end_time = $validated['end'];
                 $voteEvent->save();
 
                 foreach ($validated['candidates'] as $key => $cand) {
@@ -244,7 +282,6 @@ class VoteController extends Controller
                     $candidate->event_id = $voteEvent->event_id;
                     $candidate->number = $cand['number'];
                     $candidate->name = $cand['name'];
-                    $candidate->school = $cand['school'];
                     $candidate->save();
                 }
 
@@ -546,7 +583,6 @@ class VoteController extends Controller
             $groupedResults[$row->code_id]['vote'][] = [
                 'number' => $row->number,
                 'name' => $row->name,
-                'school' => $row->school
             ];
         }
 

@@ -4,9 +4,6 @@
 <div class="container admin_container">
     <h2 class="text-center fw-bold mb-5">
         {{ $vote_event->event_name }}
-        @if ($vote_event->manual_control === 1 && $vote_event->vote_is_ongoing === 1)
-            <button id="btnDectivateVote" type="button" class="btn btn-outline-danger">結束投票</button>
-        @endif
     </h2>
     <div class="shadow block mb-3">
         <h5 class="text-center mb-3">
@@ -52,7 +49,7 @@
 @endsection
 
 @section('script_js')
-    @if (($vote_event->manual_control === 1 && $vote_event->vote_is_ongoing === 1) || ($vote_event->manual_control === 0 && $vote_event->status === 1))
+    @if ($vote_event->status === 1)
         <script>
             $(function() {
                 function fetchData() {

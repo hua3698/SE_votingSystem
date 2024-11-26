@@ -24,9 +24,7 @@ Route::get('/', function () {
     return view('hello');
 });
 
-Route::get('/index', function () {
-    return view('front.index');
-});
+Route::get('/index', [VoteController::class, 'showVotes'])->name('index');
 
 Route::get('/user/register', function() {
     return view('front.user.register');
@@ -35,6 +33,9 @@ Route::post('/user/register', [AuthController::class, 'userRegister'])->name('us
 Route::get('/user/login', [AuthController::class, 'showUserLogin'])->name('user.login.form');
 Route::post('/user/login', [AuthController::class, 'userLogin'])->name('user.login');
 Route::get('/user/logout', [AuthController::class, 'userLogout'])->name('user.logout');
+
+Route::get('/vote/{event_id}', [VoteController::class, 'showSingleVote'])->name('front.vote');
+Route::get('/vote/candidate', [VoteController::class, 'showAllCandidate'])->name('vote.candidate');
 
 # 投票
 Route::middleware([UserLogin::class])->group(function () 
@@ -45,12 +46,6 @@ Route::middleware([UserLogin::class])->group(function ()
     Route::get('/vote/{event_id}/{qrcode_string}', [VoteController::class, 'showVotePage']);
     Route::get('/vote/{event_id}/{qrcode_string}/result', [VoteController::class, 'showVoteResult'])->name('vote.result');
 });
-
-Route::get('/vote', function() {
-    return view('front.temp');
-});
-Route::get('/vote/candidate', [VoteController::class, 'showAllCandidate'])->name('vote.candidate');
-
 
 ##########################################################################
 # 後台

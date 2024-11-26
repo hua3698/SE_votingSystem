@@ -19,17 +19,11 @@
                         </svg>
                         &nbsp;投票時間
                     </label>
-                    <input type="text" class="form-control" id="startTime" disabled>
+                    <input type="text" class="form-control" id="startTime">
                 </div>
                 <div class="col-12 col-md-6 mb-3">
                     <label for="endTime" class="form-label">結束時間</label>
-                    <input type="text" class="form-control" id="endTime" disabled>
-                </div>
-                <div class="col-12 col-md-6">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="1" name="manual_control" checked id="checkOpen">
-                        <label class="form-check-label" for="checkOpen">手動開啟/關閉投票活動</label>
-                    </div>
+                    <input type="text" class="form-control" id="endTime">
                 </div>
             </div>
             <div class="mb-4">
@@ -37,7 +31,6 @@
                 <div class="candidate_div">
                     <div class="input-group mb-3">
                         <input type="number" class="form-control candidate_number" placeholder="編號" min="1">
-                        <input type="text" class="form-control candidate_school" placeholder="候選人學校">
                         <input type="text" class="form-control candidate_name" placeholder="候選人名稱">
                         <span class="input-group-text"></span>
                     </div>
@@ -101,7 +94,6 @@
             $('.candidate_div').append(`
                 <div class="input-group mb-3">
                     <input type="number" class="form-control candidate_number" placeholder="編號" min="1">
-                    <input type="text" class="form-control candidate_school" placeholder="候選人學校">
                     <input type="text" class="form-control candidate_name" placeholder="候選人名稱">
                     <span class="input-group-text btnDeleteRow">
                         <svg width="16" height="16" fill="currentColor" class="bi bi-x-lg delete" viewBox="0 0 16 16">
@@ -112,18 +104,6 @@
             `);
         })
 
-        $('input[name=manual_control]').on('change', function() {
-            console.log($('input[name=manual_control]').prop('checked'))
-
-            if($('input[name=manual_control]').prop('checked') === false) {
-                $('#startTime').prop('disabled', false)
-                $('#endTime').prop('disabled', false)
-            } else {
-                $('#startTime').prop('disabled', true)
-                $('#endTime').prop('disabled', true)
-            }
-        })
-
         $('#btnSubmit').on('click', function() {
             let voteName = $('#voteName').val()
             let start = $('input[id="startTime"]').val()
@@ -131,12 +111,11 @@
             let startTime = moment(start, "YYYY-MM-DD HH:mm:ss");
             let endTime = moment(end, "YYYY-MM-DD HH:mm:ss");
             let qrcodeCount = $('#qrcode').val()
-            let boolManual = $('input[name=manual_control]').prop('checked') ? 1 : 0
             let max_vote = $('select[name=max_vote]').val()
             let max_winner = $('select[name=max_winner]').val()
 
             let error = [];
-            error = validateInput(startTime, endTime, boolManual)
+            error = validateInput(startTime, endTime)
 
             if(error.length > 0) {
                 let error_msg = ''
@@ -157,7 +136,6 @@
                     let tmp = {}
                     tmp.number = $(this).val()
                     tmp.name = $('.candidate_name').eq(idx).val()
-                    tmp.school = $('.candidate_school').eq(idx).val()
                     candidates.push(tmp)
                 }
             })
@@ -173,7 +151,6 @@
             post_data.end = end
             post_data.candidates = candidates
             post_data.qrcode_count = qrcodeCount
-            post_data.manual_control = boolManual
             post_data.max_vote = max_vote
             post_data.max_winner = max_winner
 
@@ -199,27 +176,20 @@
             $(this).closest('.input-group').remove()
         })
 
-        const validateInput = (startTime, endTime, boolManual) => {
+        const validateInput = (startTime, endTime) => {
             let error = []
 
             if($('#voteName').val().trim() == '') {
                 error.push('請填寫投票名稱')
             }
 
-            if(boolManual == 0) {
-                if(endTime.isBefore(startTime) || endTime.isSame(startTime)) {
-                    error.push('結束時間不可以早於開始時間')
-                }
-            }
-
             $('.input-group').each(function(index) {
                 let num = $(this).find('.candidate_number').val()
-                let school = $('.candidate_school').eq(index).val().trim()
                 let name = $('.candidate_name').eq(index).val().trim()
 
-                if(num == '' && school == '' && name == '') {
+                if(num == '' && name == '') {
                     return;
-                } else if(num == '' || school == '' || name == '') {
+                } else if(num == '' || name == '') {
                     error.push('請填寫候選人資訊')
                     return false;
                 }

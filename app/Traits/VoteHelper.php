@@ -25,12 +25,20 @@ trait VoteHelper
         }
     }
 
+    protected function addRemainDate(&$voteEvent)
+    {
+        if($voteEvent) {
+            $startDate = Carbon::parse($voteEvent->start);
+            $endDate = Carbon::parse($voteEvent->end);
+
+            $voteEvent->remain_date = $endDate->greaterThanOrEqualTo(now()) ? $endDate->diffInDays(now()) : 0;
+        }
+    }
+
     //檢查當前狀態是否可以編輯 (only allow 尚未開始階段)
     protected function validEditPermission(&$voteEvent)
     {
-        if($voteEvent->manual_control == 0 && $voteEvent->status == 0) {
-        }
-        elseif ($voteEvent->manual_control == 1 && $voteEvent->vote_is_ongoing == 0) {
+        if($voteEvent->status == 0) {
         }
         else {
             throw new \Exception();
@@ -42,9 +50,7 @@ trait VoteHelper
         $this->addVoteStatus($voteEvent);
 
         // 結束投票後才可以刪除
-        if($voteEvent->manual_control == 0 && $voteEvent->status == 2) {
-        }
-        elseif ($voteEvent->manual_control == 1 && $voteEvent->vote_is_ongoing == 2) {
+        if($voteEvent->status == 2) {
         }
         else {
             throw new \Exception();
@@ -56,9 +62,7 @@ trait VoteHelper
         $this->addVoteStatus($voteEvent);
 
         // 尚未開始才可開啟投票
-        if($voteEvent->manual_control == 0 && $voteEvent->status == 0) {
-        }
-        elseif ($voteEvent->manual_control == 1 && $voteEvent->vote_is_ongoing == 0) {
+        if($voteEvent->status == 0) {
         }
         else {
             throw new \Exception();
@@ -70,9 +74,7 @@ trait VoteHelper
         $this->addVoteStatus($voteEvent);
 
         // 進行中才可以結束投票
-        if($voteEvent->manual_control == 0 && $voteEvent->status == 1) {
-        }
-        elseif ($voteEvent->manual_control == 1 && $voteEvent->vote_is_ongoing == 1) {
+        if($voteEvent->status == 1) {
         }
         else {
             throw new \Exception();
@@ -84,9 +86,7 @@ trait VoteHelper
         $this->addVoteStatus($voteEvent);
 
         // 結束投票後才可以查看排名結果
-        if($voteEvent->manual_control == 0 && $voteEvent->status == 2) {
-        }
-        elseif ($voteEvent->manual_control == 1 && $voteEvent->vote_is_ongoing == 2) {
+        if($voteEvent->status == 2) {
         }
         else {
             throw new \Exception();

@@ -4,32 +4,18 @@
     <div class="container admin_container">
         <h2 class="text-center fw-bold mb-5">
             {{ $vote_event->event_name }} 
-            @if ($vote_event->manual_control == 1 && $vote_event->vote_is_ongoing == 0)
-                <button id="btnActivateVote" type="button" class="btn btn-outline-primary">開放投票</button>
-            @endif
         </h2>
         <div class="shadow block mb-5">
             <div class="d-flex justify-content-between mb-5">
                 <div>
                     <p>
-                        @if ($vote_event->manual_control == 1)
-                            @if ($vote_event->vote_is_ongoing == 0)
-                                <span class="fs-6 badge text-bg-secondary">尚未開始</span>
-                            @elseif ($vote_event->vote_is_ongoing == 1)
-                                <span class="fs-6 badge text-bg-success">投票進行中</span>
-                            @else 
-                                <span class="fs-6 badge text-bg-danger">已結束</span>
-                            @endif
-                        @else
-                            @if ($vote_event->status == 0)
-                                <span class="fs-6 badge text-bg-secondary">尚未開始</span>
-                            @elseif ($vote_event->status == 1)
-                                <span class="fs-6 badge text-bg-success">投票進行中</span>
-                            @else 
-                                <span class="fs-6 badge text-bg-danger">已結束</span>
-                            @endif
+                        @if ($vote_event->status == 0)
+                            <span class="fs-6 badge text-bg-secondary">尚未開始</span>
+                        @elseif ($vote_event->status == 1)
+                            <span class="fs-6 badge text-bg-success">投票進行中</span>
+                        @else 
+                            <span class="fs-6 badge text-bg-danger">已結束</span>
                         @endif
-
                     </p>
                     <p class="card-text fs-5">
                         <span class="bar">
@@ -41,16 +27,11 @@
                             <strong>投票結束：</strong> {{ $vote_event->end_time }}
                         </span>
                     </p>
-                    <p class="card-text fs-5">
-                        <span class="bar">
-                            <strong>手動開啟：</strong> {{ $vote_event->manual_control ? '是' : '否' }}
-                        </span>
-                    </p>
                 </div>
                 <div class="btn-group">
                     <div class="dropdown">
                         <ul class="list-group">
-                            @if (($vote_event->manual_control == 1 && $vote_event->vote_is_ongoing == 0) || ($vote_event->manual_control == 0 && $vote_event->status == 0))
+                            @if ($vote_event->status == 0)
                                 <a href="{{ route('vote.edit.page', ['event_id' => $vote_event->event_id]) }}" class="list-group-item list-group-item-action">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                                         <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
@@ -64,7 +45,7 @@
                                 </svg>
                                 查看投票狀況
                             </a>
-                            @if (($vote_event->manual_control == 1 && $vote_event->vote_is_ongoing == 2) || ($vote_event->manual_control == 0 && $vote_event->status == 2))
+                            @if ($vote_event->status == 2)
                                 <a href="{{ route('admin.vote.result', ['event_id' => $vote_event->event_id]) }}" class="list-group-item list-group-item-action">
                                     <svg width="16" height="16" fill="currentColor" class="bi bi-trophy" viewBox="0 0 16 16">
                                         <path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5q0 .807-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.132-5.89A33 33 0 0 1 2.5.5m.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935m10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935M3.504 1q.01.775.056 1.469c.13 2.028.457 3.546.87 4.667C5.294 9.48 6.484 10 7 10a.5.5 0 0 1 .5.5v2.61a1 1 0 0 1-.757.97l-1.426.356a.5.5 0 0 0-.179.085L4.5 15h7l-.638-.479a.5.5 0 0 0-.18-.085l-1.425-.356a1 1 0 0 1-.757-.97V10.5A.5.5 0 0 1 9 10c.516 0 1.706-.52 2.57-2.864.413-1.12.74-2.64.87-4.667q.045-.694.056-1.469z"/>
@@ -72,7 +53,7 @@
                                     查看開票結果
                                 </a>
                             @endif
-                            @if (($vote_event->manual_control == 1 && $vote_event->vote_is_ongoing != 1) || ($vote_event->manual_control == 0 && $vote_event->status != 1))
+                            @if ($vote_event->status != 1)
                                 <a id="btnDelete" href="#" class="list-group-item list-group-item-action">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
                                         <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
@@ -117,7 +98,6 @@
                     <thead>
                         <tr>
                             <th scope="col">序號</th>
-                            <th scope="col">候選人學校</th>
                             <th scope="col">候選人名稱</th>
                         </tr>
                     </thead>
@@ -125,7 +105,6 @@
                         @foreach ($candidates as $cand)
                         <tr>
                             <th scope="row">{{ $cand['number'] }}</th>
-                            <td>{{ $cand['school'] }}</td>
                             <td>{{ $cand['name'] }}</td>
                         </tr>
                         @endforeach
