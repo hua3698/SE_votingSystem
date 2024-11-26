@@ -9,7 +9,7 @@
 
     <link href="{{ asset('plugins/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/index.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/front.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/front_vote.css') }}" rel="stylesheet">
 
     <script src="{{ asset('plugins/jquery/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap/bootstrap.bundle.js') }}"></script>

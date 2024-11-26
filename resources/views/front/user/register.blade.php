@@ -2,7 +2,7 @@
 
 @section('body')
 {{-- <link href="{{ asset('css/login.css') }}" rel="stylesheet"> --}}
-<link rel="stylesheet" href="{{ asset('css/member_register.css') }}" />
+<link rel="stylesheet" href="{{ asset('css/register.css') }}" />
 
 <style>
     /* 登入頁樣式 */
