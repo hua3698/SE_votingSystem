@@ -32,10 +32,6 @@
                         </div>
                     </span>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" id="checkOpen" type="checkbox" value="1" name="manual_control" {{ $vote_event->manual_control ? 'checked' : '' }}>
-                    <label class="form-check-label" for="checkOpen">手動開啟/關閉投票活動</label>
-                </div>
             </div>
         </div> 
         <div class="col-12 mb-5 px-3">
@@ -78,7 +74,6 @@
                 <thead>
                     <tr>
                         <th scope="col" width="15%">#</th>
-                        <th scope="col">候選人學校</th>
                         <th scope="col">候選人名稱</th>
                     </tr>
                 </thead>
@@ -88,9 +83,6 @@
                         <th scope="row">
                             <input type="number" class="form-control" value="{{ $cand['number'] }}">
                         </th>
-                        <td>
-                            <input type="text" class="form-control" value="{{ $cand['school'] }}">
-                        </td>
                         <td>
                             <input type="text" class="form-control" value="{{ $cand['name'] }}">
                         </td>
