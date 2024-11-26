@@ -151,6 +151,15 @@ html, body {
     border-radius: 15px;
 }
 
+.startline {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: red;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
 .deadline {
     position: absolute;
     bottom: 10px;
