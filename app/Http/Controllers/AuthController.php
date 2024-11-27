@@ -79,9 +79,9 @@ class AuthController extends Controller
             ]);
 
             if (Auth::guard('user')->attempt($credentials)) {
-                // 登入成功
-                session()->put('frontuser', $credentials['email']);
-                return redirect()->route('index');
+                $request->session()->put('frontuser', $credentials['email']);
+                $intendedUrl = $request->session()->pull('url.intended', route('index'));
+                return redirect($intendedUrl);
             }
 
             // 登入失敗

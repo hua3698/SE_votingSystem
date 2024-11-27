@@ -32,6 +32,7 @@
 
         <div class="buttons">
             @if(session('frontuser'))
+                <div class="pe-3">{{ session('frontuser') }}</div>
                 <a href="{{ url('/user/logout') }}" class="button login">登出</a>
             @else
                 <a href="{{ url('/user/login') }}" class="button login">登入</a>

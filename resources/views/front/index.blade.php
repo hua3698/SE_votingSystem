@@ -1,12 +1,12 @@
 @extends('front.common')
 
 @section('body')
-<style>
-    a {
-        color: #000;
-        text-decoration: none;
-    }
-</style>
+    <style>
+        a {
+            color: #000;
+            text-decoration: none;
+        }
+    </style>
     <div class="filter-bar">
         <div class="filter-buttons">
             <button data-filter="all" class="filter active">全部</button>
@@ -38,11 +38,13 @@
                         <p class="activity-participants">參與人數<br />72 人</p>
                         <p class="activity-days">剩餘天數<br />{{ $vote->remain_date }}</p>
                     </div>
-                    <div class="vote-now">立即投票</div>
+                    @if ($vote->remain_date > 0 && $vote->status == 1)
+                        <div class="vote-now">立即投票</div>
+                    @endif
                 </div>
             @endforeach
         </div>
-        <div class="pagination">
+        {{-- <div class="pagination">
             @if ($current_page != 1)
                 <a href="{{ route('index', ['page'=>$current_page -1]) }}">
                     <button class="page-button">&laquo;</button>
@@ -61,7 +63,7 @@
             <a href="{{ route('index', ['page'=>$last_page]) }}">
                 <button class="page-button">最後頁</button>
             </a>
-        </div>
+        </div> --}}
     </div>
 
     <script>
@@ -86,8 +88,8 @@
                 });
             })
 
-            $('.activity-card').on('click', function() {
-                let event_id = $(this).data('event')
+            $('.vote-now').on('click', function() {
+                let event_id = $(this).closest('.activity-card').data('event')
                 location.href = '{{ route("front.vote", ":event_id") }}'.replace(':event_id', event_id);
             })
 

@@ -26,7 +26,9 @@ class VoteController extends Controller
     {
         try
         {
-            $votes = VoteEvent::orderBy('end_time', 'desc')->paginate(3);
+            $votes = VoteEvent::orderBy('end_time', 'desc')->get();
+            // $votes = VoteEvent::orderBy('end_time', 'desc')->paginate(3);
+
             foreach ($votes as $key => $vote) {
                 $this->voteEvent = $vote;
                 $this->addVoteStatus($this->voteEvent);
@@ -36,10 +38,10 @@ class VoteController extends Controller
 
             $response = [
                 'votes' => $votes,
-                'total' => $votes->total(),
-                'count' => 3,
-                'current_page' => $votes->currentPage(),
-                'last_page' => $votes->lastPage(),
+                // 'total' => $votes->total(),
+                // 'count' => 3,
+                // 'current_page' => $votes->currentPage(),
+                // 'last_page' => $votes->lastPage(),
             ];
 
             return view('front.index', $response);

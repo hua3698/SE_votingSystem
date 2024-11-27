@@ -18,6 +18,7 @@ class UserLogin
         $email = $request->session()->get('frontuser');
 
         if (!$email) {
+            $request->session()->put('url.intended', $request->fullUrl());
             return redirect()->route('user.login.form');
         }
 

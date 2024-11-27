@@ -91,6 +91,7 @@ body {
     gap: 10px;
     margin-left: auto; /* 將按鈕推到右側 */
     margin-right: 80px; /* 與右邊邊界保持適當距離 */
+    align-items: baseline;
 }
 
 /* 按鈕通用樣式 */

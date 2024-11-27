@@ -3,20 +3,6 @@
 @section('body')
 {{-- <link href="{{ asset('css/login.css') }}" rel="stylesheet"> --}}
 <link rel="stylesheet" href="{{ asset('css/register.css') }}" />
-
-<style>
-    /* 登入頁樣式 */
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-        background: linear-gradient(to right, #c1dfc4, #eff8ee);
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        box-sizing: border-box;
-    }
-</style>
 <div>
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -35,7 +21,7 @@
     @endif
     <div class="register-container">
         <div class="register-box">
-            <h1>會員註冊</h1>
+            <h1 class="fw-bold">會員註冊</h1>
             <form method="POST" action="{{ route('user.register') }}">
                 @csrf
                 <div class="input-group">

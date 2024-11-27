@@ -44,8 +44,8 @@ Route::middleware([UserLogin::class])->group(function ()
     Route::get('/user', [UserController::class, 'userPage']);
 
     Route::post('/vote', [VoteController::class, 'doVote'])->name('vote');
-    Route::get('/vote/{event_id}/{qrcode_string}', [VoteController::class, 'showVotePage']);
-    Route::get('/vote/{event_id}/{qrcode_string}/result', [VoteController::class, 'showVoteResult'])->name('vote.result');
+    Route::get('/vote/{event_id}', [VoteController::class, 'showVotePage']);
+    Route::get('/vote/{event_id}/result', [VoteController::class, 'showVoteResult'])->name('vote.result');
 });
 
 ##########################################################################
