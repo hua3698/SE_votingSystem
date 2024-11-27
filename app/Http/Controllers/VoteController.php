@@ -26,26 +26,45 @@ class VoteController extends Controller
     {
         try
         {
-            $votes = VoteEvent::orderBy('end_time', 'desc')->get();
+            $votes = VoteEvent::orderBy('end_time', 'desc')->paginate(3);
             foreach ($votes as $key => $vote) {
                 $this->voteEvent = $vote;
                 $this->addVoteStatus($this->voteEvent);
-                $this->addRemainDate($this->voteEvent);
+                $this->addRemainDay($this->voteEvent);
                 $votes[$key] = $this->voteEvent;
             }
 
             $response = [
                 'votes' => $votes,
+                'total' => $votes->total(),
+                'count' => 3,
+                'current_page' => $votes->currentPage(),
+                'last_page' => $votes->lastPage(),
             ];
 
             return view('front.index', $response);
         }
         catch (\Exception $e) 
         {
-            echo $e->getMessage();
-            // Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
-            // return redirect()->route('index');
+            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
+            return redirect()->route('index');
         }
+    }
+
+    public function searchVotesAPI(Request $request)
+    {
+        $validated = $request->validate([
+            'keyword' => 'required|string|max:255',
+        ]);
+
+        $keyword = $validated['keyword'];
+        $results = DB::table('vote_events')
+                    ->select('event_id', 'event_name')
+                    ->where('event_name', 'like', '%' . $keyword . '%')
+                    ->get();
+
+        // 回傳 JSON 結果
+        return response()->json($results, 200);
     }
 
     //

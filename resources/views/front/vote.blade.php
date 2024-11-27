@@ -41,7 +41,7 @@
                         <div class="vote_header">
                             <h4 class="fw-bold">請勾選想要投票的候選人</h4>
                             <div class="notice">
-                                <p class="fw-bold"><a href="{{ route('vote.candidate', ['event_id' => $vote_event->event_id]) }}">點擊前往查看候選人介紹</a></p>
+                                <p class="fw-bold"><a href="{{ route('vote.candidate', ['id' => $vote_event->event_id]) }}">點擊前往查看候選人介紹</a></p>
                             </div>
                         </div>
                         <div class="candidates">

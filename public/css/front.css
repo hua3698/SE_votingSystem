@@ -224,7 +224,7 @@ html, body {
 
 .jiikawa {
     width: 150px;
-    height: auto;
+    height: 100px;
     margin: 15px 20px;
     object-fit: contain;
 }

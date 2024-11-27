@@ -25,6 +25,7 @@ Route::get('/', function () {
 });
 
 Route::get('/index', [VoteController::class, 'showVotes'])->name('index');
+Route::post('/index/search', [VoteController::class, 'searchVotesAPI'])->name('search.vote');
 
 Route::get('/user/register', function() {
     return view('front.user.register');

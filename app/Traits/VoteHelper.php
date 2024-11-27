@@ -25,13 +25,14 @@ trait VoteHelper
         }
     }
 
-    protected function addRemainDate(&$voteEvent)
+    protected function addRemainDay(&$voteEvent)
     {
         if($voteEvent) {
-            $startDate = Carbon::parse($voteEvent->start);
-            $endDate = Carbon::parse($voteEvent->end);
-
-            $voteEvent->remain_date = $endDate->greaterThanOrEqualTo(now()) ? $endDate->diffInDays(now()) : 0;
+            $today = Carbon::today();
+            $end_date = date("Y-m-d", strtotime($voteEvent->end_time));
+            $diff = $today->diffInDays($end_date, false);
+            $diff = $diff > 0 ? $diff : 0;
+            $voteEvent->remain_date = $diff;
         }
     }
 

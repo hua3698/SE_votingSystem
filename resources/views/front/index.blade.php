@@ -1,6 +1,12 @@
 @extends('front.common')
 
 @section('body')
+<style>
+    a {
+        color: #000;
+        text-decoration: none;
+    }
+</style>
     <div class="filter-bar">
         <div class="filter-buttons">
             <button data-filter="all" class="filter active">全部</button>
@@ -14,7 +20,7 @@
                 class="search-input"
                 placeholder="搜尋投票活動..."
             />
-            <button class="search-button">搜尋</button>
+            <button id="btnSearch" class="search-button">搜尋</button>
         </div>
     </div>
     <div class="activity-container">
@@ -22,7 +28,7 @@
             @foreach($votes as $key => $vote)
                 <div class="activity-card" data-event="{{ $vote->event_id }}" data-status="{{ $vote->status }}">
                     <img
-                        src="{{ asset('assets/a' . ($key + 1) . '.png') }}"
+                        src="{{ asset('assets/a' . ($vote->event_id) . '.png') }}"
                         alt="活動圖片"
                         class="activity-image"
                     />
@@ -37,17 +43,31 @@
             @endforeach
         </div>
         <div class="pagination">
-            <button class="page-button">1</button>
-            <button class="page-button">2</button>
-            <button class="page-button">3</button>
-            <button class="page-button">最後頁</button>
-            <button class="page-button">下一頁</button>
+            @if ($current_page != 1)
+                <a href="{{ route('index', ['page'=>$current_page -1]) }}">
+                    <button class="page-button">&laquo;</button>
+                </a>
+            @endif
+            @for ($i = 1; $i <= $last_page; $i++) 
+                <a href="{{ route('index', ['page'=>$i]) }}">
+                    <button class="page-button">{{ $i }}</button>
+                </a>
+            @endfor
+            @if ($current_page != $last_page)
+                <a href="{{ route('index', ['page'=>$current_page +1]) }}" >
+                    <button class="page-button">&raquo;</button>
+                </a>
+            @endif
+            <a href="{{ route('index', ['page'=>$last_page]) }}">
+                <button class="page-button">最後頁</button>
+            </a>
         </div>
     </div>
 
     <script>
         $(function() {
             $('.filter').on('click', function() {
+                console.log('a')
                 $('.filter').removeClass('active');
                 $(this).addClass('active');
 
@@ -69,6 +89,33 @@
             $('.activity-card').on('click', function() {
                 let event_id = $(this).data('event')
                 location.href = '{{ route("front.vote", ":event_id") }}'.replace(':event_id', event_id);
+            })
+
+            $('#btnSearch').on('click', function() {
+                const keyword = $('.search-input').val()
+
+                if(!keyword) {
+                    $('.filter').click()
+                } else {
+                    let post_data = {};
+                    post_data._token = "{{ csrf_token() }}"
+                    post_data.keyword = keyword
+
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ route('search.vote') }}",
+                        contentType: 'application/json',
+                        data: JSON.stringify(post_data),
+                    }).done(function(re) {
+                        console.log(re)
+                        $('.activity-card').hide();
+                        re.forEach(item => {
+                            $(`.activity-card[data-event="${item.event_id}"]`).show();
+                        });
+                    }).fail(function(re) {
+                        alert('error')
+                    })
+                }
             })
         })
     </script>
