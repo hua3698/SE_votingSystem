@@ -1,5 +1,12 @@
 @extends('front.common')
 
 @section('body')
-施工中
+<style>
+    .container {
+        min-height: calc(100vh - 150px);
+    }
+</style>
+<div class="container">
+</div>
+
 @endsection

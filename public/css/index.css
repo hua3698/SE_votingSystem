@@ -225,6 +225,7 @@ body {
     align-items: center; /* 水平居中 */
     overflow-y: auto;
     padding: 0;
+    min-height: calc(100vh - 202px);
 }
 
 /* 活動卡片的排列 */

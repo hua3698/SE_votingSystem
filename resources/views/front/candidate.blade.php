@@ -2,7 +2,6 @@
 
 @section('body')
 <style>
-    
     .container {
             width: 90%;
             max-width: 1200px;

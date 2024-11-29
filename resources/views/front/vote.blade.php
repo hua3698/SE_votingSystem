@@ -95,6 +95,14 @@
                 })
 
                 $('#btnVote').on('click', function() {
+                    const isLoggedIn = @json(session('user') ? true : false);
+                    const loginUrl = "{{ route('user.login.form') }}";
+
+                    if (!isLoggedIn) {
+                        alert('請先登入')
+                        window.location.href = loginUrl;
+                    }
+
                     let checkedCount = 0
                     let cand_info = ''
                     let check_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">' +
