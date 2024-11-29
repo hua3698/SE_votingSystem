@@ -2,19 +2,20 @@
 
 @section('body')
     @if ($status !== 'error')
-        <div class="title_background" >
+        <style>
+            .activity-container {
+                min-height: calc(100vh - 150px);
+            }
+        </style>
+        <div class="activity-container">
             <div class="title_content">
-                <img src="{{ asset('assets/vote.icon.png') }}" alt="">
-                <h1 class="vote_name fw-bold text-center" >投票主題：{{ $event_name }}</h1>
+                <h1 class="vote_name fw-bold text-center" >投票結果</h1>
+                <h3 class="vote_name fw-bold text-center" >投票主題：{{ $event_name }}</h1>
             </div>
         </div>
-        <div class="container">
+        {{-- <div class="container">
             <div class="text-center fs-3 my-3">
                 <p>已完成投票！</p>
-            </div>
-            <div class="vote_name text-center mb-4">
-                <p class="fs-5 text-secondary">QR Code序號</p>
-                <p class="fs-3">{{ $qrcode_string }}</p>
             </div>
             <div class="vote_record mb-4">
                 <p class="fs-5 text-secondary text-center">投票紀錄</p>
@@ -31,6 +32,6 @@
                     @endforeach
                 </div>
             </div>
-        </div>
+        </div> --}}
     @endif
 @endsection

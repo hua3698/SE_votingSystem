@@ -8,6 +8,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px 0;
+            min-height: calc(100vh - 150px);
         }
 
         .notice h4 {

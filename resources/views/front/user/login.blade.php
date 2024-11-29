@@ -1,7 +1,7 @@
 @extends('front.common')
 
 @section('body')
-{{-- <link href="{{ asset('css/login.css') }}" rel="stylesheet"> --}}
+<link href="{{ asset('css/login.css') }}" rel="stylesheet">
 <style>
     /* 登入頁樣式 */
     body {

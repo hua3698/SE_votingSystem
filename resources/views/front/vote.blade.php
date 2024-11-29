@@ -134,10 +134,8 @@
 
                 $('#btnConfirmToVote').on('click', function() {
                     $('#checkModal').modal('hide');
-                    $('#btnConfirmToVote').attr('disabled', true)
 
                     let event_id = "{{ $vote_event->event_id ?? '' }}"
-                    let qrcode = "{{ $qrcode_string ?? '' }}"
                     let candidates_id = []
                     $('.cand input[type=checkbox]').each(function() {
                         if($(this).prop('checked') === true) {
@@ -148,7 +146,6 @@
                     let post_data = {};
                     post_data._token = "{{ csrf_token() }}"
                     post_data.event_id = event_id
-                    post_data.qrcode_string = qrcode
                     post_data.candidates = candidates_id
 
                     const resultAlert = Swal.mixin({
@@ -156,9 +153,8 @@
                         timerProgressBar: true,
                         text: "畫面將於3秒後跳轉到投票結果頁面",
                         didClose: () => {
-                            location.href = '{{ route("vote.result", ["event_id" => ":event_id", "qrcode_string" => ":qrcode"]) }}'
+                            location.href = '{{ route("vote.result", ["event_id" => ":event_id"]) }}'
                                 .replace(':event_id', event_id)
-                                .replace(':qrcode', qrcode);
                         }
                     });
 

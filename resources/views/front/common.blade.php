@@ -50,5 +50,12 @@
             中央大學資訊管理學系碩士班｜軟體工程｜期末作業用無盈利用途
         </div>
     </footer>
+    <script>
+        $(function() {
+            $('.footer img').on('click', function() {
+                location.href = '{{ url("outstand") }}';
+            })
+        })
+    </script>
 </body>
 </html>

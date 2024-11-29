@@ -88,9 +88,17 @@
                 });
             })
 
-            $('.vote-now').on('click', function() {
-                let event_id = $(this).closest('.activity-card').data('event')
-                location.href = '{{ route("front.vote", ":event_id") }}'.replace(':event_id', event_id);
+            $('.activity-card').on('click', function() {
+                const event_id = $(this).closest('.activity-card').data('event')
+                const status = $(this).data('status');
+
+                console.log(status)
+
+                if(status != 2) {
+                    location.href = '{{ route("front.vote", ":event_id") }}'.replace(':event_id', event_id);
+                } else {
+                    location.href = '{{ route("vote.result", ":event_id") }}'.replace(':event_id', event_id);
+                }
             })
 
             $('#btnSearch').on('click', function() {

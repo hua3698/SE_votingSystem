@@ -37,6 +37,7 @@ Route::get('/user/logout', [AuthController::class, 'userLogout'])->name('user.lo
 
 Route::get('/vote/{event_id}', [VoteController::class, 'showSingleVote'])->name('front.vote');
 Route::get('/vote/{id}/candidate', [VoteController::class, 'showAllCandidate'])->name('vote.candidate');
+Route::get('/vote/{event_id}/result', [VoteController::class, 'showVoteResult'])->name('vote.result');
 
 # 投票
 Route::middleware([UserLogin::class])->group(function () 
@@ -44,8 +45,6 @@ Route::middleware([UserLogin::class])->group(function ()
     Route::get('/user', [UserController::class, 'userPage']);
 
     Route::post('/vote', [VoteController::class, 'doVote'])->name('vote');
-    Route::get('/vote/{event_id}', [VoteController::class, 'showVotePage']);
-    Route::get('/vote/{event_id}/result', [VoteController::class, 'showVoteResult'])->name('vote.result');
 });
 
 ##########################################################################
@@ -79,15 +78,10 @@ Route::middleware([CheckIfAuthenticated::class])->group(function ()
     Route::post('/outstand/vote/createvote', [VoteController::class, 'createVoteEvent'])->name('create.vote');
     Route::get('/outstand/vote/{event_id}/edit', [VoteController::class, 'voteEventEditPage'])->name('vote.edit.page');
     Route::put('/outstand/vote/{event_id}/edit', [VoteController::class, 'editVoteEvent'])->name('vote.edit');
-    Route::post('/outstand/vote/{event_id}/pdf', [VoteController::class, 'generatePDF'])->name('admin.vote.pdf');
     Route::get('/outstand/vote/{event_id}/check', [VoteController::class, 'checkVoteSituation'])->name('vote.check');
     Route::post('/outstand/vote/{event_id}/check', [VoteController::class, 'postCheckVoteSituation'])->name('vote.check.post');
     Route::get('/outstand/vote/{event_id}/result', [VoteController::class, 'getVoteResult'])->name('admin.vote.result');
     Route::put('/outstand/vote/delete', [VoteController::class, 'deleteVoteEvent'])->name('del.vote');
     Route::put('/outstand/vote/activate', [VoteController::class, 'activateVoteEvent'])->name('activate.vote');
     Route::put('/outstand/vote/deactivate', [VoteController::class, 'deactivateVoteEvent'])->name('deactivate.vote');
-
-    Route::get('/outstand/vote/{event_id}/pdf', [VoteController::class, 'testPDF'])->name('test.pdf');
-    Route::get('/outstand/vote/{event_id}/export/detail', [VoteController::class, 'exportDetail'])->name('export.detail');
-
 });

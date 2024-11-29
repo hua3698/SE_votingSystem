@@ -5,13 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\VoteEvent;
 use App\Models\Candidate;
-use App\Models\GenerateQrcode;
+use App\Models\User;
 use App\Models\VoteRecord;
 use App\Traits\VoteHelper;
 use App\Constants\VoteStatus;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-use chillerlan\QRCode\{QRCode, QROptions};
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
@@ -20,7 +19,7 @@ class VoteController extends Controller
     use VoteHelper;
 
     private $voteEvent;
-    private $generateQrcode;
+    private $userID;
 
     public function showVotes()
     {
@@ -69,44 +68,12 @@ class VoteController extends Controller
         return response()->json($results, 200);
     }
 
-    //
-    public function showVotePage($event_id, $qrcode_string) 
-    {
-        try
-        {
-            $result = $this->handleVoteEvent($event_id, $qrcode_string);
-
-            if ($result['status'] === 'error') {
-                throw new \Exception(json_encode($result));
-            }
-            elseif ($result['status'] === 'voted') {
-                return $this->showVoteResult($event_id, $qrcode_string);
-            }
-
-            $candidates = Candidate::where('event_id', $event_id)
-                                ->orderBy('number', 'asc')
-                                ->get();
-
-            $response = [
-                'status' => 'ok',
-                'vote_event' => $this->voteEvent,
-                'candidates' => $candidates,
-                'qrcode_string' => $qrcode_string,
-            ];
-
-            return view('front.vote', $response);
-        }
-        catch (\Exception $e) 
-        {
-            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
-            return redirect()->route('index');
-        }
-    }
-
     public function showSingleVote($event_id)
     {
         try
         {
+            // $result = $this->handleVoteEvent($event_id, session('frontuser'));
+
             $this->voteEvent = VoteEvent::find($event_id);
             $this->addVoteStatus($this->voteEvent);
 
@@ -136,12 +103,12 @@ class VoteController extends Controller
             // 檢查投票數
             $validated = $request->validate([
                 'event_id' => 'required|integer',
-                'candidates' => 'required|array|min:1|max:3',
-                'qrcode_string' => 'required|string|max:255'
+                'candidates' => 'required|array|min:1',
             ]);
 
             // 檢查狀態
-            $result = $this->handleVoteEvent($validated['event_id'], $validated['qrcode_string']);
+            $user_id = User::where('email', session('frontuser'))->value('user_id');
+            $result = $this->handleVoteEvent($validated['event_id'], $user_id);
 
             if ($result['status'] === 'error') {
                 return view('front.vote', $result);
@@ -151,16 +118,14 @@ class VoteController extends Controller
             }
 
             // 寫入投票紀錄
-            DB::transaction(function () use ($validated) {
+            DB::transaction(function () use ($validated, $user_id) {
                 foreach ($validated['candidates'] as $key => $cand_id) {
                     VoteRecord::create([
                         'event_id' => $validated['event_id'],
                         'cand_id' => $cand_id,
-                        'code_id' => $this->generateQrcode->code_id
+                        'user_id' => $user_id
                     ]);
                 }
-
-                GenerateQrcode::where('code_id', $this->generateQrcode->code_id)->update(['has_been_voted' => 1]);
             });
 
             return response()->json(['message' => '投票活動新增成功'], 200);
@@ -172,7 +137,7 @@ class VoteController extends Controller
         }
     }
 
-    private function handleVoteEvent($event_id, $qrcode_string)
+    private function handleVoteEvent($event_id, $user_id)
     {
         $this->voteEvent = VoteEvent::find($event_id);
 
@@ -187,17 +152,11 @@ class VoteController extends Controller
             ];
         }
 
-        // 檢查 QR code 是否存在、是否已經投過票
-        $this->generateQrcode = GenerateQrcode::where('qrcode_string', $qrcode_string)->first();
+        $voted = $this->checkIsVoted($event_id, $user_id);
 
-        if (!$this->generateQrcode) {
+        if ($voted) {
             return [
                 'status' => 'error',
-                'error_msg' => 'QR code not found'
-            ];
-        } elseif ($this->generateQrcode['has_been_voted'] === 1) {
-            return [
-                'status' => 'voted',
                 'error_msg' => '已經投過票囉'
             ];
         }
@@ -224,34 +183,44 @@ class VoteController extends Controller
         return true;
     }
 
-    private function getVoteRecords($qrcode_id)
+    private function checkIsVoted($event_id, $user_id)
+    {
+        $vote = VoteRecord::where('user_id', $user_id)
+        ->where('event_id', $event_id)
+        ->get();
+
+        return count($vote) > 0 ? true : false;
+    }
+
+    private function getVoteRecords($event_id, $user_id)
     {
         return VoteRecord::leftJoin('candidates', 'vote_records.cand_id', '=', 'candidates.cand_id')
-                ->where('vote_records.code_id', $qrcode_id)
-                ->select('vote_records.code_id', 'candidates.number as cand_number', 'candidates.name as cand_name', 'vote_records.updated_at as vote_time')
+                ->where('vote_records.user_id', $user_id)
+                ->where('vote_records.event_id', $event_id)
+                ->select('candidates.number as cand_number', 'candidates.name as cand_name', 'vote_records.updated_at as vote_time')
                 ->get();
     }
 
-    public function showVoteResult($event_id, $qrcode_string)
+    public function showVoteResult($event_id)
     {
         try
         {
-            $eventName = VoteEvent::where('event_id', $event_id)->value('event_name');
-            $qrcode = GenerateQrcode::where('qrcode_string', $qrcode_string)->first();
+            // $voted = $this->checkIsVoted($event_id, $user_id);
 
-            if($qrcode['has_been_voted'] === 1) {
-                $records = $this->getVoteRecords($qrcode->code_id);
+            // if($voted) {
+                // $user_id = User::where('email', session('frontuser'))->value('user_id');
+                $eventName = VoteEvent::where('event_id', $event_id)->value('event_name');
+                // $records = $this->getVoteRecords($event_id, $user_id);
                 $response = [
                     'status' => 'ok',
                     'event_name' => $eventName,
-                    'records' => $records,
-                    'qrcode_string' => $qrcode_string
+                    // 'records' => $records,
                 ];
                 return view('front.result', $response);
-            }
-            else {
-                return view('front.result', ['status' => 'error']);
-            }
+            // }
+            // else {
+            //     return view('front.result', ['status' => 'error']);
+            // }
         }
         catch (\Exception $e) 
         {
@@ -337,13 +306,10 @@ class VoteController extends Controller
                                 ->orderBy('number', 'asc')
                                 ->get();
 
-        $qrcodes = $this->getQrcodeInfo($event_id);
-
         $response = [];
         $response = [
             'vote_event' => $voteEvent,
             'candidates' => $candidates,
-            'qrcodes' => $qrcodes,
         ];
 
         return view('admin.vote.list', $response);
@@ -381,53 +347,6 @@ class VoteController extends Controller
         return view('hello');
     }
 
-    public function generatePDF($event_id)
-    {
-        $voteEvent = VoteEvent::find($event_id);
-        $candidates = Candidate::where('event_id', $event_id)
-                                ->orderBy('number', 'asc')
-                                ->get();
-        $qrcodes = $this->getQrcodeInfo($event_id);
-
-        // 初始化 DOMPDF
-        $options = new Options();
-        $options->set('defaultFont', 'DejaVu Sans'); // 使用默認字型作為備用字型
-        $options->setIsHtml5ParserEnabled(true);
-        $options->setIsFontSubsettingEnabled(true);
-
-        $dompdf = new Dompdf($options);
-
-        // 載入 HTML 模板，並傳遞數據
-        $html = view('pdf.voteticket', compact('voteEvent', 'candidates', 'qrcodes'))->render();
-
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-        $dompdf->render();
-
-        // 輸出 PDF
-        return response($dompdf->output(), 200)
-            ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', 'attachment; filename="' . $voteEvent->event_name . '_qrcode.pdf"');
-    }
-
-    public function testPDF($event_id)
-    {
-        $voteEvent = VoteEvent::find($event_id);
-        $candidates = Candidate::where('event_id', $event_id)
-                                ->orderBy('number', 'asc')
-                                ->get();
-        $qrcodes = $this->getQrcodeInfo($event_id);
-
-        $response = [];
-        $response = [
-            'voteEvent' => $voteEvent,
-            'candidates' => $candidates,
-            'qrcodes' => $qrcodes,
-        ];
-
-        return view('pdf.voteticket', $response);
-    }
-
     private function getQrcodeInfo($event_id)
     {
         $qrcodes = GenerateQrcode::where('event_id', $event_id)->get();
@@ -439,68 +358,6 @@ class VoteController extends Controller
         }
 
         return $qrcodes;
-    }
-
-    public function activateVoteEvent(Request $request)
-    {
-        try {
-            $validated = $request->validate([
-                'event_id' => 'required|integer',
-            ]);
-
-            $voteEvent = VoteEvent::find($validated['event_id']);
-
-            if ($voteEvent) {
-                // 檢查是否可以啟動投票
-                $this->validActivatePermission($voteEvent);
-
-                VoteEvent::where('event_id', $validated['event_id'])
-                            ->update([
-                                'vote_is_ongoing' => 1,
-                                'start_time' => date('Y-m-d H:i:s', time()),
-                            ]);
-
-                return response()->json(['message' => '投票活動已啟用'], 200);
-            }
-
-            return response()->json(['message' => '投票活動不存在'], 404);
-        }
-        catch (\Exception $e) 
-        {
-            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
-            return view('hello');
-        }
-    }
-
-    // 停用投票活動
-    public function deactivateVoteEvent(Request $request)
-    {
-        try {
-            $validated = $request->validate([
-                'event_id' => 'required|integer',
-            ]);
-
-            $voteEvent = VoteEvent::find($validated['event_id']);
-
-            if ($voteEvent) {
-                $this->validDeactivatePermission($voteEvent);
-
-                VoteEvent::where('event_id', $validated['event_id'])
-                            ->update([
-                                'vote_is_ongoing' => 2,
-                                'end_time' => date('Y-m-d H:i:s', time()),
-                            ]);
-
-                return response()->json(['message' => '投票活動已停用'], 200);
-            }
-
-            return response()->json(['message' => '投票活動不存在'], 404);
-        }
-        catch (\Exception $e) 
-        {
-            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
-            return view('hello');
-        }
     }
 
     public function deleteVoteEvent(Request $request)
@@ -535,12 +392,12 @@ class VoteController extends Controller
     {
         $voteEvent = VoteEvent::find($event_id);
         $this->addVoteStatus($voteEvent);
-        $voted_qrcodes = GenerateQrcode::getVotedQrcodes($event_id);
+        $voted_users = VoteRecord::getVoteUsers($event_id);
 
         $response = [];
         $response = [
             'vote_event' => $voteEvent,
-            'qrcodes' => $voted_qrcodes,
+            'users' => $voted_users,
             'system_time' => date('Y-m-d H:i:s', time())
         ];
 
@@ -550,11 +407,11 @@ class VoteController extends Controller
     // ajax每20秒取資料
     public function postCheckVoteSituation($event_id)
     {
-        $voted_qrcodes = GenerateQrcode::getVotedQrcodes($event_id);
+        $voted_users = VoteRecord::getVoteUsers($event_id);
 
         $result = [];
         $result = [
-            'qrcodes' => $voted_qrcodes,
+            'users' => $voted_users,
             'system_time' => date('Y-m-d H:i:s', time())
         ];
 
@@ -592,18 +449,18 @@ class VoteController extends Controller
         $groupedResults = [];
 
         foreach ($results as $row) {
-            if (!isset($groupedResults[$row->code_id])) {
-                $groupedResults[$row->code_id] = [
-                    'code_id' => $row->code_id,
-                    'qrcode_string' => $row->qrcode_string,
+            if (!isset($groupedResults[$row->user_id])) {
+                $groupedResults[$row->user_id] = [
+                    'user_id' => $row->user_id,
+                    'user_name' => $row->user_name,
                     'updated_at' => $row->updated_at,
                     'vote' => [],
                 ];
             }
 
-            $groupedResults[$row->code_id]['vote'][] = [
-                'number' => $row->number,
-                'name' => $row->name,
+            $groupedResults[$row->user_id]['vote'][] = [
+                'number' => $row->cand_number,
+                'name' => $row->cand_name,
             ];
         }
 
@@ -617,18 +474,4 @@ class VoteController extends Controller
         $groupedResults = array_values($groupedResults);
         return $groupedResults;
     }
-
-    public function exportDetail($event_id)
-    {
-        $eventName = VoteEvent::where('event_id', $event_id)->value('event_name');
-        $voteRecord = $this->getVoteRecord($event_id);
-
-        $response = [];
-        $response = [
-            'records' => $voteRecord,
-            'event_name' => $eventName 
-        ];
-        return view('pdf.votedetail', $response);
-    }
-
 }

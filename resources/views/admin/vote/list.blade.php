@@ -76,14 +76,12 @@
                         <tr>
                             <th scope="col">每人最多可以投幾票</th>
                             <th scope="col">最多選出幾名winner</th>
-                            <th scope="col">設定發放的Qrcode數</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <th scope="col">{{ $vote_event->max_vote_count }}</th>
                             <th scope="col">{{ $vote_event->number_of_winners }}</th>
-                            <th scope="col">{{ $vote_event->number_of_qrcodes }}</th>
                         </tr>
                     </tbody>
                 </table>
@@ -112,60 +110,6 @@
                 </table>
             </div>
         </div>
-        <div class="shadow block">
-            <div class="qrcode_header my-3">
-                <h4 class="me-3"><strong>QR code</strong></h4>
-                <div>
-                    <form id="downloadPdfForm" method="GET" action="{{ route('test.pdf', ['event_id' => $vote_event->event_id]) }}" target="_blank">
-                    {{-- <form id="downloadPdfForm" method="POST" action="{{ route('admin.vote.pdf', ['event_id' => $vote_event->event_id]) }}" target="_blank"> --}}
-                        @csrf
-                        <button id="btnQrcodePDF" type="submit" class="btn btn-outline-success">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
-                            </svg>
-                            下載PDF
-                        </button>
-                    </form>
-                </div>
-            </div>
-            <div class="row show_qrcode px-3 ms-0 me-0">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col" class="hide">QR Code字串</th>
-                            <th scope="col" class="hide"><span>QR Code</span>
-                                <span class="expand_icon">
-                                    <svg width="16" height="16" fill="currentColor" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
-                                        <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
-                                    </svg>收合
-                                </span>
-                            </th>
-                            <th scope="col">投過票了嗎</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($qrcodes as $key => $qrcode)
-                            <tr>
-                                <th scope="row"><strong>{{ ($key + 1) }}</strong></th>
-                                <td><img src="{{ $qrcode->qrcode_url }}" alt="QR Code"></td>
-                                <td>
-                                    <a href="http://104.199.234.96/vote/{{ $vote_event->event_id }}/{{ $qrcode->qrcode_string }}" target="_blank">{{ $qrcode->qrcode_string }}</a>
-                                </td>
-                                <td class="text-center">
-                                    @if ($qrcode->has_been_voted === 1)
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
-                                            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
-                                        </svg>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </div>
 @endsection
 
@@ -178,11 +122,6 @@
         $('.dropdown').hide()
         $('.threedot').on('click', function() {
             $('.dropdown').toggle()
-        })
-
-        $('.show_qrcode tbody').hide()
-        $('.hide').on('click', function() {
-            $('.show_qrcode tbody').toggle()
         })
 
         $('#btnDelete').on('click', function(e) {
@@ -205,54 +144,6 @@
                     console.log(re)
                     alert('設定成功')
                     location.href = "{{ url('outstand') }}"
-                }).fail(function(re) {
-                    alert('發生錯誤：' + re.responseText);
-                });
-            }
-        })
-
-        $('#btnActivateVote').on('click', function() {
-            let activate = confirm('確定要開放投票嗎?')
-
-            if (activate) {
-                let post_data = {}
-                post_data._token = "{{ csrf_token() }}"
-                post_data.event_id = {{ $vote_event->event_id }}
-                post_data.activate = 1
-
-                $.ajax({
-                    type: 'PUT',
-                    url: "{{ route('activate.vote') }}",
-                    contentType: 'application/json',
-                    data: JSON.stringify(post_data),
-                }).done(function(re) {
-                    console.log(re)
-                    alert('設定成功')
-                    location.reload()
-                }).fail(function(re) {
-                    alert('發生錯誤：' + re.responseText);
-                });
-            }
-        })
-
-        $('#btnDectivateVote').on('click', function() {
-            let activate = confirm('確定要結束投票嗎?')
-
-            if (activate) {
-                let post_data = {}
-                post_data._token = "{{ csrf_token() }}"
-                post_data.event_id = {{ $vote_event->event_id }}
-                post_data.activate = 1
-
-                $.ajax({
-                    type: 'PUT',
-                    url: "{{ route('deactivate.vote') }}",
-                    contentType: 'application/json',
-                    data: JSON.stringify(post_data),
-                }).done(function(re) {
-                    console.log(re)
-                    alert('設定成功')
-                    location.reload()
                 }).fail(function(re) {
                     alert('發生錯誤：' + re.responseText);
                 });
