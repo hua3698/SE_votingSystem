@@ -58,6 +58,14 @@ class VoteRecord extends Model
             ->orderBy('vr.updated_at', 'desc')
             ->get();
     }
+
+    public static function countTotalParticipants($event_id)
+    {
+        return DB::table('vote_records')
+            ->where('event_id', $event_id)
+            ->distinct('user_id')
+            ->count('user_id');
+    }
 }
 
 
@@ -77,3 +85,8 @@ class VoteRecord extends Model
 // left join candidates as cand on vr.cand_id = cand.cand_id
 // where vr.event_id = 5
 // order by vr.updated_at desc;
+
+
+// select count(distinct user_id) AS total_users
+// from vote_records
+// where event_id = 5;

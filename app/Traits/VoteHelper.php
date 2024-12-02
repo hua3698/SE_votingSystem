@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Carbon\Carbon;
+use App\Models\VoteRecord;
 
 trait VoteHelper
 {
@@ -33,6 +34,13 @@ trait VoteHelper
             $diff = $today->diffInDays($end_date, false);
             $diff = $diff > 0 ? $diff : 0;
             $voteEvent->remain_date = $diff;
+        }
+    }
+
+    protected function addTotalParticipants(&$voteEvent)
+    {
+        if($voteEvent) {
+            $voteEvent->total_participants = VoteRecord::countTotalParticipants($voteEvent->event_id);
         }
     }
 

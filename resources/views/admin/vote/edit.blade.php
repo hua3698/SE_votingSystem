@@ -40,7 +40,6 @@
                     <tr>
                         <th scope="col">每人最多可以投幾票</th>
                         <th scope="col">最多選出幾名winner</th>
-                        <th scope="col">設定發放的Qrcode數</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,7 +62,6 @@
                                 <option value="5" {{ $vote_event->number_of_winners == "5" ? 'selected' : '' }}>5</option>
                             </select>
                         </th>
-                        <th scope="col">{{ $vote_event->number_of_qrcodes }}</th>
                     </tr>
                 </tbody>
             </table>
@@ -109,67 +107,61 @@
 @section('script_js')
 
 <script>
-    $('#add_candidate').on('click', function() {
+    $(function() {
+        $('#add_candidate').on('click', function() {
+        })
 
-    })
+        $('#btnSubmit').on('click', function() {
+            alert('還沒好啦')
+        })
 
-    $('#btnSubmit').on('click', function() {
-        alert('還沒好啦')
-    })
-
-    $('#btnCancel').on('click', function() {
+        $('#btnCancel').on('click', function() {
             history.back()
-    })
+        })
 
-    const set_datepicker = () => {
-            let today = new Date();
-            let str_today = dateFormat(today)
-
-            const config = {
-                singleDatePicker: true,
-                timePicker: true,
-                timePicker24Hour: true,
-                timePickerSeconds: true,
-                startDate: moment().startOf('hour'),
-                locale: {
-                    format: 'YYYY-MM-DD H:mm:ss',
-                    applyLabel: "確認",
-                    cancelLabel: "取消",
-                    daysOfWeek: [
-                        "日",
-                        "一",
-                        "二",
-                        "三",
-                        "四",
-                        "五",
-                        "六"
-                    ],
-                    monthNames: [
-                        "1 月",
-                        "2 月",
-                        "3 月",
-                        "4 月",
-                        "5 月",
-                        "6 月",
-                        "7 月",
-                        "8 月",
-                        "9 月",
-                        "10 月",
-                        "11 月",
-                        "12 月"
-                    ],
+        const set_datepicker = {
+            config : function(time) {
+                return {
+                    singleDatePicker: true,
+                    timePicker: true,
+                    timePicker24Hour: true,
+                    timePickerSeconds: true,
+                    startDate: time,
+                    locale: {
+                        format: 'YYYY-MM-DD H:mm:ss',
+                        applyLabel: "確認",
+                        cancelLabel: "取消",
+                        daysOfWeek: [
+                            "日",
+                            "一",
+                            "二",
+                            "三",
+                            "四",
+                            "五",
+                            "六"
+                        ],
+                        monthNames: [
+                            "1 月",
+                            "2 月",
+                            "3 月",
+                            "4 月",
+                            "5 月",
+                            "6 月",
+                            "7 月",
+                            "8 月",
+                            "9 月",
+                            "10 月",
+                            "11 月",
+                            "12 月"
+                        ],
+                    }
                 }
             }
-
-            $('input[id="startTime"]').daterangepicker(config, function(start, end, label) {
-                console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
-            });
-
-            $('input[id="endTime"]').daterangepicker(config);
         }
 
-        set_datepicker()
-
+        $('input[id="startTime"]').daterangepicker(set_datepicker.config("{{ $vote_event->start_time }}"));
+        $('input[id="endTime"]').daterangepicker(set_datepicker.config("{{ $vote_event->end_time }}"));
+    })
 </script>
 
 @endsection

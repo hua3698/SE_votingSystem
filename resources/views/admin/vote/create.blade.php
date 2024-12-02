@@ -69,16 +69,6 @@
                     </div>
                 </div>
             </div>
-            <div class="row mb-4">
-                <div class="col-md-6 col-12">
-                    <label for="qrcode" class="form-label">設定發放的Qrcode數</label>
-                    <input type="number" class="form-control" id="qrcode" min="1">
-                </div>
-                {{-- <div class="col-sm-4">
-                    <label for="voteName" class="form-label">設定當選名額</label>
-                    <input type="number" class="form-control" id="qrcode" required placeholder="0">
-                </div> --}}
-            </div>
             <div class="text-center mb-4">
                 <button id="btnSubmit" class="btn btn-primary">確認送出</button>
                 <button id="btnCancel" class="btn btn-secondary">取消</button>
@@ -194,31 +184,6 @@
                     return false;
                 }
             })
-
-            // $('.candidate_number').each(function() {
-            //     if($(this).val().trim() == '') {
-            //         error.push('請填寫候選人編號')
-            //         return false;
-            //     }
-            // })
-
-            // $('.candidate_school').each(function() {
-            //     if($(this).val().trim() == '') {
-            //         error.push('請填寫候選人學校')
-            //         return false;
-            //     }
-            // })
-
-            // $('.candidate_name').each(function() {
-            //     if($(this).val().trim() == '') {
-            //         error.push('請填寫候選人名稱')
-            //         return false;
-            //     }
-            // })
-
-            if($('#qrcode').val().trim() == '' || parseInt($('#qrcode').val()) <= 0) {
-                error.push('qrcode張數設定錯誤')
-            }
 
             return error
         }

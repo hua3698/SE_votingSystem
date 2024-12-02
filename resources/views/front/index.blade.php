@@ -34,8 +34,9 @@
                     />
                     <h3 class="activity-title">{{ $vote->event_name }}</h3>
                     <p class="activity-date">{{ $vote->start_time }}</p>
+                    <p class="activity-date">{{ $vote->end_time }}</p>
                     <div class="activity-info">
-                        <p class="activity-participants">參與人數<br />72 人</p>
+                        <p class="activity-participants">參與人數<br />{{ $vote->total_participants }} 人</p>
                         <p class="activity-days">剩餘天數<br />{{ $vote->remain_date }}</p>
                     </div>
                     @if ($vote->remain_date > 0 && $vote->status == 1)
@@ -69,7 +70,6 @@
     <script>
         $(function() {
             $('.filter').on('click', function() {
-                console.log('a')
                 $('.filter').removeClass('active');
                 $(this).addClass('active');
 
@@ -77,9 +77,6 @@
 
                 $('.activity-card').each(function () {
                     const status = $(this).data('status');
-
-                    console.log(status)
-
                     if (filter === 'all' || filter === status) {
                         $(this).show();
                     } else {
@@ -91,9 +88,6 @@
             $('.activity-card').on('click', function() {
                 const event_id = $(this).closest('.activity-card').data('event')
                 const status = $(this).data('status');
-
-                console.log(status)
-
                 if(status != 2) {
                     location.href = '{{ route("front.vote", ":event_id") }}'.replace(':event_id', event_id);
                 } else {

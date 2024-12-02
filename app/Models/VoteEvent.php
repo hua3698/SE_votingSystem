@@ -18,7 +18,6 @@ class VoteEvent extends Model
         'event_name',
         'start_date',
         'end_date',
-        'number_of_qrcodes',
         'number_of_candidates',
     ];
 

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\VoteEvent;
 use App\Models\Candidate;
-use App\Models\GenerateQrcode;
 use App\Models\VoteRecord;
 use App\Models\Admin;
 use Illuminate\Http\Request;

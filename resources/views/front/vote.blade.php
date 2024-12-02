@@ -95,7 +95,7 @@
                 })
 
                 $('#btnVote').on('click', function() {
-                    const isLoggedIn = @json(session('user') ? true : false);
+                    const isLoggedIn = @json(session('frontuser') ? true : false);
                     const loginUrl = "{{ route('user.login.form') }}";
 
                     if (!isLoggedIn) {

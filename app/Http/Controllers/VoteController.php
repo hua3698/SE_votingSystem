@@ -25,13 +25,14 @@ class VoteController extends Controller
     {
         try
         {
-            $votes = VoteEvent::orderBy('end_time', 'desc')->get();
+            $votes = VoteEvent::orderBy('end_time', 'asc')->get();
             // $votes = VoteEvent::orderBy('end_time', 'desc')->paginate(3);
 
             foreach ($votes as $key => $vote) {
                 $this->voteEvent = $vote;
                 $this->addVoteStatus($this->voteEvent);
                 $this->addRemainDay($this->voteEvent);
+                $this->addTotalParticipants($this->voteEvent);
                 $votes[$key] = $this->voteEvent;
             }
 
@@ -72,7 +73,15 @@ class VoteController extends Controller
     {
         try
         {
-            // $result = $this->handleVoteEvent($event_id, session('frontuser'));
+            $user_id = User::where('email', session('frontuser'))->value('user_id');
+            $result = $this->handleVoteEvent($event_id, $user_id);
+
+            if ($result['status'] === 'error') {
+                throw new \Exception(json_encode($result));
+            }
+            elseif ($result['status'] === 'voted') {
+                return $this->showVoteResult($event_id);
+            }
 
             $this->voteEvent = VoteEvent::find($event_id);
             $this->addVoteStatus($this->voteEvent);
@@ -91,6 +100,7 @@ class VoteController extends Controller
         }
         catch (\Exception $e) 
         {
+            dd($e->getMessage());
             Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
             return redirect()->route('index');
         }
@@ -156,7 +166,7 @@ class VoteController extends Controller
 
         if ($voted) {
             return [
-                'status' => 'error',
+                'status' => 'voted',
                 'error_msg' => '已經投過票囉'
             ];
         }
@@ -251,7 +261,6 @@ class VoteController extends Controller
                 'candidates' => 'required|array',
                 'candidates.*.number' => 'required|string|min:1|max:10',
                 'candidates.*.name' => 'required|string|max:255', 
-                'qrcode_count' => 'required|integer|min:1',
                 'max_vote' => 'integer|min:1|max:10', // 每張qrcode最多可以投幾票，目前1~10
                 'max_winner' => 'integer|min:1|max:10' // 共有幾位得名者，目前1~10
             ]);
@@ -260,7 +269,6 @@ class VoteController extends Controller
                 $voteEvent = new VoteEvent();
                 $voteEvent->event_name = $validated['vote_name'];
                 $voteEvent->max_vote_count = $validated['max_vote'];
-                $voteEvent->number_of_qrcodes = $validated['qrcode_count'];
                 $voteEvent->number_of_candidates = count($validated['candidates']);
                 $voteEvent->number_of_winners = $validated['max_winner'];
                 $voteEvent->start_time = $validated['start'];
@@ -273,13 +281,6 @@ class VoteController extends Controller
                     $candidate->number = $cand['number'];
                     $candidate->name = $cand['name'];
                     $candidate->save();
-                }
-
-                for ($i = 0; $i < $validated['qrcode_count']; $i++) {
-                    $generateQrcode = new GenerateQrcode();
-                    $generateQrcode->event_id = $voteEvent->event_id;
-                    $generateQrcode->qrcode_string = md5($voteEvent->event_id . '_' . ($i + 1));
-                    $generateQrcode->save();
                 }
             });
 
@@ -345,19 +346,6 @@ class VoteController extends Controller
     public function editVoteEvent($event_id)
     {
         return view('hello');
-    }
-
-    private function getQrcodeInfo($event_id)
-    {
-        $qrcodes = GenerateQrcode::where('event_id', $event_id)->get();
-
-        foreach ($qrcodes as $key => $qrcode) {
-            $url = config('app.url') . 'vote/' . $event_id . '/' . $qrcode->qrcode_string; 
-            $images = (new QRCode)->render($url);
-            $qrcodes[$key]->qrcode_url = $images;
-        }
-
-        return $qrcodes;
     }
 
     public function deleteVoteEvent(Request $request)
