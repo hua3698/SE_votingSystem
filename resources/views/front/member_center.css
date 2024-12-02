@@ -1,0 +1,253 @@
+/* 頁首 */
+.header {
+    position: fixed;
+    width: 100%;
+    height: 84px;
+    left: 0;
+    top: 0;
+    background: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+/* Logo 區塊 */
+.logo {
+    display: flex;
+    align-items: center; /* 確保 LOGO 和文字都垂直置中 */
+    margin-left: 40px; /* 與左邊界保持一定距離 */
+}
+
+.logo img {
+    width: 40px; /* LOGO 圖片大小 */
+    height: 40px;
+    margin-right: 10px; /* LOGO 與文字間距 */
+}
+
+.logo a {
+    text-decoration: none;
+    font-size: 16px; /* 字體大小 */
+    font-weight: bold;
+    color: #333;
+    line-height: 1; /* 確保文字不會受行高影響偏移 */
+    display: flex; /* 確保文字作為塊級元素居中 */
+    align-items: center; /* 垂直置中文字內容 */
+}
+
+/* 直線分隔樣式 */
+.divider {
+    width: 2px; /* 分隔線寬度 */
+    height: 40px; /* 分隔線高度 */
+    background-color: #e4e4e4; /* 分隔線顏色 */
+    margin: 0 20px; /* 與兩側元素的間距設置為相同 */
+}
+
+/* 導航欄 */
+.nav-links {
+    display: flex;
+    align-items: center;
+}
+
+.nav-links ul {
+    display: flex;
+    gap: 5px; /* 探索跟會員中心按鈕之間的距離 */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    list-style: none;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333; /* 預設顏色 */
+    font-size: 16px;
+    padding: 8px 15px; /* 增加可點擊區域 */
+    border-radius: 5px; /* 圓角設計 */
+    transition: all 0.3s ease; /* 添加平滑過渡效果 */
+}
+
+/* 鼠標懸停效果 */
+.nav-links a:hover {
+    background-color: #f5f5f5;
+    color: #444444; /* 白色文字 */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 添加陰影效果 */
+    transform: translateY(-2px); /* 微微上移，增加動態效果 */
+}
+
+/* 登入和註冊按鈕容器 */
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-left: auto; /* 將按鈕推到右側 */
+    margin-right: 80px; /* 與右邊邊界保持適當距離 */
+}
+
+/* 按鈕通用樣式 */
+.buttons .button {
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* 登出按鈕樣式 */
+.buttons .logout {
+    color: #333;
+    border: 1px solid #333;
+    background-color: transparent;
+}
+
+/* 按鈕懸停效果 */
+.buttons .button:hover {
+    opacity: 0.8;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 增加陰影效果 */
+}
+
+/* 背景樣式 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #c1dfc4, #eff8ee);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.center-container {
+    display: flex;
+    flex: 1;
+    min-height: calc(100vh - 84px - 50px); /* 減去 header 和 footer 的高度 */
+    margin-top: 84px; /* 與 header 對齊 */
+    box-sizing: border-box;
+}
+
+/* 左側選單區 */
+.sidebar {
+    width: 30%;
+    max-width: 250px; /* 最大寬度 */
+    background-image: url("../../../public/assets/sidebar.png"); /* 替換成圖片的實際路徑 */
+    background-size: cover; /* 確保圖片覆蓋整個區塊 */
+    background-repeat: no-repeat; /* 防止圖片重複 */
+    background-position: center; /* 確保圖片置中 */
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar-button {
+    display: block; /* 讓連結看起來像塊狀按鈕 */
+    text-decoration: none; /* 移除超連結的預設底線 */
+    color: #444444; /* 字體顏色 */
+    background-color: #ffffff; /* 按鈕背景顏色 */
+    padding: 10px 15px; /* 按鈕內邊距 */
+    border-radius: 5px; /* 圓角 */
+    font-size: 16px; /* 字體大小 */
+    text-align: left; /* 文字對齊 */
+    cursor: pointer; /* 滑鼠移上去變手指 */
+    transition: background 0.3s ease; /* 添加平滑過渡效果 */
+}
+
+.sidebar-button:hover {
+    color: #004d00; /* 懸停時的字體顏色 */
+}
+
+/* 右側內容區 */
+.content {
+    flex: 2; /* 撐滿剩餘空間 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: #eff8ee;
+}
+
+/* 修改資料表單 */
+.modify-box {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px 30px;
+    width: 100%;
+    max-width: 400px; /* 最大寬度 */
+    text-align: center;
+}
+
+/* 表單內元素 */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.modify-button {
+    width: 100%;
+    padding: 10px;
+    background: #006400;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.modify-button:hover {
+    background: #004d00;
+}
+
+/* 頁尾 */
+.footer {
+    background: #ffffff;
+    border-top: 1px solid #ccc;
+    text-align: center;
+    padding: 10px 20px;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+.footer-logo img {
+    width: 30px;
+    height: 30px;
+}
+
+.footer-text {
+    font-size: 14px;
+    color: #666;
+}
