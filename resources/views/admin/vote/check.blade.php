@@ -4,9 +4,6 @@
 <div class="container admin_container">
     <h2 class="text-center fw-bold mb-5">
         {{ $vote_event->event_name }}
-        @if ($vote_event->manual_control === 1 && $vote_event->vote_is_ongoing === 1)
-            <button id="btnDectivateVote" type="button" class="btn btn-outline-danger">結束投票</button>
-        @endif
     </h2>
     <div class="shadow block mb-3">
         <h5 class="text-center mb-3">
@@ -15,29 +12,31 @@
             <span class="fs-6">(投票期間每20秒更新一次)</span>
         </h5>
         <div class="top mb-5">
-            <h2>共 <span id="count_vote" class="text-danger">{{ count($qrcodes) }}</span> 位已完成投票</h2>
+            <h2>共 <span id="count_vote" class="text-danger">{{ count($users) }}</span> 位已完成投票</h2>
         </div>
         <div class="px-3 row justify-content-center mb-3">
             <div class="col-12">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>QR Code序號</th>
-                            <th>投了幾位</th>
+                            <th>會員編號</th>
+                            <th>會員名稱</th>
+                            <th>投了幾票</th>
                             <th>投票時間</th>
                         </tr>
                     </thead>
                     <tbody class="tbody">
-                        @foreach ($qrcodes as $key => $qrcode)
+                        @foreach ($users as $key => $user)
                             <tr>
-                                <td>{{ $qrcode->qrcode_string }}</td>
+                                <td>{{ $user->user_id }}</td>
+                                <td>{{ $user->name }}</td>
                                 <td class="text-primary fs-4">
                                     <svg width="20" height="20" fill="currentColor" class="bi bi-ticket" viewBox="0 0 16 16">
                                         <path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6zM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5z"/>
                                     </svg>
-                                    {{ $qrcode->total_votes }}
+                                    {{ $user->vote_count }}
                                 </td>
-                                <td>{{ $qrcode->updated_at }}</td>
+                                <td>{{ $user->updated_at }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -52,7 +51,7 @@
 @endsection
 
 @section('script_js')
-    @if (($vote_event->manual_control === 1 && $vote_event->vote_is_ongoing === 1) || ($vote_event->manual_control === 0 && $vote_event->status === 1))
+    @if ($vote_event->status === 1)
         <script>
             $(function() {
                 function fetchData() {
@@ -67,22 +66,23 @@
                         }),
                         success: function(response) {
                             let rows = '';
-                            response.qrcodes.forEach(function(qrcode, key) {
+                            response.users.forEach(function(user, key) {
                                 rows += '<tr>' +
-                                            '<td>' + qrcode.qrcode_string + '</td>' +
+                                            '<td>' + user.user_id + '</td>' +
+                                            '<td>' + user.name + '</td>' +
                                             '<td class="text-primary fs-4">' + 
                                                 '<svg width="20" height="20" fill="currentColor" class="bi bi-ticket" viewBox="0 0 16 16">' +
                                                     '<path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6zM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5z"/>' +
                                                 '</svg> ' + 
-                                                qrcode.total_votes + 
+                                                user.vote_count + 
                                             '</td>' +
-                                            '<td>' + formatTime(qrcode.updated_at) + '</td>' +
+                                            '<td>' + formatTime(user.updated_at) + '</td>' +
                                         '</tr>';
                             });
 
                             $('.tbody').append(rows);
                             $('#update_time').html(formatTime(response.system_time))
-                            countAnimate(response.qrcodes.length)
+                            countAnimate(response.users.length)
                         },
                         error: function(err) {
                             console.error('發生錯誤：' + err.responseText);

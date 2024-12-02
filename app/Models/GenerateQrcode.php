@@ -32,7 +32,6 @@ class GenerateQrcode extends Model
         return $this->hasMany(VoteRecord::class, 'code_id', 'code_id');
     }
 
-    // 查詢在單一投票活動下已經完成投票的QR Code
     public static function getVotedQrcodes($event_id)
     {
         return self::where('generate_qrcodes.event_id', $event_id)

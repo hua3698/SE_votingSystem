@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -78,9 +79,9 @@ class AuthController extends Controller
             ]);
 
             if (Auth::guard('user')->attempt($credentials)) {
-                // 登入成功
-                session()->put('frontuser', $credentials['email']);
-                return redirect()->intended('/user');
+                $request->session()->put('frontuser', $credentials['email']);
+                $intendedUrl = $request->session()->pull('url.intended', route('index'));
+                return redirect($intendedUrl);
             }
 
             // 登入失敗
@@ -90,7 +91,9 @@ class AuthController extends Controller
         }
         catch (\Exception $e) 
         {
-            return view('hello');
+            echo $e->getMessage();
+            // Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
+            // return redirect()->back()->withErrors(['error' => "註冊失敗，請稍後再試\n" . $e->getMessage()]);
         }
     }
 
@@ -101,8 +104,32 @@ class AuthController extends Controller
         return redirect()->route('user.login.form');
     }
 
-    public function userRegister()
+    public function userRegister(Request $request)
     {
-        // return view('');
+        try
+        {
+            if (!$request->email || !$request->password) {
+                return redirect()->back()->withErrors(['error' => '請填寫所有欄位']);
+            }
+
+            $credentials = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email',
+                'password' => 'required|min:6',
+            ]);
+
+            $user = new User();
+            $user->name = $credentials['name'];
+            $user->email = $credentials['email'];
+            $user->password = Hash::make($credentials['password']);
+            $user->save();
+
+            return redirect()->route('user.register')->with('success', '註冊成功！');
+        }
+        catch (\Exception $e) 
+        {
+            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
+            return redirect()->back()->withErrors(['error' => "註冊失敗，請稍後再試\n" . $e->getMessage()]);
+        }
     }
 }

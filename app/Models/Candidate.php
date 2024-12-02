@@ -17,8 +17,11 @@ class Candidate extends Model
     protected $fillable = [
         'event_id',
         'name',
-        'vote_count',
+        'votes_count',
         'notes',
+        'specialty',
+        'manifesto',
+        'achievements'
     ];
 
     public $timestamps = true;
@@ -36,7 +39,7 @@ class Candidate extends Model
     public static function getCandidateRanking($event_id)
     {
         $query = "
-            SELECT cand.cand_id, cand.name, cand.school, 
+            SELECT cand.cand_id, cand.name,
                     COUNT(*) AS total, 
                     RANK() OVER (ORDER BY COUNT(*) DESC) AS 'rank'
             FROM candidates cand

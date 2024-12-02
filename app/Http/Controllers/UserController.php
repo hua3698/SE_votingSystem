@@ -2,30 +2,10 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function createUser(Request $request)
-    {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8'
-        ]);
-
-        try {
-            $adminUser = new Admin();
-            $adminUser->name = $validatedData['name'];
-            $adminUser->email = $validatedData['email'];
-            $adminUser->password = Hash::make($validatedData['password']);
-            $adminUser->save();
-
-            return response()->json(['message' => '新增成功'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => '新增失敗，請重試', 'error' => $e->getMessage()], 500);
-        }
-    }
-
     public function userPage()
     {
         return view('front.user.info');
@@ -41,6 +21,22 @@ class UserController extends Controller
             'users' => $adminUser,
         ];
         return view('admin.user_list', $response);
+    }
+
+    public function deleteUser(Request $request)
+    {
+        $validatedData = $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = User::where('email', $validatedData['email'])->first();
+
+        if ($user) {
+            $user->delete();
+            return response()->json(['message' => '使用者已刪除'], 200);
+        } else {
+            return response()->json(['message' => '找不到使用者'], 404);
+        }
     }
 
 }

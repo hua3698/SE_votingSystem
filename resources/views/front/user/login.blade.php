@@ -27,16 +27,16 @@
     @endif
     <div class="login-container">
         <div class="login-box">
-            <h1>會員登入</h1>
+            <h1 class="fw-bold">會員登入</h1>
             <form method="POST" action="{{ route('user.login') }}">
                 @csrf
                 <div class="input-group">
                     <label for="email">電子郵件</label>
-                    <input type="email" name="email" class="form-control rounded-3" id="email" placeholder="請輸入電子郵件">
+                    <input type="email" name="email" id="email" placeholder="請輸入電子郵件">
                 </div>
                 <div class="input-group">
                     <label for="password">密碼</label>
-                    <input type="password" name="password" class="form-control rounded-3" id="password" placeholder="請輸入密碼">
+                    <input type="password" name="password" id="password" placeholder="請輸入密碼">
                 </div>
                 <button type="submit" class="login-button">登入</button>
             </form>

@@ -105,7 +105,7 @@ html, body {
 
 /* 主要容器樣式 */
 .activity-container {
-    min-height: calc(100vh - 84px);
+    min-height: calc(100vh - 150px);
     width: 100%;
     background: linear-gradient(to right, #c1dfc4 0%, #eff8ee 100%);
     margin: 0;
@@ -224,7 +224,7 @@ html, body {
 
 .jiikawa {
     width: 150px;
-    height: auto;
+    height: 100px;
     margin: 15px 20px;
     object-fit: contain;
 }

@@ -1,3 +1,7 @@
+body {
+    background: linear-gradient(to right, #c1dfc4 0%, #eff8ee 100%);
+}
+
 /* 頁首 */
 .header {
     /* position: fixed; 固定在頁面頂部 */
@@ -12,6 +16,7 @@
     padding: 0 20px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     /* z-index: 1000; */
+    margin-bottom: 15px;
 }
 
 /* Logo 區塊 */
@@ -86,6 +91,7 @@
     gap: 10px;
     margin-left: auto; /* 將按鈕推到右側 */
     margin-right: 80px; /* 與右邊邊界保持適當距離 */
+    align-items: baseline;
 }
 
 /* 按鈕通用樣式 */
@@ -219,6 +225,7 @@
     align-items: center; /* 水平居中 */
     overflow-y: auto;
     padding: 0;
+    min-height: calc(100vh - 202px);
 }
 
 /* 活動卡片的排列 */
@@ -247,7 +254,7 @@
     overflow: hidden;
     text-align: center;
     padding: 20px;
-    width: 250px;
+    width: 300px;
     height: 380px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;

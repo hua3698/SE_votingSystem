@@ -9,7 +9,7 @@
 
     <link href="{{ asset('plugins/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/index.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/front_vote.css') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('css/front_vote.css') }}" rel="stylesheet"> --}}
 
     <script src="{{ asset('plugins/jquery/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap/bootstrap.bundle.js') }}"></script>
@@ -32,6 +32,7 @@
 
         <div class="buttons">
             @if(session('frontuser'))
+                <div class="pe-3">{{ session('frontuser') }}</div>
                 <a href="{{ url('/user/logout') }}" class="button login">登出</a>
             @else
                 <a href="{{ url('/user/login') }}" class="button login">登入</a>
@@ -49,5 +50,12 @@
             中央大學資訊管理學系碩士班｜軟體工程｜期末作業用無盈利用途
         </div>
     </footer>
+    <script>
+        $(function() {
+            $('.footer img').on('click', function() {
+                location.href = '{{ url("outstand") }}';
+            })
+        })
+    </script>
 </body>
 </html>

@@ -38,11 +38,11 @@ class Handler extends ExceptionHandler
                 $e instanceof NotFoundHttpException ||
                 $e instanceof MethodNotAllowedHttpException
             ){
-                    return redirect()->route('vote.candidate');
+                    return redirect()->route('index');
             }
 
             if ($e instanceof HttpException && $e->getStatusCode() === 500) {
-                return redirect()->route('vote.candidate');
+                return redirect()->route('index');
             }
                 // If the error is not handled, return null to let the default handler handle it
             return null;

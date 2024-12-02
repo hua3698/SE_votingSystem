@@ -14,22 +14,12 @@
                             <div class="card-body">
                                 <h5 class="card-title">
                                     <span class="me-3">{{ $event->event_name }}</span>
-                                    @if ($event->manual_control == 1)
-                                        @if ($event->vote_is_ongoing == 0)
-                                            <span class="badge text-bg-secondary">尚未開始</span>
-                                        @elseif ($event->vote_is_ongoing == 1)
-                                            <span class="badge text-bg-success">投票進行中</span>
-                                            @else 
-                                            <span class="badge text-bg-danger">已結束</span>
-                                        @endif
-                                    @else
-                                        @if ($event->status == 0)
-                                            <span class="badge text-bg-secondary">尚未開始</span>
-                                        @elseif ($event->status == 1)
-                                            <span class="badge text-bg-success">投票進行中</span>
-                                        @else 
-                                            <span class="badge text-bg-danger">已結束</span>
-                                        @endif
+                                    @if ($event->status == 0)
+                                        <span class="badge text-bg-secondary">尚未開始</span>
+                                    @elseif ($event->status == 1)
+                                        <span class="badge text-bg-success">投票進行中</span>
+                                    @else 
+                                        <span class="badge text-bg-danger">已結束</span>
                                     @endif
                                 </h5>
                                 <p class="mb-0">開始時間 <span class="text-primary">{{ $event->start_time }}</span></p>

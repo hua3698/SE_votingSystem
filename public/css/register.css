@@ -1,6 +1,6 @@
 /* 頁首 */
 .header {
-    position: fixed; /* 固定在頁面頂部 */
+    /* position: fixed; 固定在頁面頂部 */
     width: 100%;
     height: 84px;
     left: 0;
@@ -134,7 +134,7 @@ body {
     justify-content: center;
     align-items: center;
     flex: 1;
-    margin-top: 15%;
+    margin-top: 8%;
 }
 
 .register-box {
