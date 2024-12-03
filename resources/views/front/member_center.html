@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="UTF-8" />
+        <title>投票吧－會員中心</title>
+        <link rel="stylesheet" href="member_center.css" />
+    </head>
+    <body>
+        <header class="header">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="../../../public/assets/logo.png" alt="Logo" />
+                    投票吧
+                </a>
+            </div>
+            <div class="divider"></div>
+            <nav class="nav-links">
+                <ul>
+                    <li><a href="index.html">探索</a></li>
+                    <li><a href="#">會員中心</a></li>
+                </ul>
+            </nav>
+
+            <div class="buttons">
+                <a href="index.html" class="button logout">登出</a>
+            </div>
+        </header>
+
+        <div class="center-container">
+            <!-- 左側選單區 -->
+            <div class="sidebar">
+                <a href="member_center.html" class="sidebar-button"
+                    >⮑ 修改會員資料</a
+                >
+                <a href="#" class="sidebar-button">⮑ 投票紀錄</a>
+            </div>
+
+            <!-- 右側內容區 -->
+            <div class="content">
+                <div class="modify-box">
+                    <h1>修改會員資料</h1>
+                    <form>
+                        <div class="input-group">
+                            <label for="nickname">暱稱 </label>
+                            <input
+                                type="text"
+                                id="nickname"
+                                placeholder="請輸入暱稱(最多10個字)"
+                                required
+                            />
+                        </div>
+                        <div class="input-group">
+                            <label for="email">電子郵件</label>
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="請輸入電子郵件"
+                                required
+                            />
+                        </div>
+                        <div class="input-group">
+                            <label for="password">密碼</label>
+                            <input
+                                type="password"
+                                id="password"
+                                placeholder="請輸入密碼"
+                                required
+                            />
+                        </div>
+                        <button type="submit" class="modify-button">
+                            儲存
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="footer-logo">
+                <img src="../../../public/assets/logo.png" alt="Logo" />
+                投票吧
+            </div>
+            <div class="footer-text">
+                中央大學資訊管理學系碩士班｜軟體工程｜期末作業用無盈利用途
+            </div>
+        </footer>
+    </body>
+</html>
