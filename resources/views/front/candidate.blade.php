@@ -89,7 +89,7 @@
         <div class="candidate-wrapper">
             @foreach ($candidates as $key => $candidate)
             <div class="candidate-card">
-                <img src="{{ asset('assets/' . $key. '.jpg') }}" alt="候選人 {{ $candidate->cand_id }}" class="img-fluid mb-3">
+                <img src="{{ asset('assets/' . ($key % 6). '.jpg') }}" alt="候選人 {{ $candidate->cand_id }}" class="img-fluid mb-3">
                 <h5 class="candidate-name">{{ $candidate->name }}</h5>
                 <div class="info-box">
                     <p><strong>特長：</strong>{{ $candidate->specialty ?? '無資料' }}</p>         

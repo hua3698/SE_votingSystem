@@ -12,26 +12,38 @@
                 <h1 class="vote_name fw-bold text-center" >投票結果</h1>
                 <h3 class="vote_name fw-bold text-center" >投票主題：{{ $event_name }}</h1>
             </div>
+            <h5 class="text-center mb-4">由排名前3名獲獎</h5>
+            {{-- <h5 class="text-center mb-4">由排名前 {{ $vote_event->number_of_winners }} 名獲獎</h5> --}}
+            <div style="width:60%;">
+                <table class="table table-striped result_table">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col" class="text-center">名次</th>
+                            <th scope="col">姓名</th>
+                            <th class="right" scope="col">總得票數</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="fs-4">
+                        @foreach($rank as $key => $rank)
+                            <tr>
+                                <td class="medal">
+                                    @if ($rank->rank <= $vote_event->number_of_winners)
+                                        <img src="{{ asset('assets/medal.png') }}" alt="">
+                                    @endif
+                                </td>
+                                <td class="text-center" style="width: 10%">
+                                    <span class="rank_{{ $rank->rank }}">{{ $rank->rank }}</span>
+                                </td>
+                                <td>{{ $rank->name }}</td>
+                                <td class="right">{{ $rank->total }}</td>
+                                <td></td>
+                            </tr>
+                        @endforeach
+                    </tbody>    
+                </table>
+            </div>
         </div>
-        {{-- <div class="container">
-            <div class="text-center fs-3 my-3">
-                <p>已完成投票！</p>
-            </div>
-            <div class="vote_record mb-4">
-                <p class="fs-5 text-secondary text-center">投票紀錄</p>
-                <div>
-                    @foreach ($records as $key => $record)
-                        <ul class="list-group list-group-horizontal mb-2">
-                            <li class="list-group-item">{{ $record->cand_number }}號</li>
-                            <li class="list-group-item">
-                                <p>{{ $record->cand_school }}</p>
-                                <p class="fw-bold">{{ $record->cand_name }}</p>
-                            </li>
-                            <li class="list-group-item">{{ $record->vote_time }}</li>
-                        </ul>
-                    @endforeach
-                </div>
-            </div>
-        </div> --}}
     @endif
 @endsection

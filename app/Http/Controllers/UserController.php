@@ -8,7 +8,7 @@ class UserController extends Controller
 {
     public function userPage()
     {
-        return view('front.user.info');
+        return view('front.user.member_center');
     }
 
     // 後台

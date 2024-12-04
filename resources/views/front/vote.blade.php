@@ -47,7 +47,7 @@
                         <div class="candidates">
                             @foreach ($candidates as $key => $cand)
                                 <div class="cand shadow-sm">
-                                    <img class="jiikawa" src="{{ asset('assets/' . $key . '.jpg') }}" alt="">
+                                    <img class="jiikawa" src="{{ asset('assets/' . ($key % 6) . '.jpg') }}" alt="">
                                     <div class="no">{{ $cand['number'] }}號</div>
                                     <div class="intro"><strong>{{ $cand['name'] }}</strong></div>
                                     <div class="circle_div col-3">
@@ -72,7 +72,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p>送出後無法重新投票，請確認以下您所選名單再送出。最多可圈選{{ $vote_event->max_vote_count }}位</p>
+                            <p>送出後無法重新投票，請確認以下您所選名單再送出。最多可選{{ $vote_event->max_vote_count }}位</p>
                             <div class="check_cand my-3 px-2"></div>
                         </div>
                         <div class="modal-footer">
@@ -159,9 +159,9 @@
                     const resultAlert = Swal.mixin({
                         timer: 3000,
                         timerProgressBar: true,
-                        text: "畫面將於3秒後跳轉到投票結果頁面",
+                        text: "畫面將於3秒後跳轉到投票明細頁面",
                         didClose: () => {
-                            location.href = '{{ route("vote.result", ["event_id" => ":event_id"]) }}'
+                            location.href = '{{ route("vote.detail", ["event_id" => ":event_id"]) }}'
                                 .replace(':event_id', event_id)
                         }
                     });

@@ -45,6 +45,7 @@ Route::middleware([UserLogin::class])->group(function ()
     Route::get('/user', [UserController::class, 'userPage']);
 
     Route::post('/vote', [VoteController::class, 'doVote'])->name('vote');
+    Route::get('/vote/{event_id}/detail', [VoteController::class, 'showVoteDetail'])->name('vote.detail');
 });
 
 ##########################################################################

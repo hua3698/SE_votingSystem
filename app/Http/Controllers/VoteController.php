@@ -25,8 +25,7 @@ class VoteController extends Controller
     {
         try
         {
-            $votes = VoteEvent::orderBy('end_time', 'asc')->get();
-            // $votes = VoteEvent::orderBy('end_time', 'desc')->paginate(3);
+            $votes = VoteEvent::where('is_delete', 0)->orderBy('end_time', 'asc')->get();
 
             foreach ($votes as $key => $vote) {
                 $this->voteEvent = $vote;
@@ -80,6 +79,9 @@ class VoteController extends Controller
                 throw new \Exception(json_encode($result));
             }
             elseif ($result['status'] === 'voted') {
+                return $this->showVoteDetail($event_id);
+            }
+            else if($result['status'] == 'close') {
                 return $this->showVoteResult($event_id);
             }
 
@@ -152,7 +154,6 @@ class VoteController extends Controller
         $this->voteEvent = VoteEvent::find($event_id);
 
         $this->addVoteStatus($this->voteEvent);
-        $isOpen = $this->checkVoteisOpen();
 
         // 檢查 vote_event 是否存在
         if (!$this->voteEvent) {
@@ -172,10 +173,10 @@ class VoteController extends Controller
         }
 
         // 檢查是否開放投票
-        if (!$isOpen) {
+        if ($this->voteEvent->status == 2) {
             return [
-                'status' => 'error',
-                'error_msg' => '目前不在開放投票的時間內'
+                'status' => 'close',
+                'error_msg' => '已結束'
             ];
         }
 
@@ -215,22 +216,53 @@ class VoteController extends Controller
     {
         try
         {
-            // $voted = $this->checkIsVoted($event_id, $user_id);
+            $voteEvent = VoteEvent::find($event_id);
+            $this->validGetResultPermission($voteEvent);
 
             // if($voted) {
-                // $user_id = User::where('email', session('frontuser'))->value('user_id');
+                $voteEvent = VoteEvent::find($event_id);
                 $eventName = VoteEvent::where('event_id', $event_id)->value('event_name');
-                // $records = $this->getVoteRecords($event_id, $user_id);
+                $rank = Candidate::getCandidateRanking($event_id);
+
                 $response = [
                     'status' => 'ok',
                     'event_name' => $eventName,
-                    // 'records' => $records,
+                    'vote_event' => $voteEvent,
+                    'rank' => $rank,
                 ];
                 return view('front.result', $response);
             // }
             // else {
             //     return view('front.result', ['status' => 'error']);
             // }
+        }
+        catch (\Exception $e) 
+        {
+            Log::error(sprintf('[%s] %s (%s)', __METHOD__, $e->getMessage(), $e->getLine()));
+            return redirect()->route('index');
+        }
+    }
+
+    public function showVoteDetail($event_id)
+    {
+        try
+        {
+            $user_id = User::where('email', session('frontuser'))->value('user_id');
+            $voted = $this->checkIsVoted($event_id, $user_id);
+
+            if($voted) {
+                $eventName = VoteEvent::where('event_id', $event_id)->value('event_name');
+                $records = $this->getVoteRecords($event_id, $user_id);
+                $response = [
+                    'status' => 'ok',
+                    'event_name' => $eventName,
+                    'records' => $records,
+                ];
+                return view('front.detail', $response);
+            }
+            else {
+                return redirect()->route('index');
+            }
         }
         catch (\Exception $e) 
         {

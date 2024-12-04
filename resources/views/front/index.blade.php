@@ -27,8 +27,15 @@
         <div class="activity-grid">
             @foreach($votes as $key => $vote)
                 <div class="activity-card" data-event="{{ $vote->event_id }}" data-status="{{ $vote->status }}">
+                    @if ($vote->status == 0)
+                        <div class="status bg-secondary">尚未開始</div>
+                    @elseif ($vote->status ==1)
+                        <div class="status">進行中</div>
+                    @else 
+                        <div class="status bg-danger">已結束</div>
+                    @endif
                     <img
-                        src="{{ asset('assets/a' . ($vote->event_id) . '.png') }}"
+                        src="{{ asset('assets/a' . ($vote->event_id % 9 + 1) . '.png') }}"
                         alt="活動圖片"
                         class="activity-image"
                     />
@@ -41,6 +48,8 @@
                     </div>
                     @if ($vote->remain_date > 0 && $vote->status == 1)
                         <div class="vote-now">立即投票</div>
+                    @elseif ($vote->status == 2)
+                        <div><a href="{{ route('vote.result', ['event_id' => $vote->event_id]) }}">看投票結果</a></div>
                     @endif
                 </div>
             @endforeach
@@ -88,11 +97,7 @@
             $('.activity-card').on('click', function() {
                 const event_id = $(this).closest('.activity-card').data('event')
                 const status = $(this).data('status');
-                if(status != 2) {
-                    location.href = '{{ route("front.vote", ":event_id") }}'.replace(':event_id', event_id);
-                } else {
-                    location.href = '{{ route("vote.result", ":event_id") }}'.replace(':event_id', event_id);
-                }
+                location.href = '{{ route("front.vote", ":event_id") }}'.replace(':event_id', event_id);
             })
 
             $('#btnSearch').on('click', function() {
